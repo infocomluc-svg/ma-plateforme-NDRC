@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTS NDRC — Plateforme interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1a7a4a;
+  --green-light: #2ecc71;
+  --green-pale: #e8f7ef;
+  --orange: #f47c20;
+  --orange-light: #ffa955;
+  --orange-pale: #fff3e8;
+  --white: #ffffff;
+  --off-white: #f8f9fa;
+  --grey: #6c757d;
+  --grey-light: #e9ecef;
+  --dark: #1a1a2e;
+  --text: #2d3748;
+  --correct: #1a7a4a;
+  --wrong: #c0392b;
+  --partial: #f47c20;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Nunito', sans-serif; background: var(--off-white); color: var(--text); }
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, var(--green) 0%, #0f5132 60%, #1a3a2a 100%);
+  color: white; padding: 3rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+}
+header::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(244,124,32,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(46,204,113,0.1) 0%, transparent 40%);
+}
+header::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 40px;
+  background: var(--off-white); clip-path: ellipse(55% 100% at 50% 100%);
+}
+.header-badge {
+  display: inline-block; background: rgba(244,124,32,0.9); color: white;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.35rem 1rem; border-radius: 50px; margin-bottom: 1rem;
+}
+header h1 {
+  font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900; line-height: 1.15; margin-bottom: 0.75rem; position: relative;
+}
+header h1 span { color: var(--orange-light); }
+header p { font-size: 1rem; opacity: 0.85; max-width: 600px; margin: 0 auto; line-height: 1.7; position: relative; }
+
+/* ── NAV INTRO ── */
+.intro-bar {
+  background: white; border-bottom: 3px solid var(--green-light);
+  padding: 1rem 2rem; display: flex; align-items: center; justify-content: center;
+  gap: 2rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--grey);
+}
+.intro-bar span { display: flex; align-items: center; gap: 0.4rem; }
+.intro-bar .dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-green { background: var(--green); }
+.dot-orange { background: var(--orange); }
+.dot-grey { background: var(--grey-light); border: 2px solid var(--grey); }
+
+/* ── GRID MODULES ── */
+main { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem; }
+.section-title {
+  font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;
+  color: var(--dark); margin-bottom: 0.4rem;
+}
+.section-sub { color: var(--grey); font-size: 0.9rem; margin-bottom: 2rem; }
+.modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+
+/* ── MODULE CARD ── */
+.module-card {
+  background: white; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07); transition: transform 0.25s, box-shadow 0.25s;
+  cursor: pointer; border: 2px solid transparent;
+}
+.module-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+.module-card.active { border-color: var(--green); }
+.card-top {
+  padding: 1.6rem 1.4rem 1.2rem; position: relative;
+  background: linear-gradient(135deg, var(--green) 0%, #0f5132 100%);
+}
+.card-top.orange { background: linear-gradient(135deg, var(--orange) 0%, #c0570f 100%); }
+.card-top.teal { background: linear-gradient(135deg, #0891b2 0%, #065970 100%); }
+.card-top.purple { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); }
+.card-emoji { font-size: 2.2rem; display: block; margin-bottom: 0.6rem; }
+.card-top h2 { color: white; font-size: 1.1rem; font-weight: 800; }
+.card-top .card-bloc { color: rgba(255,255,255,0.7); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.25rem; }
+.card-body { padding: 1.2rem 1.4rem; }
+.card-body p { font-size: 0.83rem; color: var(--grey); line-height: 1.6; margin-bottom: 1rem; }
+.card-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+.btn-fiche {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: var(--green-pale); color: var(--green); border: 1.5px solid var(--green);
+  border-radius: 8px; padding: 0.55rem 0.9rem; font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 700; cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-fiche:hover { background: var(--green); color: white; }
+.btn-fiche.orange-btn { background: var(--orange-pale); color: var(--orange); border-color: var(--orange); }
+.btn-fiche.orange-btn:hover { background: var(--orange); color: white; }
+.btn-cas {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--off-white); color: var(--text); border: 1.5px solid var(--grey-light);
+  border-radius: 8px; padding: 0.55rem 0.9rem; font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-cas:hover { background: var(--grey-light); }
+.btn-cas .arrow { transition: transform 0.25s; }
+.btn-cas.open .arrow { transform: rotate(180deg); }
+.score-badge {
+  display: inline-block; background: var(--green-pale); color: var(--green);
+  border-radius: 50px; padding: 0.2rem 0.6rem; font-size: 0.72rem; font-weight: 700;
+}
+
+/* ── CAS PRATIQUE PANEL ── */
+.cas-panel {
+  display: none; margin-top: 1.5rem;
+  background: white; border-radius: 16px; padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 4px solid var(--green);
+}
+.cas-panel.orange-border { border-top-color: var(--orange); }
+.cas-panel.teal-border { border-top-color: #0891b2; }
+.cas-panel.purple-border { border-top-color: #7c3aed; }
+.cas-panel.visible { display: block; animation: slideDown 0.3s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SCENARIO */
+.scenario-box {
+  background: linear-gradient(135deg, var(--green-pale), #d4edda);
+  border-left: 4px solid var(--green); border-radius: 0 12px 12px 0;
+  padding: 1.2rem 1.4rem; margin-bottom: 1.8rem;
+}
+.scenario-box.orange { background: linear-gradient(135deg, var(--orange-pale), #ffe0c7); border-left-color: var(--orange); }
+.scenario-box.teal { background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-left-color: #0891b2; }
+.scenario-box.purple { background: linear-gradient(135deg, #ede9fe, #ddd6fe); border-left-color: #7c3aed; }
+.scenario-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); margin-bottom: 0.5rem; }
+.scenario-label.orange { color: var(--orange); }
+.scenario-label.teal { color: #0891b2; }
+.scenario-label.purple { color: #7c3aed; }
+.scenario-box p { font-size: 0.88rem; line-height: 1.75; color: var(--text); }
+.scenario-box strong { color: var(--dark); }
+
+/* QUESTION */
+.question-block { margin-bottom: 2rem; padding-bottom: 1.8rem; border-bottom: 1px solid var(--grey-light); }
+.question-block:last-of-type { border-bottom: none; }
+.q-header { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 1rem; }
+.q-num {
+  width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
+  background: var(--green); color: white; display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 800;
+}
+.q-num.orange { background: var(--orange); }
+.q-num.teal { background: #0891b2; }
+.q-num.purple { background: #7c3aed; }
+.q-type-badge {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.2rem 0.6rem; border-radius: 50px; margin-bottom: 0.3rem; display: inline-block;
+}
+.badge-multi { background: #dbeafe; color: #1d4ed8; }
+.badge-open { background: #fef3c7; color: #92400e; }
+.badge-msi { background: #d1fae5; color: #065f46; }
+.q-text { font-size: 0.92rem; font-weight: 700; color: var(--dark); line-height: 1.5; }
+
+/* OPTIONS QCM */
+.options-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem; }
+.option-item {
+  display: flex; align-items: flex-start; gap: 0.7rem;
+  background: var(--off-white); border: 1.5px solid var(--grey-light);
+  border-radius: 10px; padding: 0.75rem 1rem; cursor: pointer;
+  transition: all 0.18s; font-size: 0.87rem; line-height: 1.5;
+}
+.option-item:hover { border-color: var(--green); background: var(--green-pale); }
+.option-item input[type="checkbox"] { margin-top: 2px; accent-color: var(--green); width: 16px; height: 16px; flex-shrink: 0; }
+.option-item.selected { border-color: var(--green); background: var(--green-pale); }
+.option-item.correct-answer { border-color: var(--correct); background: #d4edda; }
+.option-item.wrong-answer { border-color: var(--wrong); background: #fde8e8; }
+
+/* OPEN QUESTION */
+.open-answer {
+  width: 100%; min-height: 100px; padding: 1rem; border: 1.5px solid var(--grey-light);
+  border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 0.88rem;
+  resize: vertical; line-height: 1.6; color: var(--text); background: white;
+  transition: border-color 0.2s;
+}
+.open-answer:focus { outline: none; border-color: var(--green); }
+.corrected-answer {
+  display: none; margin-top: 0.8rem; padding: 1rem 1.2rem;
+  background: var(--green-pale); border: 1.5px solid var(--green);
+  border-radius: 10px; font-size: 0.85rem; line-height: 1.7;
+}
+.corrected-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 0.4rem; }
+.self-eval { margin-top: 0.7rem; display: flex; gap: 0.6rem; }
+.btn-eval {
+  padding: 0.4rem 0.9rem; border-radius: 8px; border: 1.5px solid; font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-eval-yes { background: var(--green-pale); color: var(--green); border-color: var(--green); }
+.btn-eval-yes:hover, .btn-eval-yes.chosen { background: var(--green); color: white; }
+.btn-eval-no { background: #fde8e8; color: var(--wrong); border-color: var(--wrong); }
+.btn-eval-no:hover, .btn-eval-no.chosen { background: var(--wrong); color: white; }
+
+/* EXPLICATION */
+.explication {
+  display: none; margin-top: 0.6rem; padding: 0.8rem 1rem;
+  background: #fffbeb; border: 1.5px solid #f59e0b; border-radius: 8px;
+  font-size: 0.83rem; line-height: 1.65; color: #78350f;
+}
+.explication strong { color: #92400e; }
+
+/* SUBMIT & PROGRESS */
+.progress-wrap { margin-bottom: 1.5rem; }
+.progress-label { font-size: 0.78rem; color: var(--grey); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+.progress-bar { height: 6px; background: var(--grey-light); border-radius: 50px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--green-light)); border-radius: 50px; transition: width 0.4s ease; }
+.progress-fill.orange { background: linear-gradient(90deg, var(--orange), var(--orange-light)); }
+
+.btn-submit {
+  width: 100%; padding: 0.9rem; background: linear-gradient(135deg, var(--green), #0f5132);
+  color: white; border: none; border-radius: 10px; font-family: 'Nunito', sans-serif;
+  font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,122,74,0.3); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-submit.orange { background: linear-gradient(135deg, var(--orange), #c0570f); }
+.btn-submit.orange:hover { box-shadow: 0 6px 20px rgba(244,124,32,0.3); }
+
+/* SYNTHÈSE CORRECTION */
+.synthese {
+  display: none; margin-top: 2rem; padding: 1.8rem;
+  background: linear-gradient(135deg, #0f5132 0%, var(--green) 100%);
+  border-radius: 14px; color: white;
+}
+.synthese.orange { background: linear-gradient(135deg, #c0570f 0%, var(--orange) 100%); }
+.synthese.teal { background: linear-gradient(135deg, #065970 0%, #0891b2 100%); }
+.synthese.purple { background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%); }
+.synthese h3 { font-family: 'Playfair Display', serif; font-size: 1.35rem; margin-bottom: 0.3rem; }
+.note-display {
+  font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900;
+  line-height: 1; margin: 0.8rem 0 0.3rem;
+}
+.note-display span { font-size: 1.4rem; opacity: 0.75; }
+.mention { font-size: 0.9rem; opacity: 0.9; font-weight: 700; margin-bottom: 1.2rem; }
+.detail-corrections { margin-top: 1.2rem; }
+.detail-item {
+  background: rgba(255,255,255,0.1); border-radius: 10px; padding: 0.9rem 1rem;
+  margin-bottom: 0.7rem; font-size: 0.84rem; line-height: 1.6;
+}
+.detail-item .di-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; margin-bottom: 0.4rem; }
+.icon-ok { color: #86efac; }
+.icon-ko { color: #fca5a5; }
+.di-expl { opacity: 0.88; font-size: 0.8rem; line-height: 1.55; }
+.btn-recommencer {
+  margin-top: 1.2rem; width: 100%; padding: 0.75rem;
+  background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.4);
+  color: white; border-radius: 10px; font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-recommencer:hover { background: rgba(255,255,255,0.25); }
+
+/* FOOTER */
+footer {
+  text-align: center; padding: 2rem; font-size: 0.78rem; color: var(--grey);
+  border-top: 1px solid var(--grey-light); margin-top: 2rem;
+}
+footer strong { color: var(--green); }
+
+@media (max-width: 640px) {
+  header { padding: 2rem 1rem 3rem; }
+  main { padding: 1.5rem 1rem; }
+  .modules-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Référentiel officiel 2018 · Pages 5-10 &amp; 13-14</div>
+  <h1>BTS NDRC<br><span>Plateforme interactive</span></h1>
+  <p>Fiches de cours et cas pratiques autocorrectifs — Négociation &amp; Digitalisation de la Relation Client</p>
+</header>
+
+<div class="intro-bar">
+  <span><span class="dot dot-green"></span> Fiche de cours</span>
+  <span><span class="dot dot-orange"></span> Cas pratique</span>
+  <span><span class="dot dot-grey"></span> Correction après validation</span>
+  <span>📋 Référentiel Blocs 1, 2 &amp; 3</span>
+</div>
+
+<main>
+  <h2 class="section-title">Choisissez un module</h2>
+  <p class="section-sub">Accès libre — consultez la fiche de cours puis entraînez-vous sur le cas pratique.</p>
+
+  <div class="modules-grid">
+
+    <!-- Module 1 : Prospection -->
+    <div class="module-card" id="card-prospection">
+      <div class="card-top">
+        <span class="card-emoji">🎯</span>
+        <h2>Prospection commerciale</h2>
+        <div class="card-bloc">Bloc 1 · Compétence 1 · U4</div>
+      </div>
+      <div class="card-body">
+        <p>Ciblage, segmentation, démarche de prospection multicanale, réseaux professionnels, pilotage de la performance.</p>
+        <div class="card-actions">
+          <a href="fiche-prospection.html" target="_blank" class="btn-fiche">📄 Consulter la fiche de cours</a>
+          <button class="btn-cas" onclick="toggleCas('prospection', this)">
+            🧠 Accéder au cas pratique <span class="arrow">▼</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module 2 : Négociation -->
+    <div class="module-card" id="card-negociation">
+      <div class="card-top orange">
+        <span class="card-emoji">🤝</span>
+        <h2>Négociation commerciale</h2>
+        <div class="card-bloc">Bloc 1 · Compétence 2 · U4</div>
+      </div>
+      <div class="card-body">
+        <p>SONCAS, CAP, traitement des objections, marges de manœuvre, situations B2B/B2C/B2G, gestion des conflits.</p>
+        <div class="card-actions">
+          <a href="fiche-negociation.html" target="_blank" class="btn-fiche orange-btn">📄 Consulter la fiche de cours</a>
+          <button class="btn-cas" onclick="toggleCas('negociation', this)">
+            🧠 Accéder au cas pratique <span class="arrow">▼</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module 3 : Vente -->
+    <div class="module-card" id="card-vente">
+      <div class="card-top teal">
+        <span class="card-emoji">💼</span>
+        <h2>Techniques de vente</h2>
+        <div class="card-bloc">Bloc 1 · Compétences 2 &amp; 3 · U4</div>
+      </div>
+      <div class="card-body">
+        <p>Phases de l'entretien de vente, closing, suivi client, événements commerciaux, fidélisation et indicateurs NPS/LTV.</p>
+        <div class="card-actions">
+          <a href="fiche-vente.html" target="_blank" class="btn-fiche" style="color:#0891b2;border-color:#0891b2;background:#e0f2fe;">📄 Consulter la fiche de cours</a>
+          <button class="btn-cas" onclick="toggleCas('vente', this)">
+            🧠 Accéder au cas pratique <span class="arrow">▼</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module 4 : Marketing -->
+    <div class="module-card" id="card-marketing">
+      <div class="card-top purple">
+        <span class="card-emoji">📊</span>
+        <h2>Marketing &amp; data client</h2>
+        <div class="card-bloc">Blocs 1, 2 &amp; 3 · U4/U5/U6</div>
+      </div>
+      <div class="card-body">
+        <p>Segmentation, marketing relationnel et digital, CRM, SIC, inbound marketing, omnicanalité, RGPD et veille commerciale.</p>
+        <div class="card-actions">
+          <a href="fiche-marketing.html" target="_blank" class="btn-fiche" style="color:#7c3aed;border-color:#7c3aed;background:#ede9fe;">📄 Consulter la fiche de cours</a>
+          <button class="btn-cas" onclick="toggleCas('marketing', this)">
+            🧠 Accéder au cas pratique <span class="arrow">▼</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /modules-grid -->
+
+  <!-- ═══════════════════════════════════════
+       CAS PRATIQUE — PROSPECTION
+  ═══════════════════════════════════════ -->
+  <div class="cas-panel" id="cas-prospection">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--dark);margin-bottom:0.3rem;">🎯 Cas pratique — Prospection commerciale</h3>
+    <p style="font-size:0.82rem;color:var(--grey);margin-bottom:1.5rem;">Répondez à toutes les questions, puis cliquez sur « Voir ma correction » pour obtenir la synthèse et votre note.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progression</span><span id="prog-p">0 / 6</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-p" style="width:0%"></div></div>
+    </div>
+
+    <div class="scenario-box">
+      <div class="scenario-label">📍 Mise en situation</div>
+      <p>Vous êtes commercial(e) chez <strong>TechPro Solutions</strong>, une PME spécialisée dans les logiciels de gestion pour artisans et PME du BTP. Vous prenez en charge un territoire comportant <strong>450 entreprises ciblées</strong> dont 180 sont déjà clientes. Votre objectif : développer le portefeuille de 30 % en 12 mois. Vous disposez d'un budget prospection de <strong>4 000 €</strong> et d'un CRM renseigné à 60 %.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block" id="qb-p1">
+      <div class="q-header">
+        <div class="q-num">1</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Parmi les étapes suivantes, lesquelles font partie d'une démarche de prospection structurée conforme au référentiel NDRC ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-p1">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Constituer et qualifier un fichier de prospects avant de contacter</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Contacter directement tous les prospects sans préparation pour gagner du temps</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Définir des objectifs de prospection chiffrés et mesurables</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Choisir les canaux adaptés à chaque segment de cible</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Assurer un suivi des actions via le CRM et calculer le taux de transformation</li>
+      </ul>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="qb-p2">
+      <div class="q-header">
+        <div class="q-num">2</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Pour prospecter 270 entreprises BTP non clientes avec un budget de 4 000 €, quelles méthodes sont les plus adaptées et rentables ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-p2">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Emailing personnalisé sur une liste qualifiée (coût : ~200 €)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Campagne TV nationale (coût : 50 000 €+)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Social selling sur LinkedIn avec ciblage sectoriel BTP</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Participation à un salon professionnel du BTP (coût : 1 500 €)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Acheter une liste non qualifiée sur internet et appeler sans ciblage</li>
+      </ul>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="qb-p3">
+      <div class="q-header">
+        <div class="q-num">3</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">Définissez la méthode RFM et expliquez comment elle peut vous aider à prioriser vos 180 clients actifs pour détecter des opportunités de développement.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-p3" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('p',6)"></textarea>
+      <div class="corrected-answer" id="cor-p3">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>RFM = Récence · Fréquence · Montant</strong> — méthode de segmentation des clients basée sur 3 critères : <strong>Récence</strong> (date du dernier achat), <strong>Fréquence</strong> (nombre d'achats sur une période), <strong>Montant</strong> (chiffre d'affaires généré). Elle permet de classer les clients et d'identifier : les clients à fort potentiel à développer en priorité (bonne récence, fréquence et montant), les clients dormants à réactiver (récence faible mais historique positif), et les clients à risque de churn (baisse de fréquence et de montant). Dans notre cas, cela permet de concentrer les efforts sur les clients à potentiel et de libérer du temps pour la conquête.</p>
+        <div class="self-eval" id="eval-p3">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('p',3,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('p',3,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="qb-p4">
+      <div class="q-header">
+        <div class="q-num">4</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">Lors d'un appel de prospection, le prospect vous dit : <em>« Je suis intéressé par votre logiciel, mais je suis satisfait de mon prestataire actuel. »</em> Quelle est la meilleure réaction professionnelle ?</div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-p4">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Raccrocher poliment, ce prospect n'est pas disponible</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Questionner sur les points forts ET les axes d'amélioration de son prestataire actuel pour positionner votre valeur ajoutée</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Dénigrer le concurrent pour le convaincre de changer</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Proposer une démonstration gratuite sans insister, pour maintenir le contact dans le temps</li>
+      </ul>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="qb-p5">
+      <div class="q-header">
+        <div class="q-num">5</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Quels indicateurs permettent de mesurer l'efficacité d'une campagne de prospection ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-p5">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le taux de transformation prospects → clients</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> La couleur préférée des commerciaux</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le Coût d'Acquisition Client (CAC)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le taux de prise de rendez-vous</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le nombre de contacts qualifiés générés</li>
+      </ul>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="qb-p6">
+      <div class="q-header">
+        <div class="q-num">6</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">Expliquez ce qu'est le <em>social selling</em> et comment vous l'utiliseriez concrètement sur LinkedIn pour prospecter des artisans du BTP.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-p6" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('p',6)"></textarea>
+      <div class="corrected-answer" id="cor-p6">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>Social selling</strong> : utilisation des réseaux sociaux professionnels (principalement LinkedIn) pour identifier, contacter et développer des relations avec des prospects, sans recourir aux techniques de vente directe agressives. <br><br>Application concrète pour les artisans BTP : <strong>(1)</strong> Optimiser son profil LinkedIn pour mettre en avant les bénéfices concrets (gain de temps, simplification comptable pour les artisans). <strong>(2)</strong> Rejoindre et animer des groupes thématiques BTP. <strong>(3)</strong> Publier des contenus à valeur ajoutée : témoignages clients, comparatifs, astuces de gestion pour artisans. <strong>(4)</strong> Identifier les décideurs via le moteur de recherche LinkedIn, envoyer des demandes de connexion personnalisées. <strong>(5)</strong> Entretenir la relation dans le temps avant de proposer un RDV commercial.</p>
+        <div class="self-eval" id="eval-p6">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('p',6,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('p',6,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="sub-p" onclick="submitCas('p')">📊 Voir ma correction et ma note</button>
+    <div class="synthese" id="syn-p"></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       CAS PRATIQUE — NÉGOCIATION
+  ═══════════════════════════════════════ -->
+  <div class="cas-panel orange-border" id="cas-negociation">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--dark);margin-bottom:0.3rem;">🤝 Cas pratique — Négociation commerciale</h3>
+    <p style="font-size:0.82rem;color:var(--grey);margin-bottom:1.5rem;">Répondez à toutes les questions, puis cliquez sur « Voir ma correction » pour obtenir la synthèse et votre note.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progression</span><span id="prog-n">0 / 6</span></div>
+      <div class="progress-bar"><div class="progress-fill orange" id="bar-n" style="width:0%"></div></div>
+    </div>
+
+    <div class="scenario-box orange">
+      <div class="scenario-label orange">📍 Mise en situation</div>
+      <p>Vous êtes responsable commercial(e) chez <strong>ImmoPro Services</strong>, agence de conseil en immobilier d'entreprise. Vous rencontrez <strong>Mme Fontaine</strong>, directrice d'une PME de 45 salariés, qui cherche à louer de nouveaux bureaux. Elle est accompagnée de son responsable administratif. L'entretien de négociation débute. Votre offre est à <strong>3 800 €/mois</strong> et votre seuil de négociation est fixé à <strong>3 500 €/mois</strong>.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block" id="qb-n1">
+      <div class="q-header">
+        <div class="q-num orange">1</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">Mme Fontaine dit : <em>« Vos bureaux sont trop grands et trop chers pour nous. »</em> En vous appuyant sur la méthode SONCAS, quel mobile d'achat prioritaire cherchez-vous à identifier dans cette réponse ?</div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-n1">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Orgueil — elle veut des bureaux prestigieux pour son image</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Argent — la dimension budgétaire et le rapport qualité/prix sont prioritaires</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Sécurité — elle craint un engagement financier trop risqué</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Nouveauté — elle veut des bureaux modernes et innovants</li>
+      </ul>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="qb-n2">
+      <div class="q-header">
+        <div class="q-num orange">2</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Pour construire un argumentaire CAP convaincant sur votre offre à 3 800 €/mois, quels éléments devez-vous intégrer ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-n2">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Une Caractéristique technique : surface de 180 m², plateau ouvert modulable</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Un Avantage client : possibilité de faire évoluer l'aménagement sans travaux supplémentaires</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Une Preuve concrète : témoignage d'une PME similaire, photos du plateau aménagé</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Un argument basé uniquement sur le dénigrement des offres concurrentes</li>
+      </ul>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="qb-n3">
+      <div class="q-header">
+        <div class="q-num orange">3</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">Mme Fontaine répond : <em>« Je comprends les avantages, mais c'est vraiment au-dessus de notre budget. Nous avons une offre à 3 200 €/mois ailleurs. »</em> Expliquez comment vous traitez cette objection prix en restant dans vos marges de manœuvre.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-n3" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('n',6)"></textarea>
+      <div class="corrected-answer" id="cor-n3">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>1. Accepter et valider l'objection</strong> (éviter de la contester frontalement) : « Je comprends tout à fait que le budget soit un critère central. »<br><br><strong>2. Creuser l'offre concurrente</strong> : « L'offre à 3 200 €/mois inclut-elle les charges, le parking, l'accès internet ? » (souvent les comparaisons ne sont pas sur les mêmes bases).<br><br><strong>3. Valoriser la différence</strong> en calculant l'écart réel par salarié : (3 800 - 3 200) = 600 €/mois, soit 13,3 €/salarié/mois — une différence marginale si les avantages justifient ce coût.<br><br><strong>4. Proposer une concession dans les marges de manœuvre</strong> : réduction à 3 600 €/mois en contrepartie d'un bail de 3 ans ferme, ou gratuité du 1er mois pour compenser les frais d'aménagement.<br><br><strong>5. Ne jamais descendre sous 3 500 €</strong> sans validation hiérarchique.</p>
+        <div class="self-eval" id="eval-n3">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('n',3,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('n',3,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="qb-n4">
+      <div class="q-header">
+        <div class="q-num orange">4</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">En fin d'entretien, Mme Fontaine hésite encore. Quelles techniques de closing pouvez-vous utiliser ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-n4">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> La reformulation positive : résumer les points d'accord avant de proposer la signature</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> L'alternative : « Préférez-vous une entrée au 1er mars ou au 1er avril ? »</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Mettre une pression artificielle en inventant une autre offre concurrente sur le même bien</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> L'urgence réelle : mentionner qu'un autre client visite le bien vendredi si c'est vrai</li>
+      </ul>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="qb-n5">
+      <div class="q-header">
+        <div class="q-num orange">5</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">3 semaines après la signature du bail, Mme Fontaine vous contacte mécontente : <em>« Les travaux de peinture promis à la signature ne sont pas commencés. »</em> Comment gérez-vous ce litige en préservant la relation client ?</div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-n5">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Lui dire que ce n'est pas votre responsabilité, mais celle des travaux</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Reconnaître le problème, s'excuser, investiguer les causes et proposer une solution avec un engagement de date</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Proposer une compensation financière immédiate sans chercher à comprendre</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Écouter activement, reformuler le problème, puis escalader en interne avec un plan d'action et un suivi communiqué à la cliente</li>
+      </ul>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="qb-n6">
+      <div class="q-header">
+        <div class="q-num orange">6</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">Expliquez les spécificités d'une négociation en contexte B2B (entreprise à entreprise) par rapport à une négociation B2C (avec un particulier). Donnez au moins 3 différences concrètes.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-n6" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('n',6)"></textarea>
+      <div class="corrected-answer" id="cor-n6">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>Différences B2B vs B2C :</strong><br><br><strong>1. Processus de décision :</strong> En B2B, plusieurs décideurs interviennent (direction, achats, technique = DMU). En B2C, la décision est souvent individuelle ou familiale.<br><br><strong>2. Durée du cycle de vente :</strong> En B2B, le cycle est long (plusieurs semaines à mois), avec appels d'offres et négociations formelles. En B2C, la décision est souvent rapide.<br><br><strong>3. Nature de l'argumentation :</strong> En B2B, les arguments sont centrés sur le ROI, la productivité, la réduction des coûts, la conformité réglementaire. En B2C, les motivations sont plus émotionnelles (SONCAS).<br><br><strong>4. Relation contractuelle :</strong> En B2B, les contrats sont complexes (CGV, clauses de révision, pénalités). En B2C, le cadre est souvent plus standardisé (droit de la consommation).<br><br><strong>5. Fidélisation :</strong> En B2B, l'enjeu de la relation durable est plus fort (contrats récurrents, chiffre d'affaires important).</p>
+        <div class="self-eval" id="eval-n6">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('n',6,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('n',6,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-submit orange" id="sub-n" onclick="submitCas('n')">📊 Voir ma correction et ma note</button>
+    <div class="synthese orange" id="syn-n"></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       CAS PRATIQUE — VENTE
+  ═══════════════════════════════════════ -->
+  <div class="cas-panel teal-border" id="cas-vente">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--dark);margin-bottom:0.3rem;">💼 Cas pratique — Techniques de vente</h3>
+    <p style="font-size:0.82rem;color:var(--grey);margin-bottom:1.5rem;">Répondez à toutes les questions, puis cliquez sur « Voir ma correction » pour obtenir la synthèse et votre note.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progression</span><span id="prog-v">0 / 6</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-v" style="width:0%;background:linear-gradient(90deg,#0891b2,#38bdf8)"></div></div>
+    </div>
+
+    <div class="scenario-box teal">
+      <div class="scenario-label teal">📍 Mise en situation</div>
+      <p>Vous êtes conseiller(ère) commercial(e) dans une concession automobile multimarques. <strong>M. Bertrand</strong>, 42 ans, entre dans la concession avec son épouse. Il explique vouloir changer sa voiture dans les 3 mois, budget <strong>28 000 €</strong> maximum, 3 enfants, beaucoup de trajets autoroutiers. Il semble hésiter entre plusieurs marques. La concession organise par ailleurs un <strong>salon de la voiture électrique</strong> le mois prochain.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block" id="qb-v1">
+      <div class="q-header">
+        <div class="q-num teal">1</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Lors de la phase de découverte avec M. Bertrand, quelles questions sont pertinentes pour bien cerner son besoin ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-v1">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> « Quels sont vos usages principaux : trajets domicile-travail, longs trajets, en famille ? »</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> « Quelle est la couleur préférée de votre épouse ? »</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> « Avez-vous des exigences en termes de consommation ou d'impact environnemental ? »</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> « Quel est votre mode de financement envisagé : comptant, crédit, LOA ? »</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> « Qu'est-ce qui vous a le plus déplu sur votre véhicule actuel ? »</li>
+      </ul>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="qb-v2">
+      <div class="q-header">
+        <div class="q-num teal">2</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">Après la découverte, vous proposez un SUV familial à 27 500 €. M. Bertrand dit : <em>« Je vais réfléchir et comparer sur internet avant de décider. »</em> Quelle est la meilleure réaction ?</div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-v2">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Laisser partir le client sans rien faire, la vente est perdue</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Baisser immédiatement le prix de 2 000 € pour convaincre</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Proposer un essai du véhicule immédiatement pour transformer l'expérience en engagement émotionnel</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Reformuler les besoins identifiés en montrant que cette offre y répond précisément, et proposer un rendez-vous de suivi personnalisé</li>
+      </ul>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="qb-v3">
+      <div class="q-header">
+        <div class="q-num teal">3</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">M. Bertrand signe le bon de commande. Expliquez les actions de suivi post-vente à mettre en place dans les 30 premiers jours pour assurer sa satisfaction et initier la fidélisation.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-v3" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('v',6)"></textarea>
+      <div class="corrected-answer" id="cor-v3">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>Actions de suivi post-vente :</strong><br><br><strong>J+1 (après commande)</strong> : Envoyer un email de confirmation avec récapitulatif de la commande, délais de livraison et contacts utiles.<br><br><strong>J+3</strong> : Appel de courtoisie pour vérifier que le client n'a pas de questions supplémentaires et confirmer sa satisfaction.<br><br><strong>Jour de la livraison</strong> : Présentation complète du véhicule (fonctionnalités, connectivité, sécurité enfants), remise des documents, vérification de la satisfaction immédiate.<br><br><strong>J+15</strong> : Envoi d'une enquête de satisfaction (CSAT) pour mesurer le ressenti client. Fiche mise à jour dans le CRM.<br><br><strong>J+30</strong> : Appel de suivi pour s'assurer de la prise en main du véhicule, proposer une première révision offerte ou un service complémentaire (accessoires, assurance).<br><br><strong>Objectif LTV</strong> : Transformer ce client en ambassadeur — lui demander s'il peut recommander la concession à son entourage (parrainage).</p>
+        <div class="self-eval" id="eval-v3">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('v',3,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('v',3,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="qb-v4">
+      <div class="q-header">
+        <div class="q-num teal">4</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Parmi les indicateurs suivants, lesquels permettent de mesurer la qualité de la relation client et la fidélisation ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-v4">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le NPS (Net Promoter Score) — mesure la propension à recommander</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le nombre de cafés bus par le commercial chaque matin</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le CSAT (Customer Satisfaction Score) — mesure la satisfaction après chaque interaction</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le LTV (Lifetime Value) — valeur totale générée par un client sur sa durée de vie</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Le taux de ré-achat et le taux de churn (attrition)</li>
+      </ul>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="qb-v5">
+      <div class="q-header">
+        <div class="q-num teal">5</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">La concession organise un salon de la voiture électrique. Parmi ces actions, lesquelles contribuent à une animation commerciale réussie de l'événement ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-v5">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Définir des objectifs commerciaux avant l'événement (nombre de contacts qualifiés, RDV pris, essais réalisés)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Inviter les clients existants qui pourraient être intéressés par une conversion vers l'électrique</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Ne prévoir aucun suivi après l'événement pour ne pas paraître insistant</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Collecter les coordonnées des visiteurs et les intégrer au CRM dès le soir même</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Réaliser un bilan quantitatif et qualitatif à J+7 pour mesurer le ROI de l'événement</li>
+      </ul>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="qb-v6">
+      <div class="q-header">
+        <div class="q-num teal">6</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">Définissez la notion de <em>valeur vie client</em> (LTV) et expliquez pourquoi un commercial NDRC doit intégrer cette notion dans sa gestion du portefeuille clients, avec un exemple chiffré.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-v6" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('v',6)"></textarea>
+      <div class="corrected-answer" id="cor-v6">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>LTV (Lifetime Value)</strong> = Valeur vie client = revenu total généré par un client sur l'ensemble de la relation commerciale.<br><br><strong>Formule simplifiée :</strong> LTV = Panier moyen × Fréquence d'achat × Durée de la relation (en années)<br><br><strong>Exemple chiffré dans la concession :</strong> M. Bertrand achète un véhicule à 27 500 €, puis une deuxième voiture dans 5 ans (28 000 €), réalise 3 révisions/an à 300 € pendant 10 ans (9 000 €) et parraine 2 clients. Sa LTV directe ≈ <strong>64 500 €</strong> sur 10 ans — soit plus du double du premier achat.<br><br><strong>Pourquoi l'intégrer dans la gestion du portefeuille ?</strong> Cela permet de <strong>prioriser</strong> les clients à fort LTV potentiel, de <strong>justifier un investissement plus important</strong> en fidélisation (geste commercial, suivi renforcé), et de montrer que le coût d'acquisition d'un client se rentabilise sur le long terme. Un commercial qui raisonne en LTV ne vend pas une voiture : il gère une relation à 10 ans.</p>
+        <div class="self-eval" id="eval-v6">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('v',6,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('v',6,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="sub-v" onclick="submitCas('v')" style="background:linear-gradient(135deg,#0891b2,#065970)">📊 Voir ma correction et ma note</button>
+    <div class="synthese teal" id="syn-v"></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       CAS PRATIQUE — MARKETING
+  ═══════════════════════════════════════ -->
+  <div class="cas-panel purple-border" id="cas-marketing">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--dark);margin-bottom:0.3rem;">📊 Cas pratique — Marketing &amp; data client</h3>
+    <p style="font-size:0.82rem;color:var(--grey);margin-bottom:1.5rem;">Répondez à toutes les questions, puis cliquez sur « Voir ma correction » pour obtenir la synthèse et votre note.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progression</span><span id="prog-m">0 / 6</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-m" style="width:0%;background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
+    </div>
+
+    <div class="scenario-box purple">
+      <div class="scenario-label purple">📍 Mise en situation</div>
+      <p>Vous êtes chargé(e) de développement commercial chez <strong>NaturaCosm</strong>, marque de cosmétiques bio en croissance, distribuée en e-commerce et dans 80 points de vente partenaires. La marque compte <strong>12 000 clients</strong> en base, un site e-commerce avec <strong>35 000 visiteurs/mois</strong> et une communauté Instagram de <strong>28 000 abonnés</strong>. Votre mission : structurer la stratégie marketing relationnel et digital.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block" id="qb-m1">
+      <div class="q-header">
+        <div class="q-num purple">1</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">Pour segmenter vos 12 000 clients et personnaliser votre communication, quels critères de segmentation sont pertinents ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-m1">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Comportement d'achat : fréquence, panier moyen, catégories achetées</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Prénom du directeur informatique de l'entreprise cliente</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Canal d'acquisition : e-commerce vs points de vente partenaires</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Engagement digital : taux d'ouverture des emails, clics, interactions Instagram</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Données socio-démographiques : âge, localisation, sensibilité écologique déclarée</li>
+      </ul>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="qb-m2">
+      <div class="q-header">
+        <div class="q-num purple">2</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">Une cliente achète régulièrement en ligne (4 fois/an, panier moyen 60 €) mais ne répond jamais aux emailings. Elle interagit en revanche fréquemment sur Instagram. Quelle stratégie omnicanale adoptez-vous ?</div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-m2">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Continuer à envoyer uniquement des emailings — c'est le canal officiel de la marque</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> La retirer de la base e-mailing et concentrer la relation sur Instagram (stories, DM, réponses aux commentaires)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Adapter le canal au comportement client : réduire les emailings, privilégier les interactions Instagram, et tester les notifications push si elle est sur l'appli</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Envoyer plus d'emailings pour augmenter les chances qu'elle en lise un</li>
+      </ul>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="qb-m3">
+      <div class="q-header">
+        <div class="q-num purple">3</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">Expliquez comment le CRM peut être utilisé pour améliorer la relation client chez NaturaCosm. Donnez 3 exemples d'utilisation concrète.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-m3" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('m',6)"></textarea>
+      <div class="corrected-answer" id="cor-m3">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>Le CRM (Customer Relationship Management)</strong> est un outil de gestion de la relation client qui centralise, stocke et exploite les données client pour personnaliser les interactions.<br><br><strong>Utilisation 1 — Personnalisation des offres :</strong> Identifier les clients qui achètent régulièrement une gamme (ex: soins visage) pour leur envoyer en priorité les nouveautés et promotions sur cette gamme — augmentation du taux de conversion.<br><br><strong>Utilisation 2 — Relance des clients inactifs :</strong> Configurer une alerte automatique dans le CRM si un client n'a pas acheté depuis 90 jours → déclenchement d'un email de réactivation avec un bon de réduction personnalisé.<br><br><strong>Utilisation 3 — Suivi multicanal :</strong> Enregistrer dans le CRM chaque interaction client (e-commerce, Instagram, appel SAV, visite en point de vente) pour avoir une vision 360° et adapter la communication selon le canal préféré identifié — c'est le fondement de la stratégie omnicanale.</p>
+        <div class="self-eval" id="eval-m3">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('m',3,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('m',3,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="qb-m4">
+      <div class="q-header">
+        <div class="q-num purple">4</div>
+        <div>
+          <span class="q-type-badge badge-multi">QCM — plusieurs réponses possibles</span>
+          <div class="q-text">NaturaCosm souhaite développer sa stratégie d'inbound marketing. Quelles actions en font partie ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-m4">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Créer un blog avec des articles sur les ingrédients bio et les routines beauté</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Acheter des listes d'emails et envoyer des campagnes non sollicitées</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Optimiser le référencement naturel (SEO) du site pour attirer des visiteurs qualifiés</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Proposer un guide gratuit téléchargeable « Routine beauté 100% naturelle » en échange d'un email</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Animer les réseaux sociaux avec des contenus à valeur ajoutée pour la communauté</li>
+      </ul>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="qb-m5">
+      <div class="q-header">
+        <div class="q-num purple">5</div>
+        <div>
+          <span class="q-type-badge badge-msi">Mise en situation</span>
+          <div class="q-text">NaturaCosm veut collecter les adresses email des visiteurs du site via un formulaire d'inscription. Parmi ces pratiques, lesquelles sont conformes au RGPD ? <em>(Plusieurs réponses possibles)</em></div>
+        </div>
+      </div>
+      <ul class="options-list" id="opts-m5">
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Informer clairement l'internaute de l'utilisation de ses données (finalité, durée de conservation)</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Obtenir un consentement explicite et libre avant tout envoi commercial</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Pré-cocher automatiquement la case d'abonnement à la newsletter</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Permettre à l'utilisateur de se désabonner facilement à tout moment</li>
+        <li class="option-item" onclick="toggleOpt(this)"><input type="checkbox" disabled> Revendre la base de données à des partenaires sans en informer les clients</li>
+      </ul>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-block" id="qb-m6">
+      <div class="q-header">
+        <div class="q-num purple">6</div>
+        <div>
+          <span class="q-type-badge badge-open">Question ouverte</span>
+          <div class="q-text">NaturaCosm remarque qu'un concurrent lance régulièrement de nouvelles gammes très médiatisées. Expliquez comment mettre en place une veille concurrentielle structurée et quelles informations commerciales vous remonteriez à votre direction.</div>
+        </div>
+      </div>
+      <textarea class="open-answer" id="ans-m6" placeholder="Rédigez votre réponse ici..." oninput="updateProgress('m',6)"></textarea>
+      <div class="corrected-answer" id="cor-m6">
+        <div class="corrected-label">✅ Éléments de corrigé attendus</div>
+        <p><strong>Veille concurrentielle structurée :</strong><br><br><strong>Sources à surveiller :</strong> Site web et e-shop du concurrent (nouvelles gammes, prix, promotions), réseaux sociaux (fréquence de publication, engagement, nouveaux produits), presse spécialisée beauté bio, avis clients (Google, Trustpilot, Sephora), salons professionnels (Cosmoprof, etc.), newsletters concurrentes (s'y inscrire), rapports d'activité s'ils sont publics.<br><br><strong>Outils :</strong> Alertes Google (nom concurrent + mots-clés produits), outils SEO (SemRush, Ubersuggest) pour comparer le référencement, Social Blade pour les réseaux sociaux, Mention.com pour les citations presse.<br><br><strong>Informations à remonter à la direction :</strong><br>• Nouveaux produits ou gammes lancés (avec prix et positionnement)<br>• Promotions et actions de prix observées<br>• Évolution de leur présence digitale (croissance followers, taux d'engagement)<br>• Avis clients négatifs récurrents (opportunités à exploiter)<br>• Nouvelles collaborations ou partenariats<br>• Évolution de leur réseau de distribution<br><br><strong>Fréquence :</strong> Rapport mensuel synthétique avec tableau de bord comparatif, alerte immédiate pour les mouvements stratégiques majeurs.</p>
+        <div class="self-eval" id="eval-m6">
+          <span style="font-size:0.78rem;color:var(--grey);align-self:center;">Votre réponse couvre-t-elle ces éléments ?</span>
+          <button class="btn-eval btn-eval-yes" onclick="selfEval('m',6,true,this)">✔ Oui</button>
+          <button class="btn-eval btn-eval-no" onclick="selfEval('m',6,false,this)">✘ Non</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-submit" id="sub-m" onclick="submitCas('m')" style="background:linear-gradient(135deg,#7c3aed,#4c1d95)">📊 Voir ma correction et ma note</button>
+    <div class="synthese purple" id="syn-m"></div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Module interactif BTS NDRC — Référentiel officiel arrêté du 19 février 2018<br>
+  <strong>Blocs de compétences 1, 2 &amp; 3</strong> · Pages 5-10 et 13-14 · Usage pédagogique</p>
+</footer>
+
+<script>
+// ─── CONFIG PAR MODULE ───────────────────────────────────────────────────────
+const CONFIG = {
+  p: {
+    qcm: {
+      1: { correct: [0,2,3,4], expl: "Une prospection structurée repose sur 5 étapes clés : constitution d'un fichier qualifié, définition d'objectifs SMART, choix des canaux adaptés aux cibles, prise de contact, et suivi via le CRM avec mesure du taux de transformation. Contacter sans préparation génère du gaspillage et nuit à l'image de l'entreprise." },
+      2: { correct: [0,2,3], expl: "L'emailing ciblé, le social selling LinkedIn et les salons professionnels sont des canaux adaptés au budget et à la cible BTP. La campagne TV est hors budget et hors cible. Une liste non qualifiée génère peu de résultats et peut nuire à la délivrabilité email (taux de spam)." },
+      4: { correct: [1,3], expl: "En prospection, un prospect qui signale la satisfaction envers un concurrent doit être traité comme une opportunité : questionner sur ses limites permet de positionner sa propre valeur ajoutée. Proposer une démonstration sans insister maintient le contact pour l'avenir. Raccrocher ou dénigrer sont des erreurs professionnelles." },
+      5: { correct: [0,2,3,4], expl: "Les indicateurs de performance d'une prospection sont : taux de transformation (prospects → clients), CAC (Coût d'Acquisition Client), taux de prise de RDV et nombre de contacts qualifiés générés. Ces indicateurs permettent d'analyser l'efficacité de chaque canal et d'optimiser les ressources." }
+    },
+    open: { 3: 6, 6: 6 },
+    total: 20
+  },
+  n: {
+    qcm: {
+      1: { correct: [1,2], expl: "La phrase de Mme Fontaine contient deux signaux : 'trop chers' (mobile Argent — priorité budgétaire) et 'trop grands' (Sécurité — crainte d'un engagement inadapté). Le SONCAS invite à identifier ces mobiles pour adapter l'argumentation. Orgueil et Nouveauté ne sont pas activés par cette réponse." },
+      2: { correct: [0,1,2], expl: "La méthode CAP (Caractéristique-Avantage-Preuve) est le fondement de l'argumentation commerciale. Une caractéristique seule ne convainc pas : elle doit être traduite en avantage client concret, puis appuyée par une preuve (témoignage, chiffre, démonstration). Dénigrer un concurrent est non seulement inefficace mais contraire à la déontologie commerciale." },
+      4: { correct: [0,1,3], expl: "La reformulation positive, la technique de l'alternative et l'urgence réelle (si fondée) sont des techniques de closing légitimes. Inventer une offre concurrente est une pratique déloyale et mensongère qui peut entraîner l'annulation du contrat et nuire à la réputation du commercial." },
+      5: { correct: [1,3], expl: "Face à un litige, le professionnel reconnaît le problème sans le minimiser, s'excuse de la gêne causée, investigue les causes et propose un plan d'action avec une date d'engagement. Écouter activement et escalader en interne avec suivi communiqué au client sont les deux réflexes attendus. Rejeter la responsabilité ou compenser sans comprendre sont des réponses inappropriées." }
+    },
+    open: { 3: 6, 6: 6 },
+    total: 20
+  },
+  v: {
+    qcm: {
+      1: { correct: [0,2,3,4], expl: "La phase de découverte vise à qualifier le besoin réel du client sur 4 axes : usages (familiaux, professionnels), contraintes (budget, consommation), mode de financement et insatisfactions avec le véhicule actuel. Ces 4 questions permettent de construire une offre personnalisée. Demander la couleur préférée de l'épouse n'apporte aucune valeur de découverte fonctionnelle." },
+      2: { correct: [2,3], expl: "Un client qui veut 'comparer sur internet' signale un doute sur le rapport valeur/prix. L'essai immédiat crée un engagement émotionnel difficile à contredire par des comparatifs en ligne. La reformulation des besoins + rendez-vous de suivi ancre l'offre dans les besoins identifiés. Baisser le prix sans raison dévalue l'offre. Laisser partir sans action est une opportunité perdue." },
+      4: { correct: [0,2,3,4], expl: "Le NPS mesure la recommandation, le CSAT la satisfaction post-interaction, le LTV la valeur totale d'un client sur sa durée de vie, et le taux de ré-achat/churn mesure la fidélité comportementale. Ces 4 indicateurs sont explicitement cités dans le référentiel NDRC comme outils de pilotage de la relation client." },
+      5: { correct: [0,1,3,4], expl: "Un événement commercial réussi repose sur 4 piliers : des objectifs commerciaux définis en amont, une invitation ciblée (clients convertibles à l'électrique), une collecte systématique de données dans le CRM, et un bilan ROI à J+7. L'absence de suivi est la principale cause d'inefficacité des événements commerciaux." }
+    },
+    open: { 3: 6, 6: 6 },
+    total: 20
+  },
+  m: {
+    qcm: {
+      1: { correct: [0,2,3,4], expl: "Une segmentation marketing efficace repose sur des critères comportementaux (achats, engagement), des critères de canal d'acquisition et des données socio-démographiques. Le prénom du directeur informatique est une donnée sans pertinence pour la segmentation marketing. Ces critères permettent de personnaliser les messages et d'améliorer le taux de conversion." },
+      2: { correct: [2], expl: "L'omnicanalité consiste à adapter le canal au comportement et aux préférences du client — pas à imposer un canal uniforme. Cette cliente est active sur Instagram : c'est là que la relation doit se construire. Multiplier les emailings non lus risque de générer de la fatigue et un désabonnement. La retirer complètement de l'emailing serait excessif." },
+      4: { correct: [0,2,3,4], expl: "L'inbound marketing repose sur la création de contenus à valeur ajoutée qui attirent naturellement les prospects (SEO, blog, réseaux sociaux, guides téléchargeables). À l'inverse, l'achat de listes et les campagnes non sollicitées sont du outbound marketing et contraires au RGPD. Les 4 actions correctes constituent le cœur d'une stratégie inbound." },
+      5: { correct: [0,1,3], expl: "Le RGPD impose : information transparente sur la finalité et la durée de conservation, consentement explicite et non pré-coché, et droit de désabonnement permanent. Pré-cocher une case ou revendre des données sans consentement sont des infractions passibles de sanctions de la CNIL (jusqu'à 4% du CA mondial ou 20 M€)." }
+    },
+    open: { 3: 6, 6: 6 },
+    total: 20
+  }
+};
+
+// ─── ÉTAT ────────────────────────────────────────────────────────────────────
+const state = {
+  p: { qcm: {}, open: {3: null, 6: null}, submitted: false },
+  n: { qcm: {}, open: {3: null, 6: null}, submitted: false },
+  v: { qcm: {}, open: {3: null, 6: null}, submitted: false },
+  m: { qcm: {}, open: {3: null, 6: null}, submitted: false }
+};
+
+// ─── TOGGLE MODULE ────────────────────────────────────────────────────────────
+function toggleCas(mod, btn) {
+  const panel = document.getElementById('cas-' + mod);
+  const isOpen = panel.classList.contains('visible');
+  panel.classList.toggle('visible', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── TOGGLE OPTION QCM ───────────────────────────────────────────────────────
+function toggleOpt(el) {
+  if (el.classList.contains('correct-answer') || el.classList.contains('wrong-answer')) return;
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  el.classList.toggle('selected', cb.checked);
+}
+
+// ─── SELF EVAL (questions ouvertes) ─────────────────────────────────────────
+function selfEval(mod, qnum, isOk, btn) {
+  state[mod].open[qnum] = isOk;
+  const evalDiv = document.getElementById('eval-' + mod + qnum);
+  evalDiv.querySelectorAll('.btn-eval').forEach(b => b.classList.remove('chosen'));
+  btn.classList.add('chosen');
+  updateProgress(mod, 6);
+}
+
+// ─── PROGRESS ────────────────────────────────────────────────────────────────
+function updateProgress(mod, total) {
+  let answered = 0;
+  const cfg = CONFIG[mod];
+
+  // QCM : compter ceux qui ont au moins une option sélectionnée
+  Object.keys(cfg.qcm).forEach(qn => {
+    const opts = document.querySelectorAll('#opts-' + mod + qn + ' .option-item.selected, #opts-' + mod + qn + ' .option-item.correct-answer, #opts-' + mod + qn + ' .option-item.wrong-answer');
+    if (opts.length > 0) answered++;
+  });
+
+  // Open : compter si du texte ou self-eval fait
+  Object.keys(cfg.open).forEach(qn => {
+    const ta = document.getElementById('ans-' + mod + qn);
+    if (ta && ta.value.trim().length > 20) answered++;
+  });
+
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('prog-' + mod).textContent = answered + ' / ' + total;
+  document.getElementById('bar-' + mod).style.width = pct + '%';
+}
+
+// ─── SUBMIT ──────────────────────────────────────────────────────────────────
+function submitCas(mod) {
+  if (state[mod].submitted) return;
+
+  const cfg = CONFIG[mod];
+  let score = 0;
+  let details = [];
+
+  // Évaluer les QCM
+  Object.entries(cfg.qcm).forEach(([qn, data]) => {
+    const opts = document.querySelectorAll('#opts-' + mod + qn + ' .option-item');
+    const selected = [];
+    opts.forEach((opt, i) => {
+      if (opt.querySelector('input').checked || opt.classList.contains('selected')) selected.push(i);
+    });
+
+    const isCorrect = arraysEqual(selected.sort(), data.correct.sort());
+    const pts = 2;
+
+    // Afficher le résultat visuel
+    opts.forEach((opt, i) => {
+      if (data.correct.includes(i)) {
+        opt.classList.add('correct-answer');
+        opt.classList.remove('selected');
+      } else if (selected.includes(i) && !data.correct.includes(i)) {
+        opt.classList.add('wrong-answer');
+        opt.classList.remove('selected');
+      }
+      opt.style.cursor = 'default';
+    });
+
+    if (isCorrect) score += pts;
+    details.push({
+      q: 'Question ' + qn + ' (QCM)',
+      ok: isCorrect,
+      pts: isCorrect ? pts : 0,
+      max: pts,
+      expl: data.expl
+    });
+
+    // Afficher explication
+    let explEl = document.getElementById('expl-' + mod + qn);
+    if (!explEl) {
+      explEl = document.createElement('div');
+      explEl.className = 'explication';
+      explEl.id = 'expl-' + mod + qn;
+      document.querySelector('#opts-' + mod + qn).after(explEl);
+    }
+    explEl.innerHTML = '<strong>💡 Explication :</strong> ' + data.expl;
+    explEl.style.display = 'block';
+  });
+
+  // Évaluer les questions ouvertes
+  Object.entries(cfg.open).forEach(([qn, maxPts]) => {
+    const ta = document.getElementById('ans-' + mod + qn);
+    const corEl = document.getElementById('cor-' + mod + qn);
+    if (corEl) corEl.style.display = 'block';
+    if (ta) ta.readOnly = true;
+
+    const selfVal = state[mod].open[qn];
+    const pts = selfVal === true ? maxPts : (selfVal === false ? 0 : 0);
+    score += pts;
+
+    details.push({
+      q: 'Question ' + qn + ' (ouverte)',
+      ok: selfVal === true,
+      pts: pts,
+      max: maxPts,
+      expl: selfVal === null ? 'Non auto-évaluée — consultez le corrigé affiché ci-dessus.' : (selfVal ? 'Auto-évaluation positive.' : 'Auto-évaluation négative — relisez le corrigé pour identifier les éléments manquants.')
+    });
+  });
+
+  state[mod].submitted = true;
+  document.getElementById('sub-' + mod).disabled = true;
+  document.getElementById('sub-' + mod).textContent = '✅ Correction affichée';
+
+  // Afficher synthèse
+  const note = Math.round((score / cfg.total) * 20 * 10) / 10;
+  let mention = '', mentionColor = '';
+  if (note >= 16) { mention = '🏆 Excellent'; mentionColor = '#86efac'; }
+  else if (note >= 14) { mention = '✨ Très bien'; mentionColor = '#fde68a'; }
+  else if (note >= 12) { mention = '👍 Bien'; mentionColor = '#fdba74'; }
+  else if (note >= 10) { mention = '📚 Passable'; mentionColor = '#f9a8d4'; }
+  else { mention = '⚠️ Insuffisant'; mentionColor = '#fca5a5'; }
+
+  let detailHTML = details.map(d => `
+    <div class="detail-item">
+      <div class="di-header">
+        <span class="${d.ok ? 'icon-ok' : 'icon-ko'}">${d.ok ? '✔' : '✘'}</span>
+        ${d.q} — <strong>${d.pts}/${d.max} pt${d.max > 1 ? 's' : ''}</strong>
+      </div>
+      <div class="di-expl">${d.expl}</div>
+    </div>
+  `).join('');
+
+  const synEl = document.getElementById('syn-' + mod);
+  synEl.innerHTML = `
+    <h3>📊 Votre correction</h3>
+    <div class="note-display">${note.toString().replace('.',',')} <span>/ 20</span></div>
+    <div class="mention" style="color:${mentionColor}">${mention}</div>
+    <p style="opacity:0.85;font-size:0.85rem;margin-bottom:0.5rem">Score brut : ${score} / ${cfg.total} points</p>
+    <div class="detail-corrections">${detailHTML}</div>
+    <button class="btn-recommencer" onclick="resetCas('${mod}')">↩ Recommencer ce module</button>
+  `;
+  synEl.style.display = 'block';
+  synEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── RESET ───────────────────────────────────────────────────────────────────
+function resetCas(mod) {
+  state[mod] = { qcm: {}, open: {3: null, 6: null}, submitted: false };
+
+  // Reset QCM options
+  document.querySelectorAll('[id^="opts-' + mod + '"] .option-item').forEach(opt => {
+    opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+    opt.style.cursor = '';
+    const cb = opt.querySelector('input');
+    if (cb) cb.checked = false;
+  });
+
+  // Reset explications
+  document.querySelectorAll('[id^="expl-' + mod + '"]').forEach(el => el.style.display = 'none');
+
+  // Reset textareas & corriges
+  ['3','6'].forEach(qn => {
+    const ta = document.getElementById('ans-' + mod + qn);
+    if (ta) { ta.value = ''; ta.readOnly = false; }
+    const cor = document.getElementById('cor-' + mod + qn);
+    if (cor) cor.style.display = 'none';
+    const eval_ = document.getElementById('eval-' + mod + qn);
+    if (eval_) eval_.querySelectorAll('.btn-eval').forEach(b => b.classList.remove('chosen'));
+  });
+
+  // Reset submit button
+  const sub = document.getElementById('sub-' + mod);
+  sub.disabled = false;
+  sub.textContent = '📊 Voir ma correction et ma note';
+
+  // Reset synthèse
+  const syn = document.getElementById('syn-' + mod);
+  syn.style.display = 'none';
+  syn.innerHTML = '';
+
+  // Reset progress
+  document.getElementById('prog-' + mod).textContent = '0 / 6';
+  document.getElementById('bar-' + mod).style.width = '0%';
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function arraysEqual(a, b) {
+  if (a.length !== b.length) return false;
+  return a.every((v, i) => v === b[i]);
+}
+</script>
+</body>
+</html>
