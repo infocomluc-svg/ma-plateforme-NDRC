@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de cours — Négociation commerciale · BTS NDRC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#f47c20;--orange-light:#ffa955;--orange-pale:#fff3e8;--green:#1a7a4a;--off-white:#f8f9fa;--dark:#1a1a2e;--text:#2d3748;--grey:#6c757d;--grey-light:#e9ecef;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--off-white);color:var(--text);line-height:1.7;}
+.top-bar{background:var(--orange);color:white;padding:0.5rem 2rem;font-size:0.75rem;display:flex;align-items:center;gap:1rem;}
+.top-bar a{color:rgba(255,255,255,0.85);text-decoration:none;font-weight:700;}
+.top-bar a:hover{color:white;}
+header{background:linear-gradient(135deg,var(--orange) 0%,#c0570f 100%);color:white;padding:3rem 2rem;text-align:center;}
+header .badge{display:inline-block;background:rgba(26,122,74,0.9);color:white;font-size:0.65rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.3rem 1rem;border-radius:50px;margin-bottom:1rem;}
+header h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;margin-bottom:0.5rem;}
+header p{opacity:0.9;font-size:0.95rem;max-width:550px;margin:0 auto;}
+main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+.toc{background:white;border-radius:14px;padding:1.5rem;margin-bottom:2rem;border-left:4px solid var(--orange);box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.toc h2{font-size:0.75rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--orange);margin-bottom:0.8rem;}
+.toc ol{padding-left:1.2rem;}
+.toc ol li{font-size:0.88rem;margin-bottom:0.35rem;}
+.toc ol li a{color:var(--dark);text-decoration:none;font-weight:600;}
+.toc ol li a:hover{color:var(--orange);}
+.section{background:white;border-radius:14px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.section h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--dark);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:2px solid var(--orange-pale);display:flex;align-items:center;gap:0.5rem;}
+.section h3{font-size:1rem;font-weight:800;color:var(--orange);margin:1.2rem 0 0.5rem;}
+.section p{font-size:0.9rem;margin-bottom:0.8rem;}
+.section ul,.section ol{padding-left:1.4rem;font-size:0.9rem;}
+.section ul li,.section ol li{margin-bottom:0.4rem;}
+.def-box{background:var(--orange-pale);border-left:4px solid var(--orange);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin:1rem 0;font-size:0.88rem;}
+.def-box strong{color:var(--orange);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.3rem;}
+.soncas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.7rem;margin:1rem 0;}
+.soncas-item{border-radius:10px;padding:0.9rem;font-size:0.84rem;}
+.s-S{background:#e0f2fe;border-left:4px solid #0891b2;}
+.s-O{background:#fef3c7;border-left:4px solid #f59e0b;}
+.s-N{background:#d1fae5;border-left:4px solid #10b981;}
+.s-C{background:#fce7f3;border-left:4px solid #db2777;}
+.s-A{background:#fde8e8;border-left:4px solid #ef4444;}
+.s-S2{background:#ede9fe;border-left:4px solid #7c3aed;}
+.soncas-item .sl{font-size:0.68rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;}
+.soncas-item ul{padding-left:1rem;list-style:disc;}
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin:1rem 0;}
+.cap-item{background:var(--orange-pale);border-radius:10px;padding:1rem;text-align:center;}
+.cap-letter{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--orange);}
+.cap-label{font-size:0.75rem;font-weight:800;color:var(--dark);}
+.cap-desc{font-size:0.78rem;color:var(--grey);margin-top:0.3rem;}
+.table-wrap{overflow-x:auto;margin:1rem 0;}
+table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+th{background:var(--orange);color:white;padding:0.65rem 0.9rem;text-align:left;font-weight:700;}
+td{padding:0.6rem 0.9rem;border-bottom:1px solid var(--grey-light);}
+tr:nth-child(even) td{background:var(--off-white);}
+.ref-badge{background:linear-gradient(135deg,var(--orange),#c0570f);color:white;border-radius:10px;padding:0.8rem 1.2rem;font-size:0.82rem;margin-top:1rem;}
+.ref-badge strong{display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.8;margin-bottom:0.2rem;}
+footer{text-align:center;padding:2rem;font-size:0.78rem;color:var(--grey);border-top:1px solid var(--grey-light);margin-top:1rem;}
+@media(max-width:640px){.cap-grid{grid-template-columns:1fr;}.soncas-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="index.html">← Retour à la plateforme</a>
+  <span>|</span>
+  <span>🤝 Fiche de cours · Négociation commerciale</span>
+</div>
+
+<header>
+  <div class="badge">Bloc 1 · Compétence 2 · Référentiel 2018 · Pages 5-10 et 13-14</div>
+  <h1>🤝 Négociation commerciale</h1>
+  <p>SONCAS, CAP, traitement des objections, marges de manœuvre et relation durable — BTS NDRC</p>
+</header>
+
+<main>
+  <nav class="toc">
+    <h2>📋 Sommaire</h2>
+    <ol>
+      <li><a href="#s1">La méthode SONCAS : identifier les motivations</a></li>
+      <li><a href="#s2">La méthode CAP : construire l'argumentaire</a></li>
+      <li><a href="#s3">Traitement des objections</a></li>
+      <li><a href="#s4">Les marges de manœuvre et la négociation du prix</a></li>
+      <li><a href="#s5">Spécificités B2B, B2C et B2G</a></li>
+      <li><a href="#s6">Gestion des conflits et des litiges</a></li>
+    </ol>
+  </nav>
+
+  <div class="section" id="s1">
+    <h2>1. 🧠 La méthode SONCAS : identifier les motivations d'achat</h2>
+    <p>La méthode SONCAS permet d'identifier les <strong>motivations psychologiques dominantes</strong> d'un client afin d'adapter son discours commercial. Chaque client présente un profil différent, souvent combinant plusieurs motivations.</p>
+    <div class="soncas-grid">
+      <div class="soncas-item s-S"><div class="sl">S — Sécurité</div><ul><li>Craint le risque, le changement</li><li>Recherche des garanties, des références</li><li>Argument : SAV, certifications, retours clients</li></ul></div>
+      <div class="soncas-item s-O"><div class="sl">O — Orgueil</div><ul><li>Valorise son statut, son image</li><li>Sensible au prestige, à l'exclusivité</li><li>Argument : édition limitée, haut de gamme</li></ul></div>
+      <div class="soncas-item s-N"><div class="sl">N — Nouveauté</div><ul><li>Aime les innovations, les tendances</li><li>Attrait pour ce qui est moderne</li><li>Argument : innovation, technologie, avant-garde</li></ul></div>
+      <div class="soncas-item s-C"><div class="sl">C — Confort</div><ul><li>Recherche la praticité, la facilité</li><li>Évite les efforts et la complexité</li><li>Argument : simplicité d'utilisation, gain de temps</li></ul></div>
+      <div class="soncas-item s-A"><div class="sl">A — Argent</div><ul><li>Sensible au prix, à la rentabilité</li><li>Compare systématiquement les offres</li><li>Argument : ROI, économies, rapport qualité/prix</li></ul></div>
+      <div class="soncas-item s-S2"><div class="sl">S — Sympathie</div><ul><li>Achète par affinité, confiance</li><li>Importance de la relation humaine</li><li>Argument : relation personnalisée, écoute</li></ul></div>
+    </div>
+    <div class="ref-badge"><strong>📌 Référentiel — Savoirs associés Bloc 1</strong>Le SONCAS est un outil du référentiel NDRC pour « personnaliser la relation commerciale et adapter l'argumentation aux motivations du client ».</div>
+  </div>
+
+  <div class="section" id="s2">
+    <h2>2. 💬 La méthode CAP : construire l'argumentaire</h2>
+    <p>La méthode CAP structure l'argumentaire commercial en trois niveaux croissants de persuasion. Un argument sans preuve est une promesse ; une caractéristique sans avantage est de la technique.</p>
+    <div class="cap-grid">
+      <div class="cap-item"><div class="cap-letter">C</div><div class="cap-label">Caractéristique</div><div class="cap-desc">Donnée objective du produit/service (taille, puissance, technologie, matériau)</div></div>
+      <div class="cap-item"><div class="cap-letter">A</div><div class="cap-label">Avantage</div><div class="cap-desc">Bénéfice concret pour CE client en particulier, lié à sa situation et ses motivations</div></div>
+      <div class="cap-item"><div class="cap-letter">P</div><div class="cap-label">Preuve</div><div class="cap-desc">Démonstration, témoignage, chiffre, certification qui rend l'avantage crédible</div></div>
+    </div>
+    <h3>Exemple appliqué</h3>
+    <div class="def-box"><strong>Exemple CAP — Logiciel de gestion pour artisan</strong>
+    <strong>C</strong> : « Notre logiciel s'installe en 30 minutes et synchronise vos devis, factures et planning depuis votre smartphone. »<br>
+    <strong>A</strong> : « Pour vous qui travaillez souvent sur chantier, cela signifie que vous pouvez envoyer un devis à un client en 5 minutes depuis votre voiture — sans attendre d'être au bureau. »<br>
+    <strong>P</strong> : « 94 % de nos clients artisans déclarent avoir réduit leur temps administratif de 40 % après 3 mois d'utilisation. Voici le témoignage de Marc, plombier à Lyon. »</div>
+  </div>
+
+  <div class="section" id="s3">
+    <h2>3. 🛡️ Traitement des objections</h2>
+    <p>Une objection est un signal d'intérêt déguisé. Elle révèle un doute, une crainte ou un manque d'information. Ne jamais la contester frontalement.</p>
+    <h3>La méthode en 5 étapes</h3>
+    <ol>
+      <li><strong>Écouter sans interrompre</strong> — montrer que l'objection est prise au sérieux</li>
+      <li><strong>Valider et reformuler</strong> — « Je comprends tout à fait que le prix soit un critère important pour vous… »</li>
+      <li><strong>Creuser l'objection</strong> — « Qu'est-ce qui vous paraît trop cher exactement ? Comparé à quoi ? »</li>
+      <li><strong>Répondre avec un argument CAP adapté</strong> à la motivation SONCAS identifiée</li>
+      <li><strong>Vérifier la levée de l'objection</strong> — « Est-ce que cette précision répond à votre question ? »</li>
+    </ol>
+    <h3>Types d'objections courantes</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Objection</th><th>Traitement recommandé</th></tr>
+        <tr><td>« C'est trop cher »</td><td>Recadrer sur la valeur et le ROI, comparer sur le total cost, proposer une concession avec contrepartie</td></tr>
+        <tr><td>« J'ai un fournisseur actuel »</td><td>Valoriser sans dénigrer, identifier les axes d'amélioration possible, proposer un test ou une démonstration</td></tr>
+        <tr><td>« Je vais réfléchir »</td><td>Identifier le frein réel, reformuler les bénéfices, créer une légère urgence réelle (stock, délai)</td></tr>
+        <tr><td>« Ce n'est pas le bon moment »</td><td>Sonder le calendrier idéal, proposer un rendez-vous de suivi planifié, laisser une documentation</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <h2>4. 💰 Marges de manœuvre et négociation du prix</h2>
+    <div class="def-box"><strong>Définition</strong>Les marges de manœuvre désignent l'espace de négociation entre le prix initial proposé et le seuil minimal acceptable (prix plancher), défini en amont avec la direction commerciale. Dépasser ce seuil sans autorisation constitue une faute professionnelle.</div>
+    <h3>Principes de la négociation du prix</h3>
+    <ul>
+      <li><strong>Ne jamais concéder sans contrepartie</strong> : toute remise doit être échangée contre un engagement du client (volume, durée, paiement comptant, référence)</li>
+      <li><strong>Défendre la valeur avant le prix</strong> : argumenter sur les bénéfices avant d'entrer dans les concessions tarifaires</li>
+      <li><strong>Maîtriser le Total Cost of Ownership (TCO)</strong> : comparer non pas le prix affiché mais le coût total sur la durée (maintenance, formation, support inclus)</li>
+      <li><strong>Utiliser les techniques de closing légitimes</strong> : reformulation positive, technique de l'alternative, urgence réelle</li>
+    </ul>
+    <h3>Les techniques de closing</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Technique</th><th>Description</th><th>Exemple</th></tr>
+        <tr><td>Reformulation positive</td><td>Résumer les points d'accord avant de conclure</td><td>« Si je résume : vous avez validé X, Y, Z… Alors je vous prépare le contrat ? »</td></tr>
+        <tr><td>Alternative</td><td>Proposer un choix entre deux options positives</td><td>« Vous préférez un démarrage le 1er mars ou le 1er avril ? »</td></tr>
+        <tr><td>Urgence réelle</td><td>Mentionner une contrainte réelle de disponibilité</td><td>« Un autre client visite ce bien vendredi — si c'est vrai. »</td></tr>
+        <tr><td>Concession finale</td><td>Offrir un geste symbolique pour déclencher la décision</td><td>Livraison offerte, 1er mois gratuit, formation incluse</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" id="s5">
+    <h2>5. 🌐 Spécificités B2B, B2C et B2G</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Critère</th><th>B2C (particulier)</th><th>B2B (entreprise)</th><th>B2G (collectivité)</th></tr>
+        <tr><td>Décideur</td><td>Individuel ou familial</td><td>DMU (Direction, Achats, Technique)</td><td>Élu + services + marchés publics</td></tr>
+        <tr><td>Cycle de vente</td><td>Court (heures à jours)</td><td>Long (semaines à mois)</td><td>Très long (appels d'offres)</td></tr>
+        <tr><td>Arguments prioritaires</td><td>Émotion, confort, prix</td><td>ROI, fiabilité, TCO</td><td>Conformité, budget, impact social</td></tr>
+        <tr><td>Cadre juridique</td><td>Droit de la consommation</td><td>Droit commercial, CGV/CGA</td><td>Code des marchés publics</td></tr>
+        <tr><td>Relation</td><td>Transactionnelle à relationnelle</td><td>Partenariale long terme</td><td>Institutionnelle et formelle</td></tr>
+      </table>
+    </div>
+    <div class="ref-badge"><strong>📌 Référentiel — Bloc 1, Compétence 2, Savoirs associés</strong>« Situations de négociation en contexte B2B, B2C et B2G — le commercial NDRC doit maîtriser les spécificités de chaque contexte et adapter son comportement en conséquence. »</div>
+  </div>
+
+  <div class="section" id="s6">
+    <h2>6. ⚖️ Gestion des conflits et des litiges client</h2>
+    <p>La gestion des insatisfactions et litiges fait partie de la compétence de création d'une relation client durable. Bien géré, un litige peut renforcer la confiance du client.</p>
+    <h3>Processus de traitement d'un litige</h3>
+    <ol>
+      <li><strong>Écoute active et empathie</strong> : laisser le client exprimer son mécontentement sans l'interrompre</li>
+      <li><strong>Reconnaissance du problème</strong> : ne pas minimiser ni rejeter la responsabilité</li>
+      <li><strong>Reformulation</strong> : vérifier la bonne compréhension du problème</li>
+      <li><strong>Investigation</strong> : rechercher les causes réelles en interne</li>
+      <li><strong>Proposition d'une solution</strong> avec un engagement de délai clair</li>
+      <li><strong>Suivi et clôture</strong> : vérifier la satisfaction après résolution, tracer dans le CRM</li>
+    </ol>
+    <h3>Bonnes pratiques</h3>
+    <ul>
+      <li>Ne jamais promettre ce que l'on ne peut pas tenir</li>
+      <li>Documenter chaque litige dans le CRM (traçabilité et apprentissage collectif)</li>
+      <li>Proposer un geste commercial proportionné — sans en faire systématiquement un précédent</li>
+      <li>Utiliser les litiges comme données de veille (signaux d'amélioration produit ou process)</li>
+    </ul>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;">
+    <a href="index.html" style="display:inline-block;background:var(--orange);color:white;padding:0.8rem 2rem;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.95rem;">← Retour à la plateforme · Faire le cas pratique</a>
+  </div>
+</main>
+<footer>BTS NDRC — Fiche de cours Négociation · Référentiel officiel 2018 · Pages 5-10 et 13-14</footer>
+</body>
+</html>

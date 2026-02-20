@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de cours — Techniques de vente · BTS NDRC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#0891b2;--teal-light:#38bdf8;--teal-pale:#e0f2fe;--orange:#f47c20;--off-white:#f8f9fa;--dark:#1a1a2e;--text:#2d3748;--grey:#6c757d;--grey-light:#e9ecef;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--off-white);color:var(--text);line-height:1.7;}
+.top-bar{background:var(--teal);color:white;padding:0.5rem 2rem;font-size:0.75rem;display:flex;align-items:center;gap:1rem;}
+.top-bar a{color:rgba(255,255,255,0.85);text-decoration:none;font-weight:700;}
+.top-bar a:hover{color:white;}
+header{background:linear-gradient(135deg,var(--teal) 0%,#065970 100%);color:white;padding:3rem 2rem;text-align:center;}
+header .badge{display:inline-block;background:rgba(244,124,32,0.9);color:white;font-size:0.65rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.3rem 1rem;border-radius:50px;margin-bottom:1rem;}
+header h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;margin-bottom:0.5rem;}
+header p{opacity:0.9;font-size:0.95rem;max-width:550px;margin:0 auto;}
+main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+.toc{background:white;border-radius:14px;padding:1.5rem;margin-bottom:2rem;border-left:4px solid var(--teal);box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.toc h2{font-size:0.75rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);margin-bottom:0.8rem;}
+.toc ol{padding-left:1.2rem;}
+.toc ol li{font-size:0.88rem;margin-bottom:0.35rem;}
+.toc ol li a{color:var(--dark);text-decoration:none;font-weight:600;}
+.toc ol li a:hover{color:var(--teal);}
+.section{background:white;border-radius:14px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.section h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--dark);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:2px solid var(--teal-pale);}
+.section h3{font-size:1rem;font-weight:800;color:var(--teal);margin:1.2rem 0 0.5rem;}
+.section p{font-size:0.9rem;margin-bottom:0.8rem;}
+.section ul,.section ol{padding-left:1.4rem;font-size:0.9rem;}
+.section ul li,.section ol li{margin-bottom:0.4rem;}
+.def-box{background:var(--teal-pale);border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin:1rem 0;font-size:0.88rem;}
+.def-box strong{color:var(--teal);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.3rem;}
+.phases{display:flex;flex-direction:column;gap:0;margin:1rem 0;}
+.phase-item{display:flex;align-items:stretch;gap:0;}
+.phase-num{width:50px;min-width:50px;background:var(--teal);color:white;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;border-radius:10px 0 0 10px;}
+.phase-num.last{border-radius:10px 0 0 10px;}
+.phase-content{flex:1;background:var(--teal-pale);border-radius:0 10px 10px 0;padding:0.9rem 1.1rem;margin-bottom:4px;}
+.phase-content h4{font-size:0.88rem;font-weight:800;color:var(--dark);margin-bottom:0.25rem;}
+.phase-content p{font-size:0.82rem;color:var(--grey);margin:0;}
+.table-wrap{overflow-x:auto;margin:1rem 0;}
+table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+th{background:var(--teal);color:white;padding:0.65rem 0.9rem;text-align:left;font-weight:700;}
+td{padding:0.6rem 0.9rem;border-bottom:1px solid var(--grey-light);}
+tr:nth-child(even) td{background:var(--off-white);}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.8rem;margin:1rem 0;}
+.kpi-card{background:var(--teal-pale);border-radius:10px;padding:1rem;text-align:center;}
+.kpi-card .kpi-label{font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);margin-bottom:0.4rem;}
+.kpi-card .kpi-name{font-size:0.82rem;font-weight:700;color:var(--dark);margin-bottom:0.3rem;}
+.kpi-card .kpi-desc{font-size:0.75rem;color:var(--grey);}
+.ref-badge{background:linear-gradient(135deg,var(--teal),#065970);color:white;border-radius:10px;padding:0.8rem 1.2rem;font-size:0.82rem;margin-top:1rem;}
+.ref-badge strong{display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.8;margin-bottom:0.2rem;}
+footer{text-align:center;padding:2rem;font-size:0.78rem;color:var(--grey);border-top:1px solid var(--grey-light);margin-top:1rem;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="index.html">← Retour à la plateforme</a>
+  <span>|</span>
+  <span>💼 Fiche de cours · Techniques de vente</span>
+</div>
+
+<header>
+  <div class="badge">Bloc 1 · Compétences 2 &amp; 3 · Référentiel 2018 · Pages 5-10 et 13-14</div>
+  <h1>💼 Techniques de vente</h1>
+  <p>Phases de l'entretien, closing, suivi client, animation commerciale et fidélisation — BTS NDRC</p>
+</header>
+
+<main>
+  <nav class="toc">
+    <h2>📋 Sommaire</h2>
+    <ol>
+      <li><a href="#s1">Les phases de l'entretien de vente</a></li>
+      <li><a href="#s2">La découverte des besoins</a></li>
+      <li><a href="#s3">Les techniques de closing</a></li>
+      <li><a href="#s4">Le suivi post-vente et la fidélisation</a></li>
+      <li><a href="#s5">Les indicateurs de la relation client</a></li>
+      <li><a href="#s6">Organiser et animer un événement commercial</a></li>
+    </ol>
+  </nav>
+
+  <div class="section" id="s1">
+    <h2>1. 🔄 Les phases de l'entretien de vente</h2>
+    <p>Un entretien de vente réussi suit une structure logique en plusieurs phases. Chacune prépare la suivante — court-circuiter une phase fragilise l'ensemble du processus.</p>
+    <div class="phases">
+      <div class="phase-item"><div class="phase-num">1</div><div class="phase-content"><h4>Prise de contact &amp; accueil</h4><p>Première impression, présentation, création du climat de confiance. Règle des 4 × 20 : 20 premières secondes, 20 premiers gestes, 20 premiers mots, 20 premiers centimètres.</p></div></div>
+      <div class="phase-item"><div class="phase-num">2</div><div class="phase-content"><h4>Découverte des besoins</h4><p>Phase clé : questionnement ouvert et fermé, écoute active, reformulation. Identifier le besoin réel (pas seulement le besoin exprimé) et les motivations SONCAS.</p></div></div>
+      <div class="phase-item"><div class="phase-num">3</div><div class="phase-content"><h4>Argumentation</h4><p>Présentation de l'offre via la méthode CAP (Caractéristique-Avantage-Preuve), adaptée aux motivations identifiées à l'étape 2.</p></div></div>
+      <div class="phase-item"><div class="phase-num">4</div><div class="phase-content"><h4>Traitement des objections</h4><p>Écouter, valider, creuser, répondre et vérifier la levée. Une objection est un signal d'intérêt.</p></div></div>
+      <div class="phase-item"><div class="phase-num">5</div><div class="phase-content"><h4>Négociation &amp; closing</h4><p>Finalisation des conditions (prix, délai, garanties) et conclusion de la vente via les techniques de closing appropriées.</p></div></div>
+      <div class="phase-item"><div class="phase-num">6</div><div class="phase-content"><h4>Prise de congé &amp; suivi</h4><p>Confirmer les engagements mutuels, remercier, planifier le suivi post-vente et mettre à jour le CRM.</p></div></div>
+    </div>
+    <div class="ref-badge"><strong>📌 Référentiel — Bloc 1, Compétence 2</strong>« Négocier et vendre une solution adaptée aux besoins du client en maîtrisant la relation interpersonnelle » — l'entretien de vente structuré est la compétence centrale évaluée en E4.</div>
+  </div>
+
+  <div class="section" id="s2">
+    <h2>2. 🔍 La découverte des besoins</h2>
+    <p>La découverte est la phase la plus importante de la vente. Un bon diagnostic client conditionne la pertinence de l'offre proposée et réduit le temps de traitement des objections.</p>
+    <h3>Types de questions</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Type</th><th>Utilisation</th><th>Exemple</th></tr>
+        <tr><td>Question ouverte</td><td>Faire parler, recueillir des informations</td><td>« Quels sont vos usages principaux ? »</td></tr>
+        <tr><td>Question fermée</td><td>Valider, confirmer une information</td><td>« Vous avez bien 3 salariés ? »</td></tr>
+        <tr><td>Question de reformulation</td><td>Vérifier la compréhension</td><td>« Si je comprends bien, vous cherchez... ? »</td></tr>
+        <tr><td>Question alternative</td><td>Orienter vers un choix, engager</td><td>« Vous préférez X ou Y ? »</td></tr>
+      </table>
+    </div>
+    <h3>L'écoute active</h3>
+    <ul>
+      <li>Maintenir le contact visuel, hocher la tête, montrer son intérêt</li>
+      <li>Prendre des notes visibles (valorise l'interlocuteur)</li>
+      <li>Ne pas interrompre — attendre les silences pour poser la question suivante</li>
+      <li>Reformuler régulièrement : « Ce que vous me dites, c'est que... »</li>
+    </ul>
+    <h3>Identifier le besoin réel</h3>
+    <div class="def-box"><strong>Besoin exprimé vs besoin réel</strong>Un client dit : « Je veux un logiciel pas cher. » → Besoin exprimé : économiser.<br>Besoin réel : simplifier sa gestion administrative et gagner du temps. → La solution n'est pas nécessairement la moins chère, mais la plus efficace. C'est la découverte approfondie qui révèle la vraie valeur à apporter.</div>
+  </div>
+
+  <div class="section" id="s3">
+    <h2>3. 🎯 Les techniques de closing</h2>
+    <p>Le closing est la conclusion de la vente. Il doit intervenir au bon moment — après levée des objections majeures. Un closing prématuré échoue ; un closing trop tardif laisse le client se raviser.</p>
+    <h3>Signaux d'achat à détecter</h3>
+    <ul>
+      <li>Le client pose des questions sur les modalités pratiques (livraison, garantie, paiement)</li>
+      <li>Il imagine déjà l'utilisation : « Et si j'avais besoin d'ajouter une option... »</li>
+      <li>Son ton se détend, il sourit, il se penche en avant</li>
+      <li>Il répète plusieurs fois les avantages qui l'ont convaincu</li>
+    </ul>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Technique</th><th>Description</th></tr>
+        <tr><td>✅ Reformulation positive</td><td>Résumer les accords et conclure naturellement</td></tr>
+        <tr><td>🔄 L'alternative</td><td>Proposer un choix entre deux options positives — jamais le choix entre oui et non</td></tr>
+        <tr><td>⏳ L'urgence réelle</td><td>Mentionner une vraie contrainte de disponibilité ou de prix (jamais inventer)</td></tr>
+        <tr><td>🎁 La concession finale</td><td>Offrir un geste symbolique conditionné à la décision immédiate</td></tr>
+        <tr><td>🔮 La projection</td><td>Faire imaginer le client déjà propriétaire : « Quand vous l'utiliserez, vous verrez que... »</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <h2>4. 🔁 Le suivi post-vente et la fidélisation</h2>
+    <p>La vente ne se termine pas à la signature. Le suivi post-vente est un levier majeur de fidélisation et génère du bouche-à-oreille positif et de la recommandation.</p>
+    <h3>Plan de suivi type</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Moment</th><th>Action</th><th>Objectif</th></tr>
+        <tr><td>J+1 (après achat)</td><td>Email de confirmation + coordonnées utiles</td><td>Rassurer, conforter la décision d'achat</td></tr>
+        <tr><td>J+3</td><td>Appel de courtoisie</td><td>Vérifier la satisfaction initiale</td></tr>
+        <tr><td>Livraison/installation</td><td>Présentation complète, vérification de la satisfaction</td><td>Valider la bonne prise en main</td></tr>
+        <tr><td>J+15</td><td>Enquête CSAT (satisfaction)</td><td>Mesurer et détecter d'éventuels problèmes</td></tr>
+        <tr><td>J+30</td><td>Appel de suivi + proposition complémentaire</td><td>Fidéliser, cross-sell ou up-sell</td></tr>
+        <tr><td>J+90</td><td>Contact de réactivation / veille sur le compte</td><td>Maintenir la relation, anticiper le renouvellement</td></tr>
+      </table>
+    </div>
+    <h3>Marketing relationnel et fidélisation</h3>
+    <ul>
+      <li><strong>Programme de fidélité</strong> : récompenser les achats répétés (points, avantages exclusifs)</li>
+      <li><strong>Personnalisation</strong> : communication et offres adaptées à l'historique du client</li>
+      <li><strong>Programme de parrainage</strong> : transformer les clients satisfaits en prescripteurs</li>
+      <li><strong>Événements clients</strong> : invitations exclusives, avant-premières, formations</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s5">
+    <h2>5. 📊 Les indicateurs de la relation client</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">NPS</div><div class="kpi-name">Net Promoter Score</div><div class="kpi-desc">Mesure la probabilité de recommandation (de -100 à +100). Score = % Promoteurs - % Détracteurs.</div></div>
+      <div class="kpi-card"><div class="kpi-label">CSAT</div><div class="kpi-name">Customer Satisfaction Score</div><div class="kpi-desc">Mesure la satisfaction après chaque interaction (ex : 4,2/5). Rapide et actionnable.</div></div>
+      <div class="kpi-card"><div class="kpi-label">LTV</div><div class="kpi-name">Lifetime Value</div><div class="kpi-desc">Valeur totale générée par un client sur toute la durée de la relation. LTV = panier × fréquence × durée.</div></div>
+      <div class="kpi-card"><div class="kpi-label">Churn</div><div class="kpi-name">Taux d'attrition</div><div class="kpi-desc">% de clients perdus sur une période. Un taux de churn élevé indique une faible fidélité.</div></div>
+    </div>
+    <div class="def-box"><strong>Exemple de calcul LTV</strong>Client achetant 2 fois/an · panier moyen 500 € · relation de 5 ans → LTV = 500 × 2 × 5 = <strong>5 000 €</strong>. Si le Coût d'Acquisition était de 150 €, le ratio LTV/CAC est de 33 — excellent. Ce ratio guide les décisions d'investissement en fidélisation.</div>
+    <div class="ref-badge"><strong>📌 Référentiel — Savoirs associés Bloc 1</strong>Le NPS, le CSAT et la LTV sont explicitement cités dans les savoirs de gestion commerciale du référentiel NDRC comme outils de pilotage de la qualité de la relation client.</div>
+  </div>
+
+  <div class="section" id="s6">
+    <h2>6. 🎪 Organiser et animer un événement commercial</h2>
+    <p>Le référentiel NDRC (Compétence 3, Bloc 1) prévoit explicitement la capacité à organiser, animer et exploiter les résultats d'un événement commercial (salon, journée portes ouvertes, démonstration...).</p>
+    <h3>Les 3 temps de l'événement</h3>
+    <h3>Avant — Préparation</h3>
+    <ul>
+      <li>Définir des objectifs commerciaux SMART : nombre de contacts qualifiés, RDV générés, CA potentiel</li>
+      <li>Cibler et inviter les prospects et clients pertinents</li>
+      <li>Préparer les supports (argumentaires, démos, offres exclusives événement)</li>
+      <li>Former et briefer l'équipe sur les messages clés et les rôles</li>
+    </ul>
+    <h3>Pendant — Animation</h3>
+    <ul>
+      <li>Accueillir chaque visiteur avec une approche personnalisée (découverte rapide)</li>
+      <li>Collecter systématiquement les coordonnées dans le CRM (mobile ou tablette)</li>
+      <li>Créer de l'expérience : démonstrations live, témoignages clients, animations</li>
+    </ul>
+    <h3>Après — Exploitation et bilan</h3>
+    <ul>
+      <li>Envoyer un email de suivi personnalisé à chaque contact dans les 48h</li>
+      <li>Planifier les relances dans le CRM selon le niveau d'intérêt détecté</li>
+      <li>Réaliser un bilan quantitatif (coût, contacts, RDV, CA généré, ROI) ET qualitatif (image, notoriété, retours terrain)</li>
+    </ul>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;">
+    <a href="index.html" style="display:inline-block;background:var(--teal);color:white;padding:0.8rem 2rem;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.95rem;">← Retour à la plateforme · Faire le cas pratique</a>
+  </div>
+</main>
+<footer>BTS NDRC — Fiche de cours Techniques de vente · Référentiel officiel 2018 · Pages 5-10 et 13-14</footer>
+</body>
+</html>

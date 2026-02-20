@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de cours — Marketing &amp; Data client · BTS NDRC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--purple:#7c3aed;--purple-light:#a78bfa;--purple-pale:#ede9fe;--orange:#f47c20;--off-white:#f8f9fa;--dark:#1a1a2e;--text:#2d3748;--grey:#6c757d;--grey-light:#e9ecef;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--off-white);color:var(--text);line-height:1.7;}
+.top-bar{background:var(--purple);color:white;padding:0.5rem 2rem;font-size:0.75rem;display:flex;align-items:center;gap:1rem;}
+.top-bar a{color:rgba(255,255,255,0.85);text-decoration:none;font-weight:700;}
+.top-bar a:hover{color:white;}
+header{background:linear-gradient(135deg,var(--purple) 0%,#4c1d95 100%);color:white;padding:3rem 2rem;text-align:center;}
+header .badge{display:inline-block;background:rgba(244,124,32,0.9);color:white;font-size:0.65rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;padding:0.3rem 1rem;border-radius:50px;margin-bottom:1rem;}
+header h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;margin-bottom:0.5rem;}
+header p{opacity:0.9;font-size:0.95rem;max-width:550px;margin:0 auto;}
+main{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem;}
+.toc{background:white;border-radius:14px;padding:1.5rem;margin-bottom:2rem;border-left:4px solid var(--purple);box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.toc h2{font-size:0.75rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--purple);margin-bottom:0.8rem;}
+.toc ol{padding-left:1.2rem;}
+.toc ol li{font-size:0.88rem;margin-bottom:0.35rem;}
+.toc ol li a{color:var(--dark);text-decoration:none;font-weight:600;}
+.toc ol li a:hover{color:var(--purple);}
+.section{background:white;border-radius:14px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.section h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--dark);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:2px solid var(--purple-pale);}
+.section h3{font-size:1rem;font-weight:800;color:var(--purple);margin:1.2rem 0 0.5rem;}
+.section p{font-size:0.9rem;margin-bottom:0.8rem;}
+.section ul,.section ol{padding-left:1.4rem;font-size:0.9rem;}
+.section ul li,.section ol li{margin-bottom:0.4rem;}
+.def-box{background:var(--purple-pale);border-left:4px solid var(--purple);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin:1rem 0;font-size:0.88rem;}
+.def-box strong{color:var(--purple);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.3rem;}
+.table-wrap{overflow-x:auto;margin:1rem 0;}
+table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+th{background:var(--purple);color:white;padding:0.65rem 0.9rem;text-align:left;font-weight:700;}
+td{padding:0.6rem 0.9rem;border-bottom:1px solid var(--grey-light);}
+tr:nth-child(even) td{background:var(--off-white);}
+.rgpd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.7rem;margin:1rem 0;}
+.rgpd-item{border-radius:10px;padding:1rem;font-size:0.84rem;}
+.rg-ok{background:#d1fae5;border-left:4px solid #10b981;}
+.rg-ko{background:#fde8e8;border-left:4px solid #ef4444;}
+.rgpd-item .rl{font-size:0.68rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;}
+.rgpd-item ul{padding-left:1rem;}
+.funnel{display:flex;flex-direction:column;align-items:center;gap:0;margin:1rem 0;}
+.funnel-step{width:100%;max-width:500px;padding:0.7rem 1.2rem;border-radius:8px;text-align:center;font-size:0.85rem;font-weight:700;margin-bottom:3px;position:relative;}
+.f1{background:#7c3aed;color:white;width:100%;}
+.f2{background:#8b5cf6;color:white;width:88%;}
+.f3{background:#a78bfa;color:white;width:75%;}
+.f4{background:#c4b5fd;color:var(--dark);width:60%;}
+.f5{background:#ddd6fe;color:var(--dark);width:45%;}
+.ref-badge{background:linear-gradient(135deg,var(--purple),#4c1d95);color:white;border-radius:10px;padding:0.8rem 1.2rem;font-size:0.82rem;margin-top:1rem;}
+.ref-badge strong{display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.8;margin-bottom:0.2rem;}
+footer{text-align:center;padding:2rem;font-size:0.78rem;color:var(--grey);border-top:1px solid var(--grey-light);margin-top:1rem;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="index.html">← Retour à la plateforme</a>
+  <span>|</span>
+  <span>📊 Fiche de cours · Marketing &amp; Data client</span>
+</div>
+
+<header>
+  <div class="badge">Blocs 1, 2 &amp; 3 · Référentiel 2018 · Pages 5-10 et 13-14</div>
+  <h1>📊 Marketing &amp; Data client</h1>
+  <p>Segmentation, marketing digital, CRM, omnicanalité, inbound marketing et RGPD — BTS NDRC</p>
+</header>
+
+<main>
+  <nav class="toc">
+    <h2>📋 Sommaire</h2>
+    <ol>
+      <li><a href="#s1">Segmentation marketing et ciblage</a></li>
+      <li><a href="#s2">Marketing relationnel et fidélisation</a></li>
+      <li><a href="#s3">Le CRM et le Système d'Information Commercial</a></li>
+      <li><a href="#s4">La stratégie omnicanale</a></li>
+      <li><a href="#s5">Inbound marketing et stratégie digitale</a></li>
+      <li><a href="#s6">RGPD et protection des données client</a></li>
+    </ol>
+  </nav>
+
+  <div class="section" id="s1">
+    <h2>1. 🗺️ Segmentation marketing et ciblage</h2>
+    <p>La segmentation est le découpage du marché en sous-ensembles homogènes de clients ou prospects présentant des besoins et comportements similaires. Elle permet d'adapter les messages et les actions à chaque groupe cible.</p>
+    <h3>Critères de segmentation</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Critères</th><th>Variables</th><th>Exemple</th></tr>
+        <tr><td>Géographiques</td><td>Pays, région, zone, milieu</td><td>Clients urbains vs ruraux</td></tr>
+        <tr><td>Socio-démographiques</td><td>Âge, sexe, CSP, revenus, situation familiale</td><td>25-35 ans, cadres, familles</td></tr>
+        <tr><td>Comportementaux</td><td>Fréquence d'achat, fidélité, canal préféré, panier moyen</td><td>Clients multicanaux, gros acheteurs</td></tr>
+        <tr><td>Psychographiques</td><td>Valeurs, style de vie, sensibilité écologique</td><td>Consommateurs bio et responsables</td></tr>
+      </table>
+    </div>
+    <h3>De la segmentation au ciblage</h3>
+    <ol>
+      <li><strong>Segmenter</strong> : identifier des groupes homogènes</li>
+      <li><strong>Évaluer</strong> : taille, accessibilité, profitabilité de chaque segment</li>
+      <li><strong>Cibler</strong> : choisir le(s) segment(s) prioritaire(s)</li>
+      <li><strong>Positionner</strong> : définir comment la marque se différencie dans l'esprit de la cible</li>
+    </ol>
+    <div class="ref-badge"><strong>📌 Référentiel — Blocs 1, 2 &amp; 3, Savoirs marketing</strong>La segmentation est un savoir fondamental du référentiel NDRC, mobilisé aussi bien en conquête (ciblage des prospects) qu'en fidélisation (personnalisation des communications).</div>
+  </div>
+
+  <div class="section" id="s2">
+    <h2>2. 💝 Marketing relationnel et fidélisation</h2>
+    <div class="def-box"><strong>Définition</strong>Le marketing relationnel consiste à développer et entretenir une relation personnalisée et durable avec chaque client, dans le but de maximiser sa valeur sur le long terme (LTV) et de le transformer en ambassadeur de la marque.</div>
+    <h3>Conquête vs Fidélisation</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Critère</th><th>Conquête (nouveaux clients)</th><th>Fidélisation (clients existants)</th></tr>
+        <tr><td>Coût</td><td>5 à 7 fois plus cher</td><td>Moins coûteux</td></tr>
+        <tr><td>Probabilité d'achat</td><td>5 à 20 %</td><td>60 à 70 %</td></tr>
+        <tr><td>Marge</td><td>Souvent réduite (offre de bienvenue)</td><td>Plus élevée (relation de confiance)</td></tr>
+        <tr><td>Levier</td><td>Prospection, publicité, SEO/SEA</td><td>Personnalisation, programme fidélité, after-sales</td></tr>
+      </table>
+    </div>
+    <h3>Outils de fidélisation</h3>
+    <ul>
+      <li><strong>Programme de fidélité</strong> : points, paliers, avantages exclusifs (ex : carte de fidélité, statut VIP)</li>
+      <li><strong>Marketing automation</strong> : emails déclenchés par un comportement (abandon de panier, anniversaire, 6 mois sans achat)</li>
+      <li><strong>Contenu personnalisé</strong> : recommandations produits basées sur l'historique d'achat</li>
+      <li><strong>Programme de parrainage</strong> : récompenser le client qui recommande (gain pour lui + gain pour le filleul)</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s3">
+    <h2>3. 🗄️ Le CRM et le Système d'Information Commercial</h2>
+    <div class="def-box"><strong>CRM — Customer Relationship Management</strong>Outil de gestion de la relation client qui centralise toutes les données et interactions clients (achats, contacts, réclamations, préférences) pour permettre une relation personnalisée et un suivi multicanal cohérent.</div>
+    <h3>Fonctions clés du CRM</h3>
+    <ul>
+      <li><strong>Centralisation des données</strong> : fiche client unique, historique complet des échanges</li>
+      <li><strong>Segmentation automatique</strong> : regroupement des clients selon des critères RFM ou comportementaux</li>
+      <li><strong>Planification des relances</strong> : rappels automatiques, alertes sur les clients inactifs</li>
+      <li><strong>Suivi du pipeline commercial</strong> : étapes de la vente, probabilités de closing</li>
+      <li><strong>Reporting et tableaux de bord</strong> : KPIs en temps réel (CA, taux de conversion, NPS)</li>
+    </ul>
+    <h3>Le Système d'Information Commercial (SIC)</h3>
+    <p>Le SIC est l'ensemble des outils, processus et personnes qui collectent, traitent et diffusent l'information commerciale dans l'entreprise. Il inclut le CRM, mais aussi les outils de veille, les rapports d'activité et les outils collaboratifs.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Composante du SIC</th><th>Rôle</th></tr>
+        <tr><td>CRM</td><td>Gestion de la relation client et suivi commercial</td></tr>
+        <tr><td>ERP / PGI</td><td>Gestion intégrée (stock, facturation, comptabilité)</td></tr>
+        <tr><td>Outils de veille</td><td>Alertes Google, SemRush, Mention pour la surveillance marché</td></tr>
+        <tr><td>Outils nomades</td><td>Applications mobiles pour le terrain (CRM mobile, signature électronique)</td></tr>
+        <tr><td>Tableaux de bord</td><td>Pilotage de la performance commerciale en temps réel</td></tr>
+      </table>
+    </div>
+    <div class="ref-badge"><strong>📌 Référentiel — Savoirs technologiques, Blocs 1, 2 &amp; 3</strong>« Maîtrise des outils numériques et du Système d'Information Commercial » — le CRM est cité comme compétence technologique obligatoire du NDRC.</div>
+  </div>
+
+  <div class="section" id="s4">
+    <h2>4. 📡 La stratégie omnicanale</h2>
+    <div class="def-box"><strong>Définition</strong>Une stratégie omnicanale intègre et coordonne tous les canaux de contact client (physique, téléphone, email, site web, application, réseaux sociaux) pour offrir une expérience client fluide et cohérente, quel que soit le canal utilisé. Le client passe d'un canal à l'autre sans rupture de service.</div>
+    <h3>Différence entre multicanal et omnicanal</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Multicanal</th><th>Omnicanal</th></tr>
+        <tr><td>Plusieurs canaux existent mais fonctionnent en silos</td><td>Tous les canaux sont interconnectés et partagent les mêmes données client</td></tr>
+        <tr><td>Le client doit se réidentifier à chaque canal</td><td>Le client est reconnu immédiatement quel que soit le canal</td></tr>
+        <tr><td>Expérience fragmentée</td><td>Expérience fluide et cohérente</td></tr>
+      </table>
+    </div>
+    <h3>Adapter le canal au comportement client</h3>
+    <ul>
+      <li>Analyser quel canal chaque client utilise préférentiellement (CRM + analytics)</li>
+      <li>Adapter la communication : certains clients répondent aux emails, d'autres aux SMS, d'autres aux réseaux sociaux</li>
+      <li>Assurer la continuité : un client qui contacte le SAV par chat doit pouvoir rappeler sans réexpliquer son problème</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s5">
+    <h2>5. 📥 Inbound marketing et stratégie digitale</h2>
+    <div class="def-box"><strong>Inbound marketing</strong>Stratégie qui consiste à attirer les prospects vers la marque via des contenus à valeur ajoutée (articles, vidéos, guides, podcasts), plutôt que d'aller les chercher avec des messages publicitaires interruptifs (outbound). L'objectif est de générer des leads qualifiés de manière organique.</div>
+    <h3>Le funnel inbound</h3>
+    <div class="funnel">
+      <div class="funnel-step f1">🌍 Attirer (SEO, blog, réseaux sociaux)</div>
+      <div class="funnel-step f2">📩 Convertir (formulaire, livre blanc, webinar)</div>
+      <div class="funnel-step f3">🔥 Nourrir (email marketing, contenu personnalisé)</div>
+      <div class="funnel-step f4">🤝 Vendre (démonstration, offre personnalisée)</div>
+      <div class="funnel-step f5">💬 Fidéliser (satisfaction, recommandation)</div>
+    </div>
+    <h3>Outils de la stratégie digitale</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Outil</th><th>Objectif</th><th>Indicateur clé</th></tr>
+        <tr><td>SEO (référencement naturel)</td><td>Attirer des visiteurs qualifiés sans payer</td><td>Trafic organique, position sur mots-clés</td></tr>
+        <tr><td>SEA (référencement payant)</td><td>Visibilité immédiate sur les moteurs de recherche</td><td>CPC, taux de clic, ROAS</td></tr>
+        <tr><td>Email marketing</td><td>Nurturing et fidélisation des leads</td><td>Taux d'ouverture, taux de clic, désabonnements</td></tr>
+        <tr><td>Réseaux sociaux</td><td>Notoriété, engagement, social selling</td><td>Taux d'engagement, portée, followers</td></tr>
+        <tr><td>Content marketing</td><td>Attirer et éduquer les prospects</td><td>Temps passé, partages, leads générés</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" id="s6">
+    <h2>6. ⚖️ RGPD et protection des données client</h2>
+    <div class="def-box"><strong>RGPD — Règlement Général sur la Protection des Données</strong>Règlement européen en vigueur depuis mai 2018 qui encadre la collecte, le traitement et la conservation des données personnelles. Toute entreprise traitant des données de résidents européens est concernée. Les sanctions peuvent atteindre <strong>4 % du CA mondial ou 20 millions d'euros</strong>.</div>
+    <h3>Principes fondamentaux</h3>
+    <div class="rgpd-grid">
+      <div class="rgpd-item rg-ok"><div class="rl">✅ Pratiques conformes</div><ul><li>Informer clairement de l'usage des données</li><li>Obtenir un consentement explicite et libre</li><li>Permettre le désabonnement à tout moment</li><li>Limiter la conservation à la durée nécessaire</li><li>Sécuriser les données contre les accès non autorisés</li></ul></div>
+      <div class="rgpd-item rg-ko"><div class="rl">❌ Pratiques interdites</div><ul><li>Cases pré-cochées pour le consentement</li><li>Revente des données à des tiers sans accord</li><li>Conservation illimitée des données inactives</li><li>Collecte de données non nécessaires à la finalité</li><li>Email non sollicité sans opt-in préalable</li></ul></div>
+    </div>
+    <h3>Les droits des personnes</h3>
+    <ul>
+      <li><strong>Droit d'accès</strong> : tout client peut demander quelles données sont détenues sur lui</li>
+      <li><strong>Droit de rectification</strong> : corriger des données inexactes</li>
+      <li><strong>Droit à l'effacement</strong> (droit à l'oubli) : demander la suppression des données</li>
+      <li><strong>Droit à la portabilité</strong> : recevoir ses données dans un format réutilisable</li>
+      <li><strong>Droit d'opposition</strong> : s'opposer à l'utilisation de ses données à des fins marketing</li>
+    </ul>
+    <h3>En pratique pour le commercial NDRC</h3>
+    <ul>
+      <li>Ne collecter que les données utiles à la finalité définie (principe de minimisation)</li>
+      <li>Informer systématiquement le client lors de chaque collecte (formulaire, appel, événement)</li>
+      <li>Paramétrer les durées de conservation dans le CRM (ex : suppression automatique à 3 ans d'inactivité)</li>
+      <li>Ne jamais partager des données clients sans autorisation préalable</li>
+    </ul>
+    <div class="ref-badge"><strong>📌 Référentiel — Savoirs juridiques, Blocs 1, 2 &amp; 3</strong>La protection des données (RGPD) est un savoir juridique obligatoire du référentiel NDRC, transversal à tous les blocs de compétences. Elle s'applique à la prospection, à la gestion du CRM et à toute communication commerciale digitale.</div>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;">
+    <a href="index.html" style="display:inline-block;background:var(--purple);color:white;padding:0.8rem 2rem;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.95rem;">← Retour à la plateforme · Faire le cas pratique</a>
+  </div>
+</main>
+<footer>BTS NDRC — Fiche de cours Marketing &amp; Data client · Référentiel officiel 2018 · Pages 5-10 et 13-14</footer>
+</body>
+</html>
