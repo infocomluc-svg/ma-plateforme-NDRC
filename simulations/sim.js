@@ -9,6 +9,9 @@
   // ── À RENSEIGNER UNE SEULE FOIS : adresse de votre relais Cloudflare Worker
   const PROXY_URL = "https://simulations-ndrc.infocomluc.workers.dev/";
 
+  // ── Relevé des résultats (Google Sheets + e-mail). Laisser vide pour ne rien transmettre.
+  const RESULTS_URL = "";
+
   const S = window.SCENARIO;
   const MODEL_TURNS = S.modelTurns ?? 3;   // répliques du conseiller modèle
   const MIN_REPLIES = S.minReplies ?? 5;   // répliques avant de pouvoir demander le bilan
@@ -23,6 +26,8 @@
   ];
 
   const state = {
+    who: null,           // {prenom, initiale}
+    simId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)),
     phase: "intro",      // intro | model | student | done
     transcript: [],      // {role:'client'|'advisor'|'student', text, api?, mood?}
     mood: 1,
@@ -40,6 +45,16 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const fmt = (s) => esc(s).replace(/\n+/g, "<br>");
   const proxyMissing = () => PROXY_URL.includes("VOTRE-WORKER");
+  const resultsOn = () => /^https:\/\/script\.google\.com\//.test(RESULTS_URL);
+
+  // ── Identité de l'étudiant : prénom et initiale du nom, mémorisés dans ce navigateur
+  const WHO_KEY = "ndrc-simulations-etudiant";
+  function loadWho() {
+    try { const w = JSON.parse(localStorage.getItem(WHO_KEY)); return w && w.prenom ? w : null; } catch { return null; }
+  }
+  function saveWho(w) { try { localStorage.setItem(WHO_KEY, JSON.stringify(w)); } catch { /* navigation privée */ } }
+  const whoLabel = (w) => `${w.prenom} ${w.initiale}.`;
+  const cap = (t) => t.toLocaleLowerCase("fr").replace(/(^|[\s'-])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase("fr"));
 
   // ── Consignes ajoutées aux prompts
   const CLIENT_RULES = `CONSIGNES TECHNIQUES (jamais mentionnées dans tes réponses) :
@@ -192,7 +207,16 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
       <li><div><strong>Recevez votre bilan</strong><span>Une note sur 20, ce qui fonctionne, ce qui coince, et une meilleure formulation pour chaque réplique à retravailler.</span></div></li>
     </ol>
     ${proxyMissing() ? `<p class="config-warn">Le relais IA n'est pas encore configuré : renseignez l'adresse du Worker sur la ligne PROXY_URL du fichier sim.js.</p>` : ""}
-    <button class="btn btn--primary btn--xl" id="start" ${proxyMissing() ? "disabled" : ""}>Lancer la simulation</button>
+    <form class="who" id="who" novalidate>
+      <p class="who-title">Qui s'entraîne ?</p>
+      <div class="who-row">
+        <label class="who-field">Prénom<input id="whoFirst" name="prenom" autocomplete="given-name" maxlength="30" required></label>
+        <label class="who-field who-field--initial">Initiale du nom<input id="whoInitial" name="initiale" maxlength="1" required autocomplete="off" autocapitalize="characters"></label>
+      </div>
+      <p class="who-note">${resultsOn() ? "Votre bilan sera transmis à votre formateur sous ce nom." : "Ce nom figurera sur votre bilan."}</p>
+      <p class="who-error" id="whoError" role="alert" hidden></p>
+    </form>
+    <button class="btn btn--primary btn--xl" id="start" form="who" type="submit" ${proxyMissing() ? "disabled" : ""}>Lancer la simulation</button>
     <a class="intro-back" href="index.html">Choisir un autre scénario</a>
   </div>
 </div>
@@ -480,7 +504,7 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
       <p class="db-appr">${esc(d.appreciation || "")}</p>
       <span class="verdict verdict--${verdict}">${verdicts[verdict]}</span>
     </div>
-    <p class="db-meta">${esc(S.title)}, ${esc(S.company)}. ${students.length} répliques analysées.</p>
+    <p class="db-meta">Bilan de ${esc(whoLabel(state.who))}, le ${new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}. ${esc(S.title)}, ${esc(S.company)}. ${students.length} répliques analysées.</p>
   </header>
 
   <section class="db-block"><h2>L'humeur du client au fil de l'échange</h2>${moodChart()}</section>
@@ -502,6 +526,8 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
 
   ${d.conseil ? `<section class="db-advice"><h2>Pour la prochaine fois</h2><p>${esc(d.conseil)}</p></section>` : ""}
 
+  ${resultsOn() ? `<p class="db-sent" id="dbSent" role="status">Transmission du bilan à votre formateur…</p>` : ""}
+
   <div class="db-actions">
     <button class="btn btn--primary" id="dbRestart">Recommencer ce scénario</button>
     <button class="btn btn--ghost" id="dbPrint">Enregistrer en PDF</button>
@@ -511,6 +537,56 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
     $("dbRestart").addEventListener("click", () => location.reload());
     $("dbPrint").addEventListener("click", () => window.print());
     $("debrief").scrollTop = 0;
+
+    if (resultsOn()) {
+      sendResults({
+        id: state.simId,
+        date: new Date().toISOString(),
+        etudiant: whoLabel(state.who),
+        scenario: { num: S.num, titre: S.title, entreprise: S.company, niveau: S.level },
+        note: total,
+        mention: mention(total),
+        criteres: crit,
+        verdict: verdicts[verdict],
+        appreciation: d.appreciation || "",
+        satisfaisant: list(d.satisfaisant),
+        insatisfaisant: list(d.insatisfaisant),
+        pistes: list(d.pistes).map((p) => ({ action: p.action || String(p), exemple: p.exemple || "" })),
+        conseil: d.conseil || "",
+        repliques: students.map((s, i) => {
+          const r = list(d.repliques).find((x) => Number(x.n) === i + 1) || {};
+          return { n: i + 1, statut: statusLabel[r.statut] || "À retravailler", texte: s.text, commentaire: r.commentaire || "", suggestion: r.suggestion || "" };
+        }),
+        humeur_finale: MOODS[state.mood - 1].label,
+        transcription: state.transcript.map((e) =>
+          `${e.role === "client" ? S.clientName : e.role === "advisor" ? "Conseiller modèle" : whoLabel(state.who)} : ${e.text}`).join("\n\n"),
+      });
+    }
+  }
+
+  // ── Transmission au relevé Google (Apps Script). Le serveur ignore les doublons (même id).
+  async function sendResults(payload) {
+    const el = $("dbSent");
+    const body = JSON.stringify(payload);
+    const done = (ok) => {
+      if (!el) return;
+      el.classList.add(ok ? "db-sent--ok" : "db-sent--ko");
+      el.textContent = ok
+        ? "Votre bilan a été transmis à votre formateur."
+        : "Le bilan n'a pas pu être transmis à votre formateur. Enregistrez-le en PDF pour le lui remettre.";
+    };
+    for (let i = 0; i < 2; i++) {
+      try {
+        const res = await fetch(RESULTS_URL, { method: "POST", body, headers: { "Content-Type": "text/plain;charset=utf-8" } });
+        const data = await res.json();
+        if (data.ok) return done(true);
+        console.warn("Relevé :", data);
+      } catch (err) {
+        console.warn("Relevé :", err);
+      }
+      await wait(1500);
+    }
+    done(false);
   }
 
   // ── Démarrage
@@ -520,7 +596,25 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
     t.style.height = Math.min(t.scrollHeight, 160) + "px";
   }
 
-  async function start() {
+  function readWho() {
+    const prenom = cap($("whoFirst").value.trim().replace(/\s+/g, " "));
+    const initiale = $("whoInitial").value.trim().toLocaleUpperCase("fr");
+    const err = $("whoError");
+    let msg = "";
+    if (!/^\p{L}[\p{L}' -]{0,29}$/u.test(prenom)) msg = "Indiquez votre prénom, en lettres uniquement.";
+    else if (!/^\p{L}$/u.test(initiale)) msg = "Indiquez la première lettre de votre nom de famille.";
+    err.hidden = !msg;
+    err.textContent = msg;
+    if (msg) { (prenom ? $("whoInitial") : $("whoFirst")).focus(); return null; }
+    return { prenom, initiale };
+  }
+
+  async function start(e) {
+    e?.preventDefault();
+    const who = readWho();
+    if (!who) return;
+    state.who = who;
+    saveWho(who);
     $("intro").remove();
     state.phase = "model";
     updateProgress();
@@ -533,7 +627,11 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
   function init() {
     render();
     updateMood(1);
-    $("start").addEventListener("click", start);
+    $("who").addEventListener("submit", start);
+    const known = loadWho();
+    if (known) { $("whoFirst").value = known.prenom; $("whoInitial").value = known.initiale; }
+    $("whoInitial").addEventListener("input", (e) => { e.target.value = e.target.value.toLocaleUpperCase("fr"); });
+    $("who").addEventListener("input", () => { $("whoError").hidden = true; });
     $("send").addEventListener("click", send);
     $("input").addEventListener("input", autosize);
     $("input").addEventListener("keydown", (e) => {
