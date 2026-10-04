@@ -87,6 +87,25 @@ footer{max-width:1160px;margin:0 auto;padding:28px 20px 40px;border-top:1px soli
 footer a{color:var(--cobalt);font-weight:600;text-decoration:none}
 footer a:hover{text-decoration:underline}
 
+/* Étoiles et progression */
+.star{width:22px;height:22px;fill:var(--ice);stroke:var(--line);stroke-width:1;stroke-linejoin:round}
+.star--on{fill:#F7B731;stroke:#E59A00}
+.scn-stars{display:flex;gap:2px;min-height:22px}
+.progress-panel{display:grid;grid-template-columns:1fr auto;gap:20px 28px;align-items:center;background:var(--abyss);color:#fff;border-radius:24px;padding:clamp(20px,3vw,30px);margin-bottom:clamp(32px,5vw,48px);
+  background-image:radial-gradient(600px 260px at 100% 0%,#2453E0 0%,transparent 60%)}
+.progress-panel h2{font-family:var(--display);font-size:clamp(1.3rem,2.6vw,1.7rem);letter-spacing:-.01em;line-height:1.15;margin-bottom:6px}
+.progress-panel p{color:#DCEAFF;line-height:1.55;max-width:60ch}
+.progress-panel p b{color:#fff}
+.pp-total{text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:14px 24px}
+.pp-total strong{display:block;font-family:var(--display);font-size:3rem;line-height:1;color:#F7B731;font-weight:800}
+.pp-total span{font-size:.82rem;color:var(--sky)}
+.pp-track{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.pp-track div{background:rgba(255,255,255,.07);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:.8rem;color:var(--sky)}
+.pp-track .star{width:18px;height:18px;fill:rgba(255,255,255,.14);stroke:rgba(255,255,255,.25)}
+.pp-track .star--on{fill:#F7B731;stroke:#FFE08A}
+.pp-track i{display:flex;gap:2px;font-style:normal}
+@media (max-width:640px){.progress-panel{grid-template-columns:1fr}.pp-track{grid-template-columns:repeat(5,1fr);gap:6px}.pp-track div{padding:8px 6px;align-items:center}.pp-track .star{width:12px;height:12px}}
+
 @media (max-width:900px){
   .hero-inner{grid-template-columns:1fr}
   .collage{height:440px;max-width:440px}
@@ -130,11 +149,12 @@ footer a:hover{text-decoration:underline}
   <ol>
     <li><div><strong>Observez</strong><span>Un conseiller modèle ouvre l'échange. Repérez sa façon d'écouter, de reformuler, de proposer.</span></div></li>
     <li><div><strong>Prenez la main</strong><span>Vous devenez le conseiller. L'humeur du client monte ou descend selon vos réponses.</span></div></li>
-    <li><div><strong>Recevez votre bilan</strong><span>Note sur 20, points forts, points faibles, pistes de progrès et reformulations réplique par réplique.</span></div></li>
+    <li><div><strong>Recevez votre bilan</strong><span>Jusqu'à 4 étoiles par scénario, points forts, points faibles et reformulations. Vos étoiles cumulées donnent votre note globale.</span></div></li>
   </ol>
 </section>
 
 <main id="scenarios">
+  <section class="progress-panel" id="progress" hidden aria-live="polite"></section>
   <div class="head">
     <h2>Cinq clients vous attendent</h2>
     <div class="legend" aria-label="Plus le bleu est profond, plus le scénario est difficile">
@@ -153,7 +173,7 @@ footer a:hover{text-decoration:underline}
         <p class="scn-pitch">M. Durand a commandé les cadeaux de ses trois enfants il y a 12 jours. Le colis est bloqué « en transit » depuis une semaine, et Noël est dans trois jours.</p>
         <ul class="chips"><li>Gestion de crise</li><li>Empathie</li><li>Geste commercial</li></ul>
       </div>
-      <div class="scn-side"><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
+      <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
     <a class="scn" href="chatbot-s2.html" style="--tone:#1F4FFF">
@@ -164,7 +184,7 @@ footer a:hover{text-decoration:underline}
         <p class="scn-pitch">Mme Petit a payé 850 € sa machine, tombée en panne au bout de dix jours. Le technicien est reparti sans réparer. Trois enfants, et la laverie tous les deux jours.</p>
         <ul class="chips"><li>SAV</li><li>Garantie légale de conformité</li><li>Remplacement</li></ul>
       </div>
-      <div class="scn-side"><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
+      <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
     <a class="scn" href="chatbot-s3.html" style="--tone:#1F4FFF">
@@ -175,7 +195,7 @@ footer a:hover{text-decoration:underline}
         <p class="scn-pitch">M. Bernard reçoit une facture de 187 € au lieu de 19,90 €. Quatre appels au service client sans réponse. Il menace de résilier après sept ans de fidélité.</p>
         <ul class="chips"><li>Litige de facturation</li><li>Rétention</li><li>Résiliation</li></ul>
       </div>
-      <div class="scn-side"><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
+      <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
     <a class="scn" href="chatbot-s4.html" style="--tone:#13306E">
@@ -186,7 +206,7 @@ footer a:hover{text-decoration:underline}
         <p class="scn-pitch">Mme Moreau a réservé une chambre vue mer à 320 € la nuit. À l'arrivée : vue parking, travaux dès 7 h, salle de bain sale. Elle exige un remboursement total.</p>
         <ul class="chips"><li>Clientèle premium</li><li>Compensation</li><li>Image de marque</li></ul>
       </div>
-      <div class="scn-side"><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
+      <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
     </a>
 
     <a class="scn" href="chatbot-s5.html" style="--tone:#13306E">
@@ -197,7 +217,7 @@ footer a:hover{text-decoration:underline}
         <p class="scn-pitch">M. Lemaire a payé 1 200 € pour un embrayage neuf. Huit jours après, même panne, à 80 km de chez lui en déplacement professionnel. Il parle de tribunal.</p>
         <ul class="chips"><li>Responsabilité du garage</li><li>Urgence</li><li>Juridique</li></ul>
       </div>
-      <div class="scn-side"><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
+      <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
     </a>
   </div>
 </main>
@@ -207,5 +227,40 @@ footer a:hover{text-decoration:underline}
   <a href="../index.html">Retour à la plateforme de cours</a>
 </footer>
 
+<script>
+/* Progression de l'étudiant : étoiles mémorisées dans ce navigateur par les simulations. */
+(function () {
+  "use strict";
+  let who = null, all = {};
+  try { who = JSON.parse(localStorage.getItem("ndrc-simulations-etudiant")); all = JSON.parse(localStorage.getItem("ndrc-simulations-etoiles")) || {}; } catch (e) { return; }
+  if (!who || !who.prenom) return;
+  const label = who.prenom + " " + who.initiale + ".";
+  const mine = all[label] || {};
+  const star = (on) => '<svg class="star' + (on ? " star--on" : "") + '" viewBox="0 0 24 24"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.5L12 17.1l-5.9 3.3 1.4-6.5L2.6 9.4l6.6-.7z"/></svg>';
+  const row = (n) => [0, 1, 2, 3].map((i) => star(i < n)).join("");
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  document.querySelectorAll(".scn").forEach((card) => {
+    const m = card.getAttribute("href").match(/chatbot-s(\d)/);
+    const n = m && mine["s" + m[1]];
+    const slot = card.querySelector(".scn-stars");
+    if (n && slot) { slot.innerHTML = row(n); slot.setAttribute("aria-hidden", "false"); slot.setAttribute("aria-label", n + " étoile" + (n > 1 ? "s" : "") + " sur 4"); slot.setAttribute("role", "img"); }
+  });
+
+  const done = Object.keys(mine).length;
+  const total = Object.values(mine).reduce((a, b) => a + b, 0);
+  const el = document.getElementById("progress");
+  const names = ["Colis", "Lave-linge", "Facture", "Hôtel", "Garage"];
+  el.innerHTML =
+    '<div><h2>' + (done ? "Bonjour " + esc(who.prenom) + ", voici vos étoiles" : "Bonjour " + esc(who.prenom) + ", à vous de jouer") + '</h2>' +
+    '<p>' + (done === 5
+      ? "Les 5 scénarios sont faits : votre note globale est de <b>" + total + "/20</b>. Rejouez un scénario pour décrocher plus d'étoiles : seule votre meilleure tentative compte."
+      : "Chaque scénario rapporte jusqu'à 4 étoiles, et seule votre meilleure tentative compte. Une fois les 5 scénarios faits, vos étoiles donnent votre note globale sur 20. " +
+        (done ? "Encore " + (5 - done) + " scénario" + (5 - done > 1 ? "s" : "") + " à faire." : "")) + '</p></div>' +
+    '<div class="pp-total"><strong>' + total + '</strong><span>étoiles sur 20</span></div>' +
+    '<div class="pp-track">' + names.map((nm, i) => '<div>' + nm + '<i>' + row(mine["s" + (i + 1)] || 0) + '</i></div>').join("") + '</div>';
+  el.hidden = false;
+})();
+</script>
 </body>
 </html>

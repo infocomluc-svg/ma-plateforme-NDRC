@@ -4,7 +4,9 @@
 
 1.1. Avant chaque simulation, l'étudiant indique son prénom et l'initiale de son nom.
 1.2. À la fin, son bilan s'ajoute automatiquement à un tableur Google Sheets qui appartient au formateur : une ligne par simulation.
-1.3. Chaque soir, le formateur reçoit par e-mail un récapitulatif des nouveaux bilans : un tableau des notes, puis le bilan de chaque étudiant. Le détail réplique par réplique et la conversation complète restent dans le tableur.
+1.3. Chaque simulation rapporte de 1 à 4 étoiles : note de 0 à 5 sur 20 = 1 étoile, 6 à 10 = 2, 11 à 15 = 3, 16 à 20 = 4. L'étudiant ne voit que ses étoiles ; la note sur 20 de chaque simulation reste visible du formateur dans le tableur.
+1.4. L'onglet « Synthèse » garde la meilleure tentative de chaque étudiant sur chaque scénario. Avec 5 scénarios à 4 étoiles, le total d'étoiles donne directement la note globale sur 20, affichée quand les 5 scénarios sont faits.
+1.5. Chaque soir, le formateur reçoit par e-mail un récapitulatif des nouveaux bilans : un tableau des étoiles, la progression des étudiants concernés, puis le bilan de chacun. Le détail réplique par réplique et la conversation complète restent dans le tableur.
 
 ## 2. Mise en service (une seule fois, environ 10 minutes)
 
@@ -36,6 +38,7 @@ Dans `simulations/sim.js`, coller l'URL de l'étape 2.3 sur la ligne `const RESU
 3.1. En haut de `Code.gs`, le bloc `CONFIG` permet de changer l'adresse de destination, l'heure d'envoi et le fuseau horaire.
 3.2. Après une modification de `Code.gs`, refaire **Déployer** → **Gérer les déploiements** → crayon → **Version : nouvelle version** → **Déployer**. L'URL ne change pas.
 3.3. **Simulations** → **Envoyer le récapitulatif maintenant** envoie tout de suite les bilans pas encore transmis.
+3.4. **Simulations** → **Recalculer la synthèse** reconstruit l'onglet « Synthèse », par exemple après avoir supprimé des lignes de test.
 
 ## 4. Données personnelles
 

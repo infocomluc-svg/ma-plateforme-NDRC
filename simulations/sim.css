@@ -151,9 +151,23 @@ body.is-debrief{overflow:hidden}
 .debrief{position:fixed;inset:0;z-index:30;background:var(--mist);overflow-y:auto;padding:clamp(16px,4vw,48px)}
 .sheet{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 .db-head{background:radial-gradient(700px 300px at 100% 0%,#2453E0 0%,transparent 60%),var(--abyss);color:#fff;border-radius:var(--r-xl);padding:clamp(24px,4vw,40px);display:flex;gap:32px;align-items:center;flex-wrap:wrap}
-.db-score{display:flex;align-items:baseline;font-family:var(--display);line-height:.85}
-.db-num{font-size:clamp(5rem,13vw,7.5rem);font-weight:800;letter-spacing:-.05em}
-.db-den{font-size:1.7rem;color:var(--sky);font-weight:600;margin-left:6px}
+/* Étoiles dorées */
+.star{width:100%;height:100%;fill:rgba(255,255,255,.14);stroke:rgba(255,255,255,.3);stroke-width:1;stroke-linejoin:round}
+.star--on{fill:#F7B731;stroke:#FFE08A;filter:drop-shadow(0 4px 14px rgba(247,183,49,.45))}
+.db-stars{display:flex;gap:clamp(4px,1vw,10px)}
+.db-stars .star{width:clamp(52px,9vw,78px);height:clamp(52px,9vw,78px)}
+.db-stars .star--on{animation:starpop .5s cubic-bezier(.3,1.6,.5,1) both}
+.db-stars .star--on:nth-child(2){animation-delay:.12s}
+.db-stars .star--on:nth-child(3){animation-delay:.24s}
+.db-stars .star--on:nth-child(4){animation-delay:.36s}
+@keyframes starpop{from{transform:scale(.2) rotate(-40deg);opacity:0}to{transform:none;opacity:1}}
+.db-progress{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(18px,3vw,26px) clamp(18px,3vw,30px)}
+.db-progress h2{margin-bottom:6px}
+.db-progress p{color:var(--ink-2);line-height:1.55;max-width:56ch}
+.db-progress p b{color:var(--ink)}
+.db-progress-total{display:flex;flex-direction:column;align-items:center;background:var(--abyss);color:#fff;border-radius:20px;padding:12px 22px;min-width:120px}
+.db-progress-total span{font-family:var(--display);font-size:2.6rem;font-weight:800;line-height:1;color:#F7B731}
+.db-progress-total small{font-size:.8rem;color:var(--sky);margin-top:4px}
 .db-summary{flex:1;min-width:250px}
 .db-mention{font-family:var(--display);font-size:1.7rem;font-weight:700;line-height:1.1}
 .db-appr{color:#DCEAFF;line-height:1.55;margin:8px 0 14px;max-width:60ch}
@@ -175,12 +189,12 @@ body.is-debrief{overflow:hidden}
 .mc-hand{stroke:var(--navy);stroke-width:1.5;stroke-dasharray:4 4}
 .mc-label{font-size:12px;font-weight:600;fill:var(--navy);font-family:var(--body)}
 
-.crit{display:grid;grid-template-columns:210px 1fr 52px;gap:8px 16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.crit{display:grid;grid-template-columns:210px 1fr 104px;gap:8px 16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
 .crit:first-of-type{border-top:none;padding-top:0}
 .crit-name{font-weight:700}
 .crit-bar{height:12px;background:var(--ice);border-radius:99px;overflow:hidden}
 .crit-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--azure),var(--cobalt));border-radius:99px}
-.crit-note{font-family:var(--display);font-weight:700;font-size:1.1rem;text-align:right}
+.crit-note{font-family:var(--display);font-weight:700;font-size:.95rem;text-align:right;color:var(--navy)}
 .crit p{grid-column:1/-1;font-size:.92rem;color:var(--ink-2);line-height:1.5}
 
 .db-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -233,7 +247,7 @@ body.is-debrief{overflow:hidden}
   .back{font-size:0;padding:8px}
   .topbar-title span{display:none}
   .db-cols{grid-template-columns:1fr}
-  .crit{grid-template-columns:1fr 52px}
+  .crit{grid-template-columns:1fr 104px}
   .crit-bar{grid-column:1/-1;grid-row:2}
 }
 @media (max-width:520px){
@@ -252,7 +266,7 @@ body.is-debrief{overflow:hidden}
   .app,.intro{display:none!important}
   .debrief{position:static;padding:0;background:#fff;overflow:visible}
   .db-actions,.db-sent{display:none}
-  .db-head,.reply-better,.chip,.crit-bar i,.db-col li::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .db-head,.reply-better,.chip,.crit-bar i,.db-col li::before,.star,.db-progress-total{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .reply,.crit,.tracks li{break-inside:avoid}
   .db-block,.db-col,.db-advice{border-color:#ccd}
 }

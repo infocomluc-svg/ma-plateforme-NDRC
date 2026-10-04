@@ -54,6 +54,26 @@
   }
   function saveWho(w) { try { localStorage.setItem(WHO_KEY, JSON.stringify(w)); } catch { /* navigation privée */ } }
   const whoLabel = (w) => `${w.prenom} ${w.initiale}.`;
+
+  // ── Étoiles : 0-5 → 1, 6-10 → 2, 11-15 → 3, 16-20 → 4. La meilleure tentative de chaque scénario compte.
+  const MAX_STARS = 4;
+  const NB_SCENARIOS = 5;
+  const toStars = (t) => (t <= 5 ? 1 : t <= 10 ? 2 : t <= 15 ? 3 : 4);
+  const STAR_LABELS = { 1: "À retravailler", 2: "En progrès", 3: "Bien joué", 4: "Excellent" };
+  const STARS_KEY = "ndrc-simulations-etoiles";
+  function loadStars() { try { return JSON.parse(localStorage.getItem(STARS_KEY)) || {}; } catch { return {}; } }
+  function saveBest(who, num, stars) {
+    const all = loadStars();
+    const mine = all[who] || {};
+    const improved = !mine["s" + num] || stars > mine["s" + num];
+    if (improved) mine["s" + num] = stars;
+    all[who] = mine;
+    try { localStorage.setItem(STARS_KEY, JSON.stringify(all)); } catch { /* navigation privée */ }
+    return { mine, improved };
+  }
+  const starIcon = (on) => `<svg class="star${on ? " star--on" : ""}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.5L12 17.1l-5.9 3.3 1.4-6.5L2.6 9.4l6.6-.7z"/></svg>`;
+  const starRow = (n, max = MAX_STARS) => Array.from({ length: max }, (_, i) => starIcon(i < n)).join("");
+  const LEVELS = ["À travailler", "À travailler", "Fragile", "En progrès", "Solide", "Maîtrisé"];
   const cap = (t) => t.toLocaleLowerCase("fr").replace(/(^|[\s'-])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase("fr"));
 
   // ── Consignes ajoutées aux prompts
@@ -210,7 +230,7 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
     <ol class="steps">
       <li><div><strong>Observez</strong><span>Un conseiller modèle répond à ${esc(S.clientName)} pendant quelques échanges. Repérez ses techniques.</span></div></li>
       <li><div><strong>Prenez la main</strong><span>Vous devenez le conseiller. Le client réagit à vos vraies réponses, et son humeur aussi.</span></div></li>
-      <li><div><strong>Recevez votre bilan</strong><span>Une note sur 20, ce qui fonctionne, ce qui coince, et une meilleure formulation pour chaque réplique à retravailler.</span></div></li>
+      <li><div><strong>Recevez votre bilan</strong><span>Jusqu'à 4 étoiles, ce qui fonctionne, ce qui coince, et une meilleure formulation pour chaque réplique à retravailler.</span></div></li>
     </ol>
     ${proxyMissing() ? `<p class="config-warn">Le relais IA n'est pas encore configuré : renseignez l'adresse du Worker sur la ligne PROXY_URL du fichier sim.js.</p>` : ""}
     <form class="who" id="who" novalidate>
@@ -456,14 +476,6 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
   const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, Math.round(Number(n) || 0)));
   const list = (a) => (Array.isArray(a) ? a.filter(Boolean) : []);
 
-  function mention(t) {
-    if (t >= 16) return "Très bien";
-    if (t >= 14) return "Bien";
-    if (t >= 12) return "Assez bien";
-    if (t >= 10) return "Passable";
-    if (t >= 8) return "Fragile";
-    return "Insuffisant";
-  }
 
   function moodChart() {
     const pts = state.moods;
@@ -484,6 +496,10 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
   function renderDebrief(d) {
     const crit = list(d.criteres).slice(0, 4).map((c) => ({ nom: c.nom, note: clamp(c.note, 0, 5), commentaire: c.commentaire }));
     const total = crit.reduce((s, c) => s + c.note, 0);
+    const stars = toStars(total);
+    const { mine, improved } = saveBest(whoLabel(state.who), S.num, stars);
+    const done = Object.keys(mine).length;
+    const cumul = Object.values(mine).reduce((a, b) => a + b, 0);
     const verdicts = { fidelise: "Client fidélisé", mitige: "Résultat mitigé", perdu: "Client perdu" };
     const vKey = String(d.verdict || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
     const verdict = vKey.includes("fidel") ? "fidelise" : vKey.includes("perdu") ? "perdu" : "mitige";
@@ -504,19 +520,30 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
     $("debrief").innerHTML = `
 <div class="sheet">
   <header class="db-head">
-    <div class="db-score"><span class="db-num">${total}</span><span class="db-den">/20</span></div>
+    <div class="db-stars" role="img" aria-label="${stars} étoile${stars > 1 ? "s" : ""} sur ${MAX_STARS}">${starRow(stars)}</div>
     <div class="db-summary">
-      <p class="db-mention">${mention(total)}</p>
+      <p class="db-mention">${STAR_LABELS[stars]}</p>
       <p class="db-appr">${esc(d.appreciation || "")}</p>
       <span class="verdict verdict--${verdict}">${verdicts[verdict]}</span>
     </div>
     <p class="db-meta">Bilan de ${esc(whoLabel(state.who))}, le ${new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}. ${esc(S.title)}, ${esc(S.company)}. ${students.length} répliques analysées.</p>
   </header>
 
+  <section class="db-progress">
+    <div>
+      <h2>Votre collection d'étoiles</h2>
+      <p>${done < NB_SCENARIOS
+        ? `${done} scénario${done > 1 ? "s" : ""} sur ${NB_SCENARIOS} réussi${done > 1 ? "s" : ""}. Terminez les ${NB_SCENARIOS} pour obtenir votre note globale : chaque étoile vaut un point sur 20.`
+        : `Les ${NB_SCENARIOS} scénarios sont faits : votre note globale est de <b>${cumul}/20</b>. Rejouez un scénario pour améliorer votre total.`}
+      ${improved ? "" : " Votre meilleur score sur ce scénario reste celui d'une tentative précédente."}</p>
+    </div>
+    <div class="db-progress-total"><span>${cumul}</span><small>/ ${NB_SCENARIOS * MAX_STARS} étoiles</small></div>
+  </section>
+
   <section class="db-block"><h2>L'humeur du client au fil de l'échange</h2>${moodChart()}</section>
 
   <section class="db-block"><h2>Votre grille</h2>
-    ${crit.map((c) => `<div class="crit"><span class="crit-name">${esc(c.nom)}</span><div class="crit-bar"><i style="width:${c.note * 20}%"></i></div><span class="crit-note">${c.note}/5</span>${c.commentaire ? `<p>${esc(c.commentaire)}</p>` : ""}</div>`).join("")}
+    ${crit.map((c) => `<div class="crit"><span class="crit-name">${esc(c.nom)}</span><div class="crit-bar"><i style="width:${c.note * 20}%"></i></div><span class="crit-note">${LEVELS[c.note]}</span>${c.commentaire ? `<p>${esc(c.commentaire)}</p>` : ""}</div>`).join("")}
   </section>
 
   <div class="db-cols">
@@ -551,7 +578,8 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
         etudiant: whoLabel(state.who),
         scenario: { num: S.num, titre: S.title, entreprise: S.company, niveau: S.level },
         note: total,
-        mention: mention(total),
+        etoiles: stars,
+        mention: STAR_LABELS[stars],
         criteres: crit,
         verdict: verdicts[verdict],
         appreciation: d.appreciation || "",

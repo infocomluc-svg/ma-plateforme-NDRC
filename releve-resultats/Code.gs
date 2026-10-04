@@ -2,7 +2,9 @@
    RELEVÉ DES RÉSULTATS — Simulations relation client BTS NDRC
    À coller dans un tableur Google : Extensions > Apps Script.
    1. Reçoit le bilan de chaque simulation et l'ajoute au tableur.
-   2. Envoie chaque soir un récapitulatif par e-mail au formateur.
+   2. Tient à jour l'onglet « Synthèse » : étoiles de chaque étudiant
+      (meilleure tentative par scénario) et note globale sur 20.
+   3. Envoie chaque soir un récapitulatif par e-mail au formateur.
    ═══════════════════════════════════════════════════════════════ */
 
 // ── RÉGLAGES (modifiables)
@@ -11,6 +13,7 @@ const CONFIG = {
   HEURE_RECAP: 18,         // heure d'envoi du récapitulatif quotidien (0 à 23)
   FUSEAU: "Europe/Paris",
   BILANS_PAR_EMAIL: 40,    // au-delà, le récapitulatif est découpé en plusieurs e-mails
+  NB_SCENARIOS: 5,         // 4 étoiles maximum par scénario : 5 scénarios = 20 étoiles = note sur 20
 };
 
 const ONGLET = "Résultats";
@@ -19,7 +22,12 @@ const COLONNES = [
   "Écoute et empathie /5", "Professionnalisme /5", "Solutions et argumentation /5", "Fidélisation /5",
   "Verdict", "Humeur finale du client", "Appréciation", "Ce qui est satisfaisant", "Ce qui ne l'est pas",
   "Pistes d'amélioration", "Conseil prioritaire", "Réplique par réplique", "Conversation complète", "Envoyé par e-mail le",
+  "Étoiles /4",
 ];
+const ONGLET_SYNTHESE = "Synthèse";
+// Barème : 0-5 → 1 étoile, 6-10 → 2, 11-15 → 3, 16-20 → 4
+const etoiles_ = (note) => (note <= 5 ? 1 : note <= 10 ? 2 : note <= 15 ? 3 : 4);
+const dessin_ = (n) => "★".repeat(n) + "☆".repeat(4 - n);
 const COL = Object.fromEntries(COLONNES.map((nom, i) => [nom, i + 1]));
 
 // ── Menu du tableur
@@ -28,6 +36,7 @@ function onOpen() {
     .createMenu("Simulations")
     .addItem("Installer le relevé", "installer")
     .addItem("Envoyer le récapitulatif maintenant", "envoyerRecapitulatifManuel")
+    .addItem("Recalculer la synthèse", "majSynthese")
     .addToUi();
 }
 
@@ -83,8 +92,10 @@ function doPost(e) {
         (r.suggestion && r.statut !== "Efficace" ? `\n   Mieux : ${r.suggestion}` : "")).join("\n\n"),
       d.transcription || "",
       "",
+      Number(d.etoiles) || etoiles_(Number(d.note)),
     ].map(cellule_);
     sh.appendRow(ligne);
+    majSynthese();
     return json_({ ok: true });
   } catch (err) {
     return json_({ ok: false, erreur: String(err && err.message || err) });
@@ -96,6 +107,54 @@ function doPost(e) {
 // Permet de vérifier que le relevé est en ligne en ouvrant son adresse dans un navigateur.
 function doGet() {
   return json_({ ok: true, service: "Relevé des simulations BTS NDRC" });
+}
+
+// ── Synthèse : meilleure tentative de chaque étudiant sur chaque scénario
+function lireSynthese_() {
+  const sh = feuille_();
+  const n = sh.getLastRow() - 1;
+  const parEtudiant = {};
+  if (n < 1) return parEtudiant;
+  sh.getRange(2, 1, n, COLONNES.length).getValues().forEach((v) => {
+    const qui = String(v[COL["Étudiant"] - 1]).replace(/^'/, "");
+    const m = String(v[COL["Scénario"] - 1]).match(/^S(\d+)/);
+    if (!qui || !m) return;
+    const note = Number(v[COL["Note /20"] - 1]);
+    const et = Number(v[COL["Étoiles /4"] - 1]) || etoiles_(note);
+    const e = parEtudiant[qui] || (parEtudiant[qui] = { etoiles: {}, tentatives: 0, derniere: null });
+    e.etoiles[m[1]] = Math.max(e.etoiles[m[1]] || 0, et);
+    e.tentatives++;
+    const date = v[COL["Reçu le"] - 1];
+    if (date instanceof Date && (!e.derniere || date > e.derniere)) e.derniere = date;
+  });
+  Object.values(parEtudiant).forEach((e) => {
+    e.faits = Object.keys(e.etoiles).length;
+    e.total = Object.values(e.etoiles).reduce((a, b) => a + b, 0);
+    e.noteGlobale = e.faits >= CONFIG.NB_SCENARIOS ? e.total : null;
+  });
+  return parEtudiant;
+}
+
+function majSynthese() {
+  const data = lireSynthese_();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(ONGLET_SYNTHESE) || ss.insertSheet(ONGLET_SYNTHESE, 1);
+  const scen = Array.from({ length: CONFIG.NB_SCENARIOS }, (_, i) => `S${i + 1}`);
+  const entete = ["Étudiant", ...scen, "Scénarios faits", "Étoiles cumulées", "Note globale /20", "Tentatives", "Dernière simulation"];
+  const lignes = Object.keys(data).sort((a, b) => a.localeCompare(b, "fr")).map((qui) => {
+    const e = data[qui];
+    return [qui, ...scen.map((s) => (e.etoiles[s.slice(1)] ? dessin_(e.etoiles[s.slice(1)]) : "")),
+      `${e.faits}/${CONFIG.NB_SCENARIOS}`, e.total, e.noteGlobale == null ? "en cours" : e.noteGlobale, e.tentatives, e.derniere || ""];
+  });
+  sh.clear();
+  sh.getRange(1, 1, 1, entete.length).setValues([entete]).setFontWeight("bold").setBackground("#E6F0FF");
+  if (lignes.length) {
+    sh.getRange(2, 1, lignes.length, entete.length).setValues(lignes);
+    sh.getRange(2, 2, lignes.length, scen.length).setFontColor("#E59A00");
+    sh.getRange(2, entete.length, lignes.length, 1).setNumberFormat("dd/MM/yyyy HH:mm");
+  }
+  sh.setFrozenRows(1);
+  return data;
 }
 
 // ── Récapitulatif par e-mail
@@ -122,7 +181,7 @@ function envoyerRecapitulatif() {
     MailApp.sendEmail({
       to: destinataire_(),
       subject: `Simulations clients : ${lot.length} bilan(s) au ${jour}${partie}`,
-      htmlBody: courriel_(lot.map((x) => x.v), url),
+      htmlBody: courriel_(lot.map((x) => x.v), url, lireSynthese_()),
       name: "Simulations BTS NDRC",
     });
     const quand = new Date();
@@ -131,25 +190,27 @@ function envoyerRecapitulatif() {
   return nouveaux.length;
 }
 
-function courriel_(lignes, url) {
+function courriel_(lignes, url, synthese) {
   const g = (v, nom) => v[COL[nom] - 1];
   const h = (t) => String(t == null ? "" : t).replace(/^'/, "")
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
   const heure = (d) => d instanceof Date ? Utilities.formatDate(d, CONFIG.FUSEAU, "dd/MM HH:mm") : "";
-  const couleur = (note) => note >= 14 ? "#0B8A5F" : note >= 10 ? "#1F4FFF" : "#C8234A";
-  const moyenne = lignes.reduce((s, v) => s + Number(g(v, "Note /20") || 0), 0) / lignes.length;
+  const et = (v) => Number(g(v, "Étoiles /4")) || etoiles_(Number(g(v, "Note /20")));
+  const or = (n) => `<span style="color:#E59A00;font-size:17px;letter-spacing:1px">${"★".repeat(n)}</span><span style="color:#C9D6EE;font-size:17px;letter-spacing:1px">${"★".repeat(4 - n)}</span>`;
+  const moyenne = lignes.reduce((s, v) => s + et(v), 0) / lignes.length;
+  const qui = [...new Set(lignes.map((v) => String(g(v, "Étudiant")).replace(/^'/, "")))];
 
   const tableau = lignes.map((v) => `<tr>
       <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7"><b>${h(g(v, "Étudiant"))}</b></td>
       <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7">${h(g(v, "Scénario"))}</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7;text-align:center;color:${couleur(g(v, "Note /20"))};font-weight:700">${h(g(v, "Note /20"))}/20</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7;white-space:nowrap">${or(et(v))}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7">${h(g(v, "Verdict"))}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7;color:#46587F">${heure(g(v, "Reçu le"))}</td></tr>`).join("");
 
   const fiches = lignes.map((v) => `
     <div style="border:1px solid #D5E2F7;border-radius:14px;padding:18px 20px;margin:0 0 16px">
       <p style="margin:0 0 4px;font-size:17px"><b>${h(g(v, "Étudiant"))}</b>, ${h(g(v, "Scénario"))}</p>
-      <p style="margin:0 0 12px;color:${couleur(g(v, "Note /20"))};font-weight:700">${h(g(v, "Note /20"))}/20, ${h(g(v, "Mention"))}. ${h(g(v, "Verdict"))}, client ${h(String(g(v, "Humeur finale du client")).toLowerCase())} en fin d'échange.</p>
+      <p style="margin:0 0 12px">${or(et(v))} <b>${h(g(v, "Mention"))}</b> (${h(g(v, "Note /20"))}/20). ${h(g(v, "Verdict"))}, client ${h(String(g(v, "Humeur finale du client")).toLowerCase())} en fin d'échange.</p>
       <p style="margin:0 0 12px;color:#46587F">Écoute ${h(g(v, "Écoute et empathie /5"))}/5, professionnalisme ${h(g(v, "Professionnalisme /5"))}/5, solutions ${h(g(v, "Solutions et argumentation /5"))}/5, fidélisation ${h(g(v, "Fidélisation /5"))}/5.</p>
       <p style="margin:0 0 12px"><i>${h(g(v, "Appréciation"))}</i></p>
       <p style="margin:0 0 4px;color:#0B8A5F"><b>Ce qui est satisfaisant</b></p><p style="margin:0 0 12px">${h(g(v, "Ce qui est satisfaisant"))}</p>
@@ -159,11 +220,20 @@ function courriel_(lignes, url) {
 
   return `<div style="font-family:Arial,Helvetica,sans-serif;color:#0B1F4D;max-width:760px;line-height:1.5">
     <h2 style="margin:0 0 6px">Simulations relation client</h2>
-    <p style="margin:0 0 18px;color:#46587F">${lignes.length} nouveau(x) bilan(s), note moyenne ${moyenne.toFixed(1).replace(".", ",")}/20.
+    <p style="margin:0 0 18px;color:#46587F">${lignes.length} nouveau(x) bilan(s), ${moyenne.toFixed(1).replace(".", ",")} étoile(s) en moyenne sur 4.
       Le détail réplique par réplique et les conversations complètes sont dans <a href="${url}" style="color:#1F4FFF">votre tableur de résultats</a>.</p>
     <table style="border-collapse:collapse;width:100%;font-size:14px;margin:0 0 24px">
-      <tr style="background:#E6F0FF;text-align:left"><th style="padding:8px 10px">Étudiant</th><th style="padding:8px 10px">Scénario</th><th style="padding:8px 10px">Note</th><th style="padding:8px 10px">Verdict</th><th style="padding:8px 10px">Reçu le</th></tr>
+      <tr style="background:#E6F0FF;text-align:left"><th style="padding:8px 10px">Étudiant</th><th style="padding:8px 10px">Scénario</th><th style="padding:8px 10px">Étoiles</th><th style="padding:8px 10px">Verdict</th><th style="padding:8px 10px">Reçu le</th></tr>
       ${tableau}
+    </table>
+    <h3 style="margin:0 0 8px">Progression des étudiants concernés</h3>
+    <table style="border-collapse:collapse;width:100%;font-size:14px;margin:0 0 24px">
+      <tr style="background:#E6F0FF;text-align:left"><th style="padding:8px 10px">Étudiant</th><th style="padding:8px 10px">Scénarios faits</th><th style="padding:8px 10px">Étoiles cumulées</th><th style="padding:8px 10px">Note globale</th></tr>
+      ${qui.filter((q) => synthese[q]).map((q) => `<tr>
+        <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7"><b>${h(q)}</b></td>
+        <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7">${synthese[q].faits}/${CONFIG.NB_SCENARIOS}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7;color:#E59A00;font-weight:700">${synthese[q].total} ★</td>
+        <td style="padding:8px 10px;border-bottom:1px solid #D5E2F7;font-weight:700">${synthese[q].noteGlobale == null ? "en cours" : synthese[q].noteGlobale + "/20"}</td></tr>`).join("")}
     </table>
     ${fiches}
   </div>`;
@@ -182,6 +252,11 @@ function feuille_() {
     sh.hideColumns(COL["Identifiant"]);
     sh.getRange(2, COL["Reçu le"], 999, 1).setNumberFormat("dd/MM/yyyy HH:mm");
     sh.getRange(2, COL["Envoyé par e-mail le"], 999, 1).setNumberFormat("dd/MM/yyyy HH:mm");
+  } else if (sh.getLastColumn() < COLONNES.length) {
+    // Tableur créé avec une version précédente : on ajoute les colonnes manquantes à droite.
+    const deb = sh.getLastColumn() + 1;
+    sh.getRange(1, deb, 1, COLONNES.length - deb + 1).setValues([COLONNES.slice(deb - 1)])
+      .setFontWeight("bold").setBackground("#E6F0FF");
   }
   return sh;
 }
