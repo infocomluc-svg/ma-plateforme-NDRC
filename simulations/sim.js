@@ -7,7 +7,7 @@
   "use strict";
 
   // ── À RENSEIGNER UNE SEULE FOIS : adresse de votre relais Cloudflare Worker
-  const PROXY_URL = "https://VOTRE-WORKER.VOTRE-COMPTE.workers.dev";
+  const PROXY_URL = "https://simulations-ndrc.infocomluc.workers.dev/";
 
   const S = window.SCENARIO;
   const MODEL_TURNS = S.modelTurns ?? 3;   // répliques du conseiller modèle
