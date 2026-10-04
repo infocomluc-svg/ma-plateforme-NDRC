@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulations relation client — BTS NDRC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#0B1F4D; --navy:#13306E; --cobalt:#1F4FFF; --azure:#2F8CFF;
+  --sky:#CFE4FF; --ice:#E6F0FF; --mist:#F3F7FF; --white:#FFFFFF;
+  --ink:#0B1F4D; --ink-2:#46587F; --line:#D5E2F7;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Figtree",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background:var(--mist);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:3px solid var(--azure);outline-offset:3px}
+a{color:inherit}
+
+/* Hero */
+.hero{color:#fff;overflow:hidden;
+  background:radial-gradient(1100px 600px at 90% -20%,#2F6BFF 0%,transparent 55%),radial-gradient(800px 500px at -10% 120%,#1A3FA8 0%,transparent 60%),var(--abyss)}
+.hero-inner{max-width:1160px;margin:0 auto;padding:clamp(28px,6vw,72px) 20px clamp(48px,8vw,96px);display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:600;color:var(--sky);font-size:.95rem;margin-bottom:clamp(28px,5vw,56px)}
+.brand-dot{width:30px;height:30px;border-radius:10px;background:var(--cobalt);display:grid;place-items:center;font-size:1rem}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,6.4vw,4.8rem);line-height:.98;letter-spacing:-.03em}
+.hero p{font-size:clamp(1rem,1.6vw,1.15rem);line-height:1.6;color:#DCEAFF;max-width:46ch;margin:22px 0 30px}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--abyss);text-decoration:none;font-weight:700;padding:15px 26px;border-radius:999px;transition:background .15s}
+.cta:hover{background:var(--sky)}
+
+/* Collage de bulles */
+.collage{position:relative;height:500px}
+.bub{position:absolute;max-width:300px;padding:14px 18px;border-radius:22px;font-size:.98rem;line-height:1.45;box-shadow:0 20px 50px rgba(3,10,40,.35);opacity:0;animation:pop .45s ease-out forwards}
+.bub small{display:block;font-size:.76rem;font-weight:700;margin-bottom:4px;opacity:.7}
+.bub--c{background:var(--white);color:var(--ink);border-bottom-left-radius:6px}
+.bub--a{background:var(--cobalt);color:#fff;border-bottom-right-radius:6px}
+.b1{top:0;left:0;transform:rotate(-3deg);animation-delay:.1s}
+.b2{top:108px;right:0;transform:rotate(2deg);animation-delay:.45s}
+.b3{top:196px;left:24px;transform:rotate(-1.5deg);animation-delay:.8s}
+.b4{bottom:62px;right:16px;animation-delay:1.15s}
+.mood-pill{position:absolute;bottom:0;right:16px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);padding:10px 16px;border-radius:999px;font-size:.88rem;font-weight:600;opacity:0;animation:pop .45s ease-out 1.5s forwards}
+.mood-pill b{font-size:1.25rem}
+.mood-pill i{display:inline-flex;gap:3px}
+.mood-pill i span{width:16px;height:8px;border-radius:99px;background:rgba(255,255,255,.25)}
+.mood-pill i span.on{background:#8FCBFF}
+@keyframes pop{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+
+/* Déroulé */
+.flow{max-width:1160px;margin:-40px auto 0;padding:0 20px;position:relative}
+.flow ol{list-style:none;counter-reset:f;display:grid;grid-template-columns:repeat(3,1fr);background:var(--white);border-radius:24px;box-shadow:0 1px 2px rgba(11,31,77,.06),0 18px 40px rgba(11,31,77,.1);overflow:hidden}
+.flow li{counter-increment:f;padding:24px 26px;display:grid;grid-template-columns:40px 1fr;gap:14px;border-left:1px solid var(--line)}
+.flow li:first-child{border-left:none}
+.flow li::before{content:counter(f);width:40px;height:40px;border-radius:13px;background:var(--ice);color:var(--navy);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
+.flow strong{font-family:var(--display);font-size:1.1rem;display:block;margin-bottom:4px}
+.flow span{font-size:.92rem;line-height:1.5;color:var(--ink-2)}
+
+/* Scénarios */
+main{max-width:1160px;margin:0 auto;padding:clamp(48px,7vw,80px) 20px 40px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.head h2{font-family:var(--display);font-size:clamp(1.8rem,3.4vw,2.4rem);letter-spacing:-.02em;line-height:1.05}
+.legend{display:flex;gap:18px;font-size:.86rem;color:var(--ink-2);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:14px;height:14px;border-radius:5px}
+
+.list{display:flex;flex-direction:column;gap:14px}
+.scn{display:grid;grid-template-columns:84px 1fr auto;gap:22px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:24px;padding:18px 22px 18px 18px;text-decoration:none;color:inherit;transition:border-color .2s,box-shadow .2s}
+.scn:hover{border-color:var(--tone);box-shadow:0 14px 34px rgba(11,31,77,.1)}
+.scn-tile{width:84px;height:84px;border-radius:24px;background:var(--tone);display:grid;place-items:center;font-size:2.3rem}
+.scn-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:2px}
+.scn h3{font-family:var(--display);font-size:1.3rem;letter-spacing:-.01em}
+.lvl{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--navy)}
+.lvl i{display:inline-flex;gap:3px}
+.lvl i span{width:7px;height:16px;border-radius:3px;background:var(--ice)}
+.lvl i span.on{background:var(--tone)}
+.scn-co{font-size:.88rem;color:var(--ink-2);font-weight:600;margin-bottom:8px}
+.scn-pitch{font-size:.94rem;line-height:1.55;color:var(--ink-2);max-width:72ch}
+.chips{list-style:none;display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.chips li{font-size:.78rem;font-weight:600;padding:4px 11px;border-radius:999px;background:var(--mist);color:var(--navy);border:1px solid var(--line)}
+.scn-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;min-width:120px}
+.scn-time{font-size:.86rem;color:var(--ink-2);white-space:nowrap}
+.go{background:var(--tone);color:#fff;font-weight:700;font-size:.92rem;padding:11px 22px;border-radius:999px;white-space:nowrap}
+
+footer{max-width:1160px;margin:0 auto;padding:28px 20px 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.88rem;color:var(--ink-2)}
+footer a{color:var(--cobalt);font-weight:600;text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr}
+  .collage{height:440px;max-width:440px}
+  .flow ol{grid-template-columns:1fr}
+  .flow li{border-left:none;border-top:1px solid var(--line)}
+  .flow li:first-child{border-top:none}
+}
+@media (max-width:640px){
+  .scn{grid-template-columns:64px 1fr;padding:16px}
+  .scn-tile{width:64px;height:64px;border-radius:18px;font-size:1.8rem}
+  .scn-side{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}
+  .bub{max-width:250px;font-size:.92rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .bub,.mood-pill{animation:none;opacity:1}
+  .scn,.cta{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="brand"><span class="brand-dot" aria-hidden="true">☎</span>BTS NDRC, simulations relation client</div>
+      <h1>Le client est furieux. À vous de le reconquérir.</h1>
+      <p>Cinq appels de clients mécontents, joués par une IA qui réagit à chacune de vos phrases. À la fin, un bilan détaillé vous dit ce qui a marché, ce qui a coincé, et comment le dire mieux.</p>
+      <a class="cta" href="#scenarios">Choisir un scénario</a>
+    </div>
+    <div class="collage" aria-hidden="true">
+      <div class="bub bub--c b1"><small>M. Durand</small>Noël, c'est dans trois jours. Le suivi n'a pas bougé depuis une semaine !</div>
+      <div class="bub bub--c b2"><small>M. Bernard</small>187 euros au lieu de 19,90. Expliquez-moi ça, ou je résilie.</div>
+      <div class="bub bub--c b3"><small>Mme Moreau</small>Vue sur un parking pour mon anniversaire. Je veux être remboursée.</div>
+      <div class="bub bub--a b4"><small>Vous</small>Je comprends votre colère, Monsieur Durand. Voici ce que je fais tout de suite pour vous.</div>
+      <div class="mood-pill"><b>🙂</b>Humeur du client <i><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></i></div>
+    </div>
+  </div>
+</header>
+
+<section class="flow" aria-label="Déroulement d'une simulation">
+  <ol>
+    <li><div><strong>Observez</strong><span>Un conseiller modèle ouvre l'échange. Repérez sa façon d'écouter, de reformuler, de proposer.</span></div></li>
+    <li><div><strong>Prenez la main</strong><span>Vous devenez le conseiller. L'humeur du client monte ou descend selon vos réponses.</span></div></li>
+    <li><div><strong>Recevez votre bilan</strong><span>Note sur 20, points forts, points faibles, pistes de progrès et reformulations réplique par réplique.</span></div></li>
+  </ol>
+</section>
+
+<main id="scenarios">
+  <div class="head">
+    <h2>Cinq clients vous attendent</h2>
+    <div class="legend" aria-label="Plus le bleu est profond, plus le scénario est difficile">
+      <span><i style="background:#2F8CFF"></i>Niveau 1</span>
+      <span><i style="background:#1F4FFF"></i>Niveau 2</span>
+      <span><i style="background:#13306E"></i>Niveau 3</span>
+    </div>
+  </div>
+
+  <div class="list">
+    <a class="scn" href="chatbot-s1.html" style="--tone:#2F8CFF">
+      <div class="scn-tile" aria-hidden="true">📦</div>
+      <div>
+        <div class="scn-top"><h3>Colis perdu avant Noël</h3><span class="lvl"><i><span class="on"></span><span></span><span></span></i>Niveau 1</span></div>
+        <p class="scn-co">RetailShop, e-commerce mode</p>
+        <p class="scn-pitch">M. Durand a commandé les cadeaux de ses trois enfants il y a 12 jours. Le colis est bloqué « en transit » depuis une semaine, et Noël est dans trois jours.</p>
+        <ul class="chips"><li>Gestion de crise</li><li>Empathie</li><li>Geste commercial</li></ul>
+      </div>
+      <div class="scn-side"><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
+    </a>
+
+    <a class="scn" href="chatbot-s2.html" style="--tone:#1F4FFF">
+      <div class="scn-tile" aria-hidden="true">🫧</div>
+      <div>
+        <div class="scn-top"><h3>Lave-linge en panne à 15 jours</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span></span></i>Niveau 2</span></div>
+        <p class="scn-co">ElectroPlus, électroménager</p>
+        <p class="scn-pitch">Mme Petit a payé 850 € sa machine, tombée en panne au bout de dix jours. Le technicien est reparti sans réparer. Trois enfants, et la laverie tous les deux jours.</p>
+        <ul class="chips"><li>SAV</li><li>Garantie légale de conformité</li><li>Remplacement</li></ul>
+      </div>
+      <div class="scn-side"><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
+    </a>
+
+    <a class="scn" href="chatbot-s3.html" style="--tone:#1F4FFF">
+      <div class="scn-tile" aria-hidden="true">📱</div>
+      <div>
+        <div class="scn-top"><h3>Facture multipliée par dix</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span></span></i>Niveau 2</span></div>
+        <p class="scn-co">TéléConnect, opérateur mobile</p>
+        <p class="scn-pitch">M. Bernard reçoit une facture de 187 € au lieu de 19,90 €. Quatre appels au service client sans réponse. Il menace de résilier après sept ans de fidélité.</p>
+        <ul class="chips"><li>Litige de facturation</li><li>Rétention</li><li>Résiliation</li></ul>
+      </div>
+      <div class="scn-side"><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
+    </a>
+
+    <a class="scn" href="chatbot-s4.html" style="--tone:#13306E">
+      <div class="scn-tile" aria-hidden="true">🏨</div>
+      <div>
+        <div class="scn-top"><h3>Séjour d'anniversaire gâché</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span class="on"></span></i>Niveau 3</span></div>
+        <p class="scn-co">Grand Hôtel Bellevue, hôtellerie haut de gamme</p>
+        <p class="scn-pitch">Mme Moreau a réservé une chambre vue mer à 320 € la nuit. À l'arrivée : vue parking, travaux dès 7 h, salle de bain sale. Elle exige un remboursement total.</p>
+        <ul class="chips"><li>Clientèle premium</li><li>Compensation</li><li>Image de marque</li></ul>
+      </div>
+      <div class="scn-side"><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
+    </a>
+
+    <a class="scn" href="chatbot-s5.html" style="--tone:#13306E">
+      <div class="scn-tile" aria-hidden="true">🚗</div>
+      <div>
+        <div class="scn-top"><h3>Réparation ratée, client immobilisé</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span class="on"></span></i>Niveau 3</span></div>
+        <p class="scn-co">AutoService Pro, garage automobile</p>
+        <p class="scn-pitch">M. Lemaire a payé 1 200 € pour un embrayage neuf. Huit jours après, même panne, à 80 km de chez lui en déplacement professionnel. Il parle de tribunal.</p>
+        <ul class="chips"><li>Responsabilité du garage</li><li>Urgence</li><li>Juridique</li></ul>
+      </div>
+      <div class="scn-side"><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <span>BTS NDRC, référentiel 2018. Relation client et traitement des réclamations.</span>
+  <a href="../index.html">Retour à la plateforme de cours</a>
+</footer>
+
+</body>
+</html>

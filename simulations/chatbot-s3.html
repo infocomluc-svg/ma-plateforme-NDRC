@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facture multipliée par dix — Simulation BTS NDRC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sim.css">
+</head>
+<body>
+<noscript>Activez JavaScript pour lancer la simulation.</noscript>
+<script>
+/* Configuration du scénario 3. Le moteur commun est dans sim.js. */
+window.SCENARIO = {
+  "num": 3,
+  "level": 2,
+  "emoji": "📱",
+  "title": "Facture multipliée par dix",
+  "company": "TéléConnect",
+  "sector": "opérateur mobile",
+  "clientName": "M. Bernard",
+  "clientDesc": "38 ans, client depuis 7 ans",
+  "pitch": "M. Bernard reçoit une facture de 187 € au lieu de ses 19,90 € habituels, sans explication. Quatre appels au service client sans succès. Il menace de résilier.",
+  "context": "Facture de 187 € au lieu de 19,90 €, aucune modification de sa part. Quatre tentatives d'appel au SAV cette semaine : coupures, 45 minutes d'attente. Client depuis 7 ans. Menace de résiliation et de recours.",
+  "tips": [
+    "Reconnaître la légitimité de la colère",
+    "Présenter des excuses pour le SAV injoignable",
+    "Identifier la cause de la surfacturation",
+    "Corriger et rembourser avec un délai précis",
+    "Proposer un geste de fidélisation",
+    "S'engager sur le suivi"
+  ],
+  "firstMessage": "Bonjour ! Là, c'est vraiment inadmissible. Je viens de recevoir ma facture TéléConnect : 187 euros ! D'habitude c'est 19 euros 90. Je n'ai rien changé à mon abonnement. J'ai essayé d'appeler votre service client quatre fois cette semaine : soit ça coupe, soit j'attends 45 minutes et ça raccroche. Je suis client chez vous depuis sept ans ! Si vous ne m'expliquez pas ça tout de suite, je résilie et je saisis l'ARCEP.",
+  "clientPrompt": "Tu joues M. Bernard, 38 ans, client mécontent de TéléConnect, opérateur mobile.\n\nSITUATION : ta facture du mois est de 187 € au lieu de 19,90 €. Tu n'as rien modifié. Tu as tenté de joindre le SAV 4 fois (coupures, attentes interminables). Client depuis 7 ans. Très en colère.\n\nCARACTÈRE : professionnel pragmatique. Tu veux des faits et des solutions, pas des excuses. Tu connais tes droits. Si on ne t'explique pas clairement l'erreur ET qu'on ne te rembourse pas, tu résilies.\n\nCOMPORTEMENT :\n- Tu demandes : « Pourquoi cette facture ? C'est quoi la cause ? Quand suis-je remboursé ? »\n- Si le conseiller identifie l'erreur et propose un remboursement rapide et daté, tu te calmes.\n- Si on te dit « on va vérifier » sans délai précis, tu t'énerves et tu reparles de résiliation et de recours.\n- Tu évoques les offres des concurrents.",
+  "advisorPrompt": "Tu joues un conseiller service client exemplaire de TéléConnect. Un étudiant de BTS NDRC t'observe.\n\nCONTEXTE : M. Bernard, 7 ans de fidélité, facture de 187 € au lieu de 19,90 €. SAV injoignable depuis 4 jours. Menace de résiliation.\n\nTU DÉMONTRES :\n1. La reconnaissance immédiate du problème et de la légitimité de la colère.\n2. L'identification de la cause (par exemple : option internationale activée par erreur, service ajouté sans consentement).\n3. La correction immédiate et un délai de remboursement précis.\n4. Des excuses sincères pour la défaillance du SAV.\n5. Un geste de fidélisation (mois offert, crédit sur la prochaine facture).\n6. Un engagement de suivi (rappel pour confirmer le remboursement), et si besoin l'information sur les voies de recours (service consommateurs, puis médiateur des communications électroniques).",
+  "evalContext": "TéléConnect (opérateur mobile). M. Bernard, client depuis 7 ans : facture de 187 € au lieu de 19,90 €, SAV injoignable après 4 tentatives, menace de résiliation et de recours.",
+  "evalFocus": [
+    "Reconnaître la défaillance du SAV sans se défausser",
+    "Rechercher et expliquer clairement la cause de la surfacturation",
+    "Rembourser avec un délai précis plutôt que « on va vérifier »",
+    "Argumenter la rétention face à la menace de résiliation",
+    "Geste de fidélisation adapté à 7 ans d'ancienneté",
+    "Suivi et, le cas échéant, information exacte sur les recours"
+  ],
+  "duration": "15 à 20 min",
+  "minReplies": 5,
+  "maxReplies": 14
+};
+</script>
+<script src="sim.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réparation ratée, client immobilisé — Simulation BTS NDRC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sim.css">
+</head>
+<body>
+<noscript>Activez JavaScript pour lancer la simulation.</noscript>
+<script>
+/* Configuration du scénario 5. Le moteur commun est dans sim.js. */
+window.SCENARIO = {
+  "num": 5,
+  "level": 3,
+  "emoji": "🚗",
+  "title": "Réparation ratée, client immobilisé",
+  "company": "AutoService Pro",
+  "sector": "garage automobile",
+  "clientName": "M. Lemaire",
+  "clientDesc": "50 ans, cadre en déplacement",
+  "pitch": "M. Lemaire a payé 1 200 € pour une révision et un embrayage neuf. Huit jours après, même panne, à 80 km de chez lui en plein déplacement professionnel. Il parle de tribunal.",
+  "context": "Révision complète et remplacement d'embrayage : 1 200 €, il y a 8 jours. Même panne ce matin. Véhicule immobilisé dans une zone industrielle à 80 km. Réunion importante manquée.",
+  "tips": [
+    "Assumer la responsabilité du garage",
+    "Connaître l'obligation de résultat du garagiste",
+    "Organiser dépannage et véhicule de remplacement",
+    "Reprendre la réparation sans frais",
+    "Rembourser les frais annexes",
+    "Garantir la qualité et le suivi"
+  ],
+  "firstMessage": "Écoutez, je suis hors de moi. Il y a huit jours, j'ai déposé ma voiture chez vous pour une révision complète et le remplacement de l'embrayage : 1 200 euros. Ce matin, elle retombe en panne, exactement la même panne. Je suis à 80 kilomètres de chez moi, en déplacement professionnel, au milieu d'une zone industrielle, et j'ai raté une réunion importante. Vous allez venir chercher la voiture et la réparer à vos frais, ou je vous attaque en justice.",
+  "clientPrompt": "Tu joues M. Lemaire, 50 ans, client très mécontent d'AutoService Pro, garage automobile.\n\nSITUATION : il y a 8 jours, tu as payé 1 200 € pour une révision complète et le remplacement de l'embrayage. Ce matin, même panne. Tu es à 80 km de chez toi, en déplacement professionnel, voiture immobilisée. Tu as raté une réunion importante.\n\nCARACTÈRE : professionnel pragmatique et autoritaire. Tu sais qu'un garagiste doit rendre un véhicule correctement réparé. Tu veux une solution IMMÉDIATE et une prise en charge TOTALE. Tu parles de tribunal, mais tu veux d'abord une solution rapide.\n\nCOMPORTEMENT :\n- Tu demandes concrètement : dépannage, véhicule de remplacement, remboursement des frais.\n- Si on te propose un dépanneur rapide et un véhicule de remplacement, tu te calmes un peu.\n- Si on minimise ou nie la responsabilité du garage, tu parles du tribunal et de la DGCCRF.",
+  "advisorPrompt": "Tu joues un responsable après-vente exemplaire d'AutoService Pro. Un étudiant de BTS NDRC t'observe.\n\nCONTEXTE : M. Lemaire, révision et embrayage à 1 200 €, même panne 8 jours après, immobilisé à 80 km en déplacement professionnel.\n\nTU DÉMONTRES :\n1. La reconnaissance immédiate de la responsabilité du garage, sans se défausser.\n2. La connaissance du cadre : le garagiste est tenu d'une obligation de résultat sur la réparation effectuée ; la reprise se fait sans frais (et selon la garantie contractuelle de l'atelier sur pièces et main-d'œuvre).\n3. Une action immédiate : envoi d'un dépanneur et véhicule de remplacement.\n4. La prise en charge totale de la réparation et des frais annexes (taxi, transport).\n5. Un geste commercial (remise sur la prochaine révision).\n6. Un engagement qualité : contrôle complet gratuit après réparation, suivi personnel.",
+  "evalContext": "AutoService Pro (garage automobile). M. Lemaire : révision et embrayage à 1 200 €, même panne 8 jours après, véhicule immobilisé à 80 km pendant un déplacement professionnel, menace de procès.",
+  "evalFocus": [
+    "Assumer la responsabilité sans se défausser ni accuser le client",
+    "Faire référence à l'obligation de résultat du garagiste (reprise sans frais)",
+    "Organiser immédiatement dépannage et mobilité (véhicule de remplacement, taxi)",
+    "Prise en charge des frais annexes",
+    "Désamorcer la menace judiciaire par des actes concrets",
+    "Engagement qualité et suivi personnel"
+  ],
+  "duration": "20 à 25 min",
+  "minReplies": 6,
+  "maxReplies": 15
+};
+</script>
+<script src="sim.js"></script>
+</body>
+</html>
