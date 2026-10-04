@@ -60,12 +60,18 @@
   const CLIENT_RULES = `CONSIGNES TECHNIQUES (jamais mentionnées dans tes réponses) :
 - Termine CHAQUE message par [[humeur:N]], N allant de 1 (furieux) à 5 (satisfait), selon ton état après la dernière réplique du conseiller. Tu commences à 1.
 - Ton humeur ne remonte que si le conseiller le mérite : écoute, reformulation, empathie sincère, solutions concrètes et datées. Elle baisse s'il est évasif, défensif, impoli, s'il te coupe ou répète des formules creuses.
-- Quand ton problème est réglé de façon satisfaisante et que tu n'as plus rien à demander, conclus poliment et ajoute [[fin]].
 - Messages de 2 à 5 phrases, en français oral, sans didascalies ni astérisques. Tu ne sors jamais de ton rôle.`;
 
   const ADVISOR_RULES = `Réponds uniquement par la réplique du conseiller : 3 à 5 phrases, français oral professionnel, sans didascalies ni astérisques. Tu ne joues jamais le client.`;
 
-  const clientSystem = () => `${S.clientPrompt}\n\n${CLIENT_RULES}`;
+  // Le client ne peut conclure l'appel qu'une fois que l'étudiant a fait le minimum de répliques.
+  // Avant, il relance toujours : c'est ce qui laisse à l'étudiant de la matière pour s'entraîner.
+  const KEEP_GOING = `- L'appel n'est PAS terminé : ne conclus jamais, ne dis pas au revoir. Même si une réponse te satisfait en partie, relance toujours avec une question, un doute ou une exigence nouvelle : délai précis, garantie que cela ne se reproduira pas, compensation du préjudice, suivi, interlocuteur à rappeler, sort de ta commande ou de ton dossier.`;
+  const MAY_END = `- Quand ton problème est réglé de façon satisfaisante et que tu n'as plus rien à demander, conclus poliment et ajoute [[fin]]. Sinon, continue de relancer.`;
+  const clientSystem = () => {
+    const mayEnd = state.phase === "student" && state.studentCount >= MIN_REPLIES;
+    return `${S.clientPrompt}\n\n${CLIENT_RULES}\n${mayEnd ? MAY_END : KEEP_GOING}`;
+  };
   const advisorSystem = () => `${S.advisorPrompt}\n\n${ADVISOR_RULES}`;
 
   function evalSystem(n) {
@@ -366,7 +372,7 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
       const { fin } = pushClient(await callAI(clientSystem(), clientMessages(), 350, "dialogue"));
       hideTyping();
       state.busy = false;
-      if (fin) {
+      if (fin && state.studentCount >= MIN_REPLIES) {
         note(`${esc(S.clientName)} considère son problème réglé. Place au bilan.`);
         return endConversation();
       }
