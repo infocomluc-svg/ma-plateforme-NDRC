@@ -10,7 +10,7 @@
   const PROXY_URL = "https://simulations-ndrc.infocomluc.workers.dev/";
 
   // ── Relevé des résultats (Google Sheets + e-mail). Laisser vide pour ne rien transmettre.
-  const RESULTS_URL = "";
+  const RESULTS_URL = "https://script.google.com/macros/s/AKfycbzpJW-GoEdCC5ZMw9YZd936CC6PTX7gNKWNPwNflQfZ_F-5O62GWValhiAKiKp-aBER/exec";
 
   const S = window.SCENARIO;
   const MODEL_TURNS = S.modelTurns ?? 3;   // répliques du conseiller modèle
