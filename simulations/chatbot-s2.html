@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lave-linge en panne à 15 jours — Simulation BTS NDRC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sim.css">
+</head>
+<body>
+<noscript>Activez JavaScript pour lancer la simulation.</noscript>
+<script>
+/* Configuration du scénario 2. Le moteur commun est dans sim.js. */
+window.SCENARIO = {
+  "num": 2,
+  "level": 2,
+  "emoji": "🫧",
+  "title": "Lave-linge en panne à 15 jours",
+  "company": "ElectroPlus",
+  "sector": "électroménager",
+  "clientName": "Mme Petit",
+  "clientDesc": "35 ans, mère de trois enfants",
+  "pitch": "Mme Petit a payé 850 € un lave-linge tombé en panne au bout de dix jours. Le technicien est reparti sans réparer, faute de pièce. Depuis, plus de nouvelles.",
+  "context": "Lave-linge 8 kg à 850 €, acheté il y a 15 jours. Panne moteur après 10 jours. Technicien venu il y a 5 jours, pièce manquante, aucun délai annoncé. Trois enfants de 2, 5 et 8 ans. Laverie tous les deux jours, 15 € à chaque fois.",
+  "tips": [
+    "Reconnaître le préjudice concret (enfants, frais)",
+    "Maîtriser la garantie légale de conformité",
+    "Privilégier un remplacement rapide",
+    "Proposer une solution d'attente",
+    "Compenser les frais engagés",
+    "Nommer un interlocuteur et un délai"
+  ],
+  "firstMessage": "Bonjour, j'appelle parce que je suis à bout de nerfs. J'ai acheté un lave-linge chez vous il y a quinze jours, 850 euros quand même, et il est déjà en panne. Un technicien est venu il y a cinq jours, il m'a dit qu'il manquait une pièce, et depuis, plus rien. J'ai trois jeunes enfants, je vais à la laverie tous les deux jours, ça me coûte 15 euros à chaque fois. Ce n'est pas acceptable. Qu'est-ce que vous allez faire ?",
+  "clientPrompt": "Tu joues Mme Petit, 35 ans, cliente très mécontente d'ElectroPlus, magasin d'électroménager.\n\nSITUATION : il y a 15 jours, tu as acheté un lave-linge 8 kg à 850 €. Panne moteur après 10 jours d'utilisation. Un technicien est venu il y a 5 jours mais n'a pas réparé : pièce manquante. Aucune nouvelle depuis. Tu as 3 enfants (2, 5 et 8 ans) et tu vas à la laverie tous les 2 jours (15 € à chaque fois).\n\nCARACTÈRE : mère de famille épuisée, en colère mais polie. Tu veux une solution CONCRÈTE et RAPIDE. Tu connais tes droits : garantie légale de conformité de 2 ans, possibilité de demander le remplacement.\n\nCOMPORTEMENT :\n- Tu évoques régulièrement tes enfants et les frais de laverie.\n- Si on te propose un remplacement rapide, tu te calmes progressivement.\n- Si on te répond « on attend la pièce » sans alternative, tu t'énerves et tu parles de signaler l'enseigne à la DGCCRF.\n- Tu poses des questions concrètes : « C'est pour quand ? », « Qu'est-ce que vous faites, concrètement ? »",
+  "advisorPrompt": "Tu joues un conseiller service client exemplaire d'ElectroPlus. Un étudiant de BTS NDRC t'observe.\n\nCONTEXTE : Mme Petit, 3 enfants, lave-linge à 850 € en panne après 10 jours (moteur). Technicien venu, pièce manquante. Une semaine sans machine, frais de laverie.\n\nTU DÉMONTRES :\n1. Une empathie sincère et la reconnaissance du préjudice concret (enfants, frais de laverie).\n2. La connaissance des droits : garantie légale de conformité (articles L217-3 et suivants du Code de la consommation), mise en conformité dans un délai de 30 jours, choix entre réparation et remplacement.\n3. Une solution immédiate : remplacement du produit plutôt qu'une attente indéfinie.\n4. Une solution d'attente si le remplacement n'est pas immédiat : prise en charge des frais de laverie, livraison express.\n5. Une compensation commerciale proportionnée.\n6. Un suivi avec un interlocuteur nommé et un délai précis.",
+  "evalContext": "ElectroPlus (électroménager). Mme Petit, 3 enfants : lave-linge à 850 € en panne après 10 jours, technicien reparti sans réparer faute de pièce, frais de laverie de 15 € tous les 2 jours.",
+  "evalFocus": [
+    "Reconnaître le préjudice concret (enfants, frais de laverie)",
+    "Mobiliser correctement la garantie légale de conformité (2 ans, réparation ou remplacement, délai de 30 jours)",
+    "Privilégier le remplacement plutôt que l'attente d'une pièce sans délai",
+    "Proposer une solution d'attente ou le remboursement des frais de laverie",
+    "Compensation commerciale proportionnée",
+    "Interlocuteur et délai précis"
+  ],
+  "duration": "15 à 20 min",
+  "minReplies": 5,
+  "maxReplies": 14
+};
+</script>
+<script src="sim.js"></script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+/* ═══════════════════════════════════════════════════════════════
+   MOTEUR DES SIMULATIONS RELATION CLIENT — BTS NDRC
+   Un seul fichier pour les 5 scénarios. Chaque page chatbot-sX.html
+   ne contient que sa configuration (window.SCENARIO).
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  // ── À RENSEIGNER UNE SEULE FOIS : adresse de votre relais Cloudflare Worker
+  const PROXY_URL = "https://VOTRE-WORKER.VOTRE-COMPTE.workers.dev";
+
+  const S = window.SCENARIO;
+  const MODEL_TURNS = S.modelTurns ?? 3;   // répliques du conseiller modèle
+  const MIN_REPLIES = S.minReplies ?? 5;   // répliques avant de pouvoir demander le bilan
+  const MAX_REPLIES = S.maxReplies ?? 15;  // répliques maximum de l'étudiant
+  const LEVEL_TONES = { 1: "#2F8CFF", 2: "#1F4FFF", 3: "#13306E" };
+  const MOODS = [
+    { face: "😡", label: "Furieux" },
+    { face: "😠", label: "Agacé" },
+    { face: "😐", label: "Méfiant" },
+    { face: "🙂", label: "Rassuré" },
+    { face: "😊", label: "Satisfait" },
+  ];
+
+  const state = {
+    phase: "intro",      // intro | model | student | done
+    transcript: [],      // {role:'client'|'advisor'|'student', text, api?, mood?}
+    mood: 1,
+    moods: [],           // {mood, at:index dans transcript}
+    studentCount: 0,
+    handoverAt: null,
+    busy: false,
+    skip: false,
+  };
+
+  // ── Outils
+  const $ = (id) => document.getElementById(id);
+  const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wait = (ms) => new Promise((r) => setTimeout(r, reduced() ? 0 : ms));
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const fmt = (s) => esc(s).replace(/\n+/g, "<br>");
+  const proxyMissing = () => PROXY_URL.includes("VOTRE-WORKER");
+
+  // ── Consignes ajoutées aux prompts
+  const CLIENT_RULES = `CONSIGNES TECHNIQUES (jamais mentionnées dans tes réponses) :
+- Termine CHAQUE message par [[humeur:N]], N allant de 1 (furieux) à 5 (satisfait), selon ton état après la dernière réplique du conseiller. Tu commences à 1.
+- Ton humeur ne remonte que si le conseiller le mérite : écoute, reformulation, empathie sincère, solutions concrètes et datées. Elle baisse s'il est évasif, défensif, impoli, s'il te coupe ou répète des formules creuses.
+- Quand ton problème est réglé de façon satisfaisante et que tu n'as plus rien à demander, conclus poliment et ajoute [[fin]].
+- Messages de 2 à 5 phrases, en français oral, sans didascalies ni astérisques. Tu ne sors jamais de ton rôle.`;
+
+  const ADVISOR_RULES = `Réponds uniquement par la réplique du conseiller : 3 à 5 phrases, français oral professionnel, sans didascalies ni astérisques. Tu ne joues jamais le client.`;
+
+  const clientSystem = () => `${S.clientPrompt}\n\n${CLIENT_RULES}`;
+  const advisorSystem = () => `${S.advisorPrompt}\n\n${ADVISOR_RULES}`;
+
+  function evalSystem(n) {
+    const focus = (S.evalFocus || []).map((f) => `- ${f}`).join("\n");
+    return `Tu es formateur en BTS NDRC (Négociation et Digitalisation de la Relation Client). Tu débriefes un étudiant qui vient de traiter, au téléphone, un client mécontent.
+
+SITUATION : ${S.evalContext}
+
+Tu évalues UNIQUEMENT les répliques de l'étudiant, repérées [R1], [R2]… Les répliques du conseiller modèle servaient d'exemple et ne sont pas notées.
+
+POINTS ATTENDUS DANS CE SCÉNARIO :
+${focus}
+
+GRILLE (4 critères notés de 0 à 5, entiers) :
+1. Écoute et empathie : reformulation, reconnaissance de l'émotion, personnalisation, absence de formules creuses.
+2. Professionnalisme : clarté, ton, politesse, maîtrise de soi, vocabulaire, pas de promesse irréaliste.
+3. Solutions et argumentation : diagnostic, solutions concrètes et datées, droits du client, geste commercial proportionné.
+4. Fidélisation : reprise de confiance, engagement de suivi, conclusion de l'échange.
+
+EXIGENCES DU RETOUR :
+- Bienveillant mais exigeant. Tu vouvoies l'étudiant. Phrases courtes et concrètes.
+- Appuie chaque constat sur ses propres mots (cite brièvement ses répliques).
+- "satisfaisant" et "insatisfaisant" : 2 à 4 constats précis chacun.
+- "pistes" : 3 actions concrètes, chacune avec une phrase type qu'il pourra réutiliser.
+- "repliques" : exactement ${n} éléments, de R1 à R${n}. Statut "bien", "a_revoir" ou "a_eviter". Pour tout statut autre que "bien", donne dans "suggestion" la formulation qu'il aurait pu dire à la place (style oral professionnel). Pour "bien", "suggestion" peut rester vide.
+- Note réaliste : une prestation moyenne se situe autour de 10 à 12 sur 20.
+
+Réponds UNIQUEMENT par un objet JSON valide, sans aucun texte autour :
+{
+  "criteres": [
+    {"nom": "Écoute et empathie", "note": 0, "commentaire": "..."},
+    {"nom": "Professionnalisme", "note": 0, "commentaire": "..."},
+    {"nom": "Solutions et argumentation", "note": 0, "commentaire": "..."},
+    {"nom": "Fidélisation", "note": 0, "commentaire": "..."}
+  ],
+  "appreciation": "une phrase de synthèse",
+  "verdict": "fidelise | mitige | perdu",
+  "satisfaisant": ["..."],
+  "insatisfaisant": ["..."],
+  "pistes": [{"action": "...", "exemple": "..."}],
+  "repliques": [{"n": 1, "statut": "bien", "commentaire": "...", "suggestion": ""}],
+  "conseil": "le conseil prioritaire pour la prochaine simulation"
+}`;
+  }
+
+  // ── Appel au relais
+  async function callAI(system, messages, maxTokens, purpose) {
+    const res = await fetch(PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ system, messages, max_tokens: maxTokens, purpose }),
+    });
+    let data;
+    try { data = await res.json(); } catch { throw new Error(`Le relais IA a répondu de façon illisible (code ${res.status}).`); }
+    if (!res.ok || data.error) throw new Error(data.error?.message || `Le relais IA a renvoyé l'erreur ${res.status}.`);
+    return (data.content || []).map((b) => b.text || "").join("").trim();
+  }
+
+  // ── Historiques vus par chaque IA
+  function pushMerged(out, role, content) {
+    const last = out[out.length - 1];
+    if (last && last.role === role) last.content += "\n\n" + content;
+    else out.push({ role, content });
+  }
+  function clientMessages() {
+    const out = [{ role: "user", content: `${S.company}, service client, bonjour. Je vous écoute.` }];
+    state.transcript.forEach((e) => pushMerged(out, e.role === "client" ? "assistant" : "user", e.role === "client" ? e.api : e.text));
+    return out;
+  }
+  function advisorMessages() {
+    const out = [];
+    state.transcript.forEach((e) => pushMerged(out, e.role === "client" ? "user" : "assistant", e.text));
+    return out;
+  }
+
+  // ── Rendu de la page
+  function render() {
+    document.title = `${S.title} — Simulation BTS NDRC`;
+    document.body.style.setProperty("--tone", S.tone || LEVEL_TONES[S.level] || "#1F4FFF");
+    const goals = S.tips.map((t) => `<li>${esc(t)}</li>`).join("");
+    const segs = MOODS.map(() => "<i></i>").join("");
+    document.body.innerHTML = `
+<div class="app">
+  <header class="topbar">
+    <a class="back" href="index.html"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Scénarios</a>
+    <div class="topbar-title">
+      <span class="topbar-emoji" aria-hidden="true">${S.emoji}</span>
+      <div><strong>${esc(S.title)}</strong><span>${esc(S.company)}</span></div>
+    </div>
+    <div class="progress"><span id="progressText">Observation</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+    <button class="brief-toggle" id="briefToggle" aria-expanded="false" aria-controls="brief">Fiche client</button>
+  </header>
+  <div class="layout">
+    <aside class="brief" id="brief">
+      <button class="brief-close" id="briefClose">Fermer la fiche</button>
+      <section class="client-card">
+        <div class="client-id">
+          <div class="client-face" id="clientFace" aria-hidden="true">😡</div>
+          <div><h2>${esc(S.clientName)}</h2><p>${esc(S.clientDesc)}</p></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span>Humeur du client</span><strong id="moodLabel">Furieux</strong></div>
+          <div class="gauge-track" id="gauge" role="meter" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Humeur du client">${segs}</div>
+          <div class="gauge-scale"><span>Furieux</span><span>Satisfait</span></div>
+        </div>
+      </section>
+      <section><h3>La situation</h3><p>${esc(S.context)}</p></section>
+      <section><h3>Ce qu'on attend de vous</h3><ul class="goals">${goals}</ul></section>
+    </aside>
+    <main class="chat">
+      <div class="phase" id="phase">Observation : le conseiller modèle répond</div>
+      <div class="messages" id="messages" aria-live="polite"></div>
+      <div class="composer">
+        <div class="composer-row">
+          <label class="sr-only" for="input">Votre réponse au client</label>
+          <textarea id="input" rows="1" disabled placeholder="Observez d'abord le conseiller modèle"></textarea>
+          <button class="send" id="send" disabled aria-label="Envoyer"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="composer-foot">
+          <span class="hint" id="hint">La simulation démarre dans un instant.</span>
+          <button class="btn btn--ghost" id="takeOver">Je prends la main</button>
+          <button class="btn btn--primary" id="finish" hidden disabled>Terminer et voir mon bilan</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="intro" id="intro">
+  <div class="intro-card">
+    <div class="intro-tile" aria-hidden="true">${S.emoji}</div>
+    <p class="intro-co">${esc(S.company)}, ${esc(S.sector)}</p>
+    <h1>${esc(S.title)}</h1>
+    <p class="intro-pitch">${esc(S.pitch)}</p>
+    <ol class="steps">
+      <li><div><strong>Observez</strong><span>Un conseiller modèle répond à ${esc(S.clientName)} pendant quelques échanges. Repérez ses techniques.</span></div></li>
+      <li><div><strong>Prenez la main</strong><span>Vous devenez le conseiller. Le client réagit à vos vraies réponses, et son humeur aussi.</span></div></li>
+      <li><div><strong>Recevez votre bilan</strong><span>Une note sur 20, ce qui fonctionne, ce qui coince, et une meilleure formulation pour chaque réplique à retravailler.</span></div></li>
+    </ol>
+    ${proxyMissing() ? `<p class="config-warn">Le relais IA n'est pas encore configuré : renseignez l'adresse du Worker sur la ligne PROXY_URL du fichier sim.js.</p>` : ""}
+    <button class="btn btn--primary btn--xl" id="start" ${proxyMissing() ? "disabled" : ""}>Lancer la simulation</button>
+    <a class="intro-back" href="index.html">Choisir un autre scénario</a>
+  </div>
+</div>
+
+<div class="debrief" id="debrief" hidden></div>`;
+  }
+
+  // ── Affichage des messages
+  function scrollDown() { const m = $("messages"); m.scrollTop = m.scrollHeight; }
+
+  function addBubble(e) {
+    const who = e.role === "client" ? S.clientName : e.role === "advisor" ? "Conseiller modèle" : "Vous";
+    const badge = e.role === "client" ? `<span class="msg-mood" title="${MOODS[e.mood - 1].label}">${MOODS[e.mood - 1].face}</span>` : "";
+    const div = document.createElement("div");
+    div.className = `msg msg--${e.role}`;
+    div.innerHTML = `<div class="msg-who">${badge}${esc(who)}</div><div class="bubble">${fmt(e.text)}</div>`;
+    $("messages").appendChild(div);
+    scrollDown();
+  }
+
+  function note(html, mod = "") {
+    const div = document.createElement("div");
+    div.className = `note ${mod}`;
+    div.innerHTML = html;
+    $("messages").appendChild(div);
+    scrollDown();
+    return div;
+  }
+
+  function errorNote(err, retry) {
+    const n = note(`<p>${esc(err.message)}</p><button class="btn btn--ghost">Réessayer</button>`, "note--error");
+    n.querySelector("button").addEventListener("click", () => { n.remove(); retry(); });
+  }
+
+  function showTyping(role) {
+    hideTyping();
+    const div = document.createElement("div");
+    div.className = `msg msg--${role}`;
+    div.id = "typing";
+    div.innerHTML = `<div class="msg-who">${role === "client" ? esc(S.clientName) : "Conseiller modèle"} écrit</div><div class="bubble bubble--typing"><span></span><span></span><span></span></div>`;
+    $("messages").appendChild(div);
+    scrollDown();
+  }
+  function hideTyping() { $("typing")?.remove(); }
+
+  function updateMood(m) {
+    state.mood = m;
+    $("clientFace").textContent = MOODS[m - 1].face;
+    $("moodLabel").textContent = MOODS[m - 1].label;
+    $("gauge").setAttribute("aria-valuenow", m);
+    $("gauge").querySelectorAll("i").forEach((seg, i) => seg.classList.toggle("on", i < m));
+  }
+
+  function updateProgress() {
+    if (state.phase === "model") {
+      $("progressText").textContent = "Observation";
+      $("progressFill").style.width = "0%";
+    } else {
+      $("progressText").textContent = `Réplique ${state.studentCount} sur ${MAX_REPLIES}`;
+      $("progressFill").style.width = `${(state.studentCount / MAX_REPLIES) * 100}%`;
+    }
+  }
+
+  function setInput(enabled) {
+    $("input").disabled = !enabled;
+    $("send").disabled = !enabled;
+    $("finish").disabled = state.studentCount < MIN_REPLIES || state.busy || state.phase !== "student";
+    if (enabled) $("input").focus();
+  }
+
+  // ── Transcription
+  function push(entry) { state.transcript.push(entry); addBubble(entry); }
+
+  function pushClient(raw) {
+    const m = raw.match(/\[\[\s*humeur\s*:\s*([1-5])\s*\]\]/i);
+    const fin = /\[\[\s*fin\s*\]\]/i.test(raw);
+    const text = raw.replace(/\[\[[^\]]*\]\]/g, "").trim();
+    const mood = m ? Number(m[1]) : state.mood;
+    state.moods.push({ mood, at: state.transcript.length });
+    updateMood(mood);
+    push({ role: "client", text, api: raw, mood });
+    return { fin };
+  }
+
+  // ── Phase 1 : observation
+  async function runModel() {
+    try {
+      while (!state.skip && state.transcript.filter((e) => e.role === "advisor").length < MODEL_TURNS) {
+        const last = state.transcript[state.transcript.length - 1];
+        if (last.role === "client") {
+          showTyping("advisor");
+          const a = await callAI(advisorSystem(), advisorMessages(), 350, "dialogue");
+          hideTyping();
+          push({ role: "advisor", text: a.replace(/\[\[[^\]]*\]\]/g, "").trim() });
+        } else {
+          showTyping("client");
+          pushClient(await callAI(clientSystem(), clientMessages(), 350, "dialogue"));
+          hideTyping();
+        }
+        await wait(600);
+      }
+      if (state.transcript[state.transcript.length - 1].role !== "client") {
+        showTyping("client");
+        pushClient(await callAI(clientSystem(), clientMessages(), 350, "dialogue"));
+        hideTyping();
+      }
+      handover();
+    } catch (err) {
+      hideTyping();
+      errorNote(err, runModel);
+    }
+  }
+
+  function handover() {
+    state.phase = "student";
+    state.handoverAt = state.transcript.length;
+    note(`<strong>À vous de jouer.</strong> Vous êtes maintenant le conseiller ${esc(S.company)}. Répondez au dernier message de ${esc(S.clientName)} : son humeur dépend de vos réponses.`, "note--handover");
+    $("phase").textContent = "À vous : vous êtes le conseiller";
+    $("phase").classList.add("phase--student");
+    $("takeOver").hidden = true;
+    $("finish").hidden = false;
+    $("input").placeholder = `Votre réponse à ${S.clientName}`;
+    $("hint").textContent = `Entrée pour envoyer, Maj + Entrée pour aller à la ligne. Bilan disponible après ${MIN_REPLIES} répliques.`;
+    updateProgress();
+    setInput(true);
+  }
+
+  // ── Phase 2 : l'étudiant joue
+  async function send() {
+    if (state.phase !== "student" || state.busy) return;
+    const text = $("input").value.trim();
+    if (!text) return;
+    $("input").value = "";
+    autosize();
+    push({ role: "student", text });
+    state.studentCount++;
+    updateProgress();
+    await clientReact();
+  }
+
+  async function clientReact() {
+    state.busy = true;
+    setInput(false);
+    try {
+      await wait(500);
+      showTyping("client");
+      const { fin } = pushClient(await callAI(clientSystem(), clientMessages(), 350, "dialogue"));
+      hideTyping();
+      state.busy = false;
+      if (fin) {
+        note(`${esc(S.clientName)} considère son problème réglé. Place au bilan.`);
+        return endConversation();
+      }
+      if (state.studentCount >= MAX_REPLIES) {
+        note("Vous avez atteint le nombre maximal de répliques. Place au bilan.");
+        return endConversation();
+      }
+      if (state.studentCount === MIN_REPLIES) $("hint").textContent = "Vous pouvez continuer ou demander votre bilan à tout moment.";
+      setInput(true);
+    } catch (err) {
+      hideTyping();
+      state.busy = false;
+      errorNote(err, clientReact);
+    }
+  }
+
+  async function endConversation() {
+    state.phase = "done";
+    setInput(false);
+    $("phase").textContent = "Échange terminé";
+    await wait(900);
+    evaluate();
+  }
+
+  // ── Bilan
+  function transcriptForEval() {
+    let k = 0;
+    const lines = state.transcript.map((e) => {
+      if (e.role === "client") return `CLIENT (humeur ${e.mood}/5) : ${e.text}`;
+      if (e.role === "advisor") return `CONSEILLER MODÈLE (exemple, non évalué) : ${e.text}`;
+      k++;
+      return `ÉTUDIANT [R${k}] : ${e.text}`;
+    });
+    return `Transcription complète de l'échange :\n\n${lines.join("\n\n")}\n\nL'étudiant a produit ${k} répliques : le champ "repliques" doit en contenir exactement ${k}, de R1 à R${k}.`;
+  }
+
+  function parseJSON(raw) {
+    const a = raw.indexOf("{");
+    const b = raw.lastIndexOf("}");
+    try { return JSON.parse(raw.slice(a, b + 1)); }
+    catch { throw new Error("Le bilan reçu est incomplet ou mal formé."); }
+  }
+
+  async function evaluate() {
+    const box = $("debrief");
+    box.hidden = false;
+    document.body.classList.add("is-debrief");
+    box.innerHTML = `<div class="db-loading"><div class="spinner" aria-hidden="true"></div><p class="db-loading-title">Votre formateur relit vos répliques</p><p>Comptez une trentaine de secondes.</p></div>`;
+    box.scrollTop = 0;
+    try {
+      const raw = await callAI(evalSystem(state.studentCount), [{ role: "user", content: transcriptForEval() }], 4000, "evaluation");
+      renderDebrief(parseJSON(raw));
+    } catch (err) {
+      box.innerHTML = `<div class="db-loading"><p class="db-loading-title">Le bilan n'a pas pu être produit</p><p>${esc(err.message)}</p>
+        <div class="db-actions db-actions--center"><button class="btn btn--primary" id="dbRetry">Relancer l'analyse</button><button class="btn btn--ghost" id="dbBack">Revenir à la conversation</button></div></div>`;
+      $("dbRetry").addEventListener("click", evaluate);
+      $("dbBack").addEventListener("click", () => { box.hidden = true; document.body.classList.remove("is-debrief"); });
+    }
+  }
+
+  const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, Math.round(Number(n) || 0)));
+  const list = (a) => (Array.isArray(a) ? a.filter(Boolean) : []);
+
+  function mention(t) {
+    if (t >= 16) return "Très bien";
+    if (t >= 14) return "Bien";
+    if (t >= 12) return "Assez bien";
+    if (t >= 10) return "Passable";
+    if (t >= 8) return "Fragile";
+    return "Insuffisant";
+  }
+
+  function moodChart() {
+    const pts = state.moods;
+    if (pts.length < 2) return "";
+    const W = 640, H = 170, L = 44, R = 16, T = 16, B = 30;
+    const x = (i) => L + (i * (W - L - R)) / (pts.length - 1);
+    const y = (m) => T + ((5 - m) * (H - T - B)) / 4;
+    const line = pts.map((p, i) => `${x(i).toFixed(1)},${y(p.mood).toFixed(1)}`).join(" ");
+    const area = `${x(0)},${H - B} ${line} ${x(pts.length - 1)},${H - B}`;
+    const hIdx = pts.findIndex((p) => p.at >= state.handoverAt);
+    const hx = hIdx > 0 ? (x(hIdx - 1) + x(hIdx)) / 2 : null;
+    const grid = [1, 2, 3, 4, 5].map((m) => `<line x1="${L}" x2="${W - R}" y1="${y(m)}" y2="${y(m)}" class="mc-grid"/><text x="${L - 12}" y="${y(m) + 5}" text-anchor="end" class="mc-face">${MOODS[m - 1].face}</text>`).join("");
+    const dots = pts.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.mood)}" r="${i >= hIdx && hIdx > -1 ? 5 : 3.5}" class="${i >= hIdx && hIdx > -1 ? "mc-dot" : "mc-dot mc-dot--model"}"/>`).join("");
+    const marker = hx ? `<line x1="${hx}" x2="${hx}" y1="${T - 6}" y2="${H - B}" class="mc-hand"/><text x="${hx + 6}" y="${H - 10}" class="mc-label">Vous prenez la main</text>` : "";
+    return `<figure class="mood-chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution de l'humeur du client, de ${MOODS[pts[0].mood - 1].label} à ${MOODS[pts[pts.length - 1].mood - 1].label}">${grid}<polygon points="${area}" class="mc-area"/><polyline points="${line}" class="mc-line"/>${marker}${dots}</svg></figure>`;
+  }
+
+  function renderDebrief(d) {
+    const crit = list(d.criteres).slice(0, 4).map((c) => ({ nom: c.nom, note: clamp(c.note, 0, 5), commentaire: c.commentaire }));
+    const total = crit.reduce((s, c) => s + c.note, 0);
+    const verdicts = { fidelise: "Client fidélisé", mitige: "Résultat mitigé", perdu: "Client perdu" };
+    const vKey = String(d.verdict || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    const verdict = vKey.includes("fidel") ? "fidelise" : vKey.includes("perdu") ? "perdu" : "mitige";
+    const statusLabel = { bien: "Efficace", a_revoir: "À retravailler", a_eviter: "À éviter" };
+
+    const students = state.transcript.filter((e) => e.role === "student");
+    const replies = students.map((s, i) => {
+      const r = list(d.repliques).find((x) => Number(x.n) === i + 1) || {};
+      const st = statusLabel[r.statut] ? r.statut : "a_revoir";
+      return `<article class="reply">
+        <div class="reply-head"><span class="reply-n">R${i + 1}</span><span class="chip chip--${st}">${statusLabel[st]}</span></div>
+        <p class="reply-said"><b>Vous avez dit :</b> ${esc(s.text)}</p>
+        ${r.commentaire ? `<p class="reply-comment">${esc(r.commentaire)}</p>` : ""}
+        ${r.suggestion && st !== "bien" ? `<div class="reply-better"><b>Formulation plus efficace</b>${esc(r.suggestion)}</div>` : ""}
+      </article>`;
+    }).join("");
+
+    $("debrief").innerHTML = `
+<div class="sheet">
+  <header class="db-head">
+    <div class="db-score"><span class="db-num">${total}</span><span class="db-den">/20</span></div>
+    <div class="db-summary">
+      <p class="db-mention">${mention(total)}</p>
+      <p class="db-appr">${esc(d.appreciation || "")}</p>
+      <span class="verdict verdict--${verdict}">${verdicts[verdict]}</span>
+    </div>
+    <p class="db-meta">${esc(S.title)}, ${esc(S.company)}. ${students.length} répliques analysées.</p>
+  </header>
+
+  <section class="db-block"><h2>L'humeur du client au fil de l'échange</h2>${moodChart()}</section>
+
+  <section class="db-block"><h2>Votre grille</h2>
+    ${crit.map((c) => `<div class="crit"><span class="crit-name">${esc(c.nom)}</span><div class="crit-bar"><i style="width:${c.note * 20}%"></i></div><span class="crit-note">${c.note}/5</span>${c.commentaire ? `<p>${esc(c.commentaire)}</p>` : ""}</div>`).join("")}
+  </section>
+
+  <div class="db-cols">
+    <section class="db-col db-col--ok"><h2>Ce qui est satisfaisant</h2><ul>${list(d.satisfaisant).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></section>
+    <section class="db-col db-col--ko"><h2>Ce qui ne l'est pas</h2><ul>${list(d.insatisfaisant).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></section>
+  </div>
+
+  <section class="db-block"><h2>Pistes d'amélioration</h2>
+    <ol class="tracks">${list(d.pistes).map((p) => `<li><div><strong>${esc(p.action || p)}</strong>${p.exemple ? `<q>${esc(p.exemple)}</q>` : ""}</div></li>`).join("")}</ol>
+  </section>
+
+  <section class="db-block"><h2>Réplique par réplique</h2>${replies}</section>
+
+  ${d.conseil ? `<section class="db-advice"><h2>Pour la prochaine fois</h2><p>${esc(d.conseil)}</p></section>` : ""}
+
+  <div class="db-actions">
+    <button class="btn btn--primary" id="dbRestart">Recommencer ce scénario</button>
+    <button class="btn btn--ghost" id="dbPrint">Enregistrer en PDF</button>
+    <a class="btn btn--ghost" href="index.html">Changer de scénario</a>
+  </div>
+</div>`;
+    $("dbRestart").addEventListener("click", () => location.reload());
+    $("dbPrint").addEventListener("click", () => window.print());
+    $("debrief").scrollTop = 0;
+  }
+
+  // ── Démarrage
+  function autosize() {
+    const t = $("input");
+    t.style.height = "auto";
+    t.style.height = Math.min(t.scrollHeight, 160) + "px";
+  }
+
+  async function start() {
+    $("intro").remove();
+    state.phase = "model";
+    updateProgress();
+    await wait(400);
+    pushClient(`${S.firstMessage} [[humeur:1]]`);
+    await wait(700);
+    runModel();
+  }
+
+  function init() {
+    render();
+    updateMood(1);
+    $("start").addEventListener("click", start);
+    $("send").addEventListener("click", send);
+    $("input").addEventListener("input", autosize);
+    $("input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+    });
+    $("takeOver").addEventListener("click", (e) => {
+      state.skip = true;
+      e.currentTarget.disabled = true;
+      e.currentTarget.textContent = "Passage de relais…";
+    });
+    $("finish").addEventListener("click", () => {
+      if (state.studentCount >= MIN_REPLIES && !state.busy) endConversation();
+    });
+    const setBrief = (open) => {
+      $("brief").classList.toggle("open", open);
+      $("briefToggle").setAttribute("aria-expanded", open);
+    };
+    $("briefToggle").addEventListener("click", () => setBrief(!$("brief").classList.contains("open")));
+    $("briefClose").addEventListener("click", () => setBrief(false));
+    $("messages").addEventListener("click", () => setBrief(false));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setBrief(false); });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();

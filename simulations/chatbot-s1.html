@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colis perdu avant Noël — Simulation BTS NDRC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sim.css">
+</head>
+<body>
+<noscript>Activez JavaScript pour lancer la simulation.</noscript>
+<script>
+/* Configuration du scénario 1. Le moteur commun est dans sim.js. */
+window.SCENARIO = {
+  "num": 1,
+  "level": 1,
+  "emoji": "📦",
+  "title": "Colis perdu avant Noël",
+  "company": "RetailShop",
+  "sector": "e-commerce mode",
+  "clientName": "M. Durand",
+  "clientDesc": "42 ans, client depuis 5 ans",
+  "pitch": "M. Durand a commandé les cadeaux de Noël de ses trois enfants il y a 12 jours. Le colis est introuvable, Noël est dans trois jours. Il appelle le service client, à bout.",
+  "context": "Commande de 187 € passée il y a 12 jours. Suivi bloqué sur « en transit » depuis 7 jours. Un e-mail envoyé il y a 3 jours, sans réponse. Noël dans 3 jours, trois enfants attendent leurs cadeaux.",
+  "tips": [
+    "Écouter et reformuler le problème",
+    "Exprimer une empathie sincère, pas une formule",
+    "Enquêter : numéro de commande, transporteur",
+    "Proposer des solutions concrètes et datées",
+    "Adapter le geste commercial",
+    "S'engager sur un suivi personnalisé"
+  ],
+  "firstMessage": "Bonjour. Je vous appelle parce que je suis vraiment à bout. J'ai passé une commande il y a 12 jours pour les cadeaux de Noël de mes trois enfants, 187 euros, et mon colis n'est toujours pas arrivé. Le suivi n'a pas bougé depuis une semaine et j'ai envoyé un e-mail il y a trois jours, sans aucune réponse. Noël, c'est dans trois jours. Qu'est-ce qui se passe ?",
+  "clientPrompt": "Tu joues M. Durand, 42 ans, client très mécontent du service client de RetailShop, site de e-commerce de mode.\n\nSITUATION : il y a 12 jours, tu as commandé les cadeaux de Noël de tes 3 enfants (vêtements et accessoires, 187 €). Noël est dans 3 jours. Le suivi indique « en transit » depuis 7 jours sans mouvement. Ton e-mail d'il y a 3 jours est resté sans réponse.\n\nCARACTÈRE : père de famille stressé, en colère mais pas agressif. Déçu, car client fidèle depuis 5 ans. Tu veux être entendu et obtenir une solution concrète et rapide, pas des excuses vides.\n\nCOMPORTEMENT :\n- Tu poses des questions directes : que se passe-t-il, que va-t-on faire concrètement, quand ?\n- Si le conseiller est empathique et propose des solutions claires et datées, tu te calmes progressivement.\n- S'il est évasif ou répète des formules creuses, tu t'énerves davantage et tu menaces de ne plus jamais commander.\n- Tu évoques parfois tes enfants et le fait que tu comptes sur ces cadeaux.\n- Tu n'insistes pas sur un point auquel le conseiller a déjà répondu clairement.",
+  "advisorPrompt": "Tu joues un conseiller service client exemplaire de RetailShop. Un étudiant de BTS NDRC t'observe : tu dois démontrer les meilleures pratiques face à un client mécontent.\n\nCONTEXTE : M. Durand, client fidèle depuis 5 ans, a commandé les cadeaux de Noël de ses 3 enfants (187 €). Colis bloqué depuis 7 jours, Noël dans 3 jours.\n\nTU DÉMONTRES :\n1. L'écoute active et la reformulation du problème.\n2. Une empathie sincère et personnalisée.\n3. Une investigation rapide (numéro de commande, contact transporteur).\n4. Des solutions concrètes et immédiates (réexpédition express, retrait en magasin…).\n5. Un geste commercial adapté (livraison offerte, bon d'achat).\n6. Un engagement de suivi personnalisé (rappel à une heure précise).",
+  "evalContext": "RetailShop (e-commerce mode). M. Durand, client fidèle depuis 5 ans : colis de cadeaux de Noël (187 €) bloqué depuis 7 jours, e-mail resté sans réponse, Noël dans 3 jours.",
+  "evalFocus": [
+    "Reformuler la situation et reconnaître l'urgence liée à Noël",
+    "Reconnaître le défaut de réponse à l'e-mail",
+    "Enquêter (numéro de commande, transporteur) avant de promettre",
+    "Proposer une solution garantissant une livraison avant Noël, ou une alternative crédible",
+    "Geste commercial proportionné au préjudice",
+    "Engagement de suivi précis (qui, quand, comment)"
+  ],
+  "duration": "15 à 20 min",
+  "minReplies": 5,
+  "maxReplies": 12
+};
+</script>
+<script src="sim.js"></script>
+</body>
+</html>

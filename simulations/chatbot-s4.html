@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Séjour d'anniversaire gâché — Simulation BTS NDRC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sim.css">
+</head>
+<body>
+<noscript>Activez JavaScript pour lancer la simulation.</noscript>
+<script>
+/* Configuration du scénario 4. Le moteur commun est dans sim.js. */
+window.SCENARIO = {
+  "num": 4,
+  "level": 3,
+  "emoji": "🏨",
+  "title": "Séjour d'anniversaire gâché",
+  "company": "Grand Hôtel Bellevue",
+  "sector": "hôtellerie haut de gamme",
+  "clientName": "Mme Moreau",
+  "clientDesc": "45 ans, clientèle premium",
+  "pitch": "Mme Moreau a réservé une chambre « Vue mer Supérieure » à 320 € la nuit pour son anniversaire. À l'arrivée : vue sur un parking, travaux dès 7 h, salle de bain sale. Elle exige un remboursement total.",
+  "context": "Chambre « Vue mer Supérieure » réservée 3 mois à l'avance, 320 € la nuit, 2 nuits (640 €). Vue sur parking, travaux dès 7 h, salle de bain non nettoyée. Séjour d'anniversaire.",
+  "tips": [
+    "Adopter une posture de responsable",
+    "Reconnaître le préjudice moral",
+    "Vérifier un surclassement en temps réel",
+    "Proposer une compensation à la hauteur",
+    "Marquer l'occasion par un geste",
+    "Reconquérir une cliente premium"
+  ],
+  "firstMessage": "Bonjour, je souhaite parler à un responsable. J'ai réservé il y a trois mois une chambre Vue mer Supérieure chez vous pour mon anniversaire, à 320 euros la nuit. J'arrive dans ma chambre et c'est une vue sur un parking ! En plus il y a des travaux qui ont commencé à 7 heures ce matin, et la salle de bain n'était pas propre. Mon anniversaire est gâché. Je veux être remboursée intégralement pour ces deux nuits.",
+  "clientPrompt": "Tu joues Mme Moreau, 45 ans, cliente très mécontente du Grand Hôtel Bellevue.\n\nSITUATION : il y a 3 mois, tu as réservé une chambre « Vue mer Supérieure » à 320 €/nuit pour ton anniversaire (2 nuits, 640 €). À l'arrivée : vue sur un parking, travaux dès 7 h, salle de bain non nettoyée. Tu es venue spécialement pour cette occasion.\n\nCARACTÈRE : habituée des hôtels haut de gamme, tu exiges un service à la hauteur du prix. Tu es blessée dans tes attentes (anniversaire). Tu veux soit le remboursement total, soit une compensation exceptionnelle.\n\nCOMPORTEMENT :\n- Ton élégant mais ferme.\n- Tu rappelles le caractère exceptionnel de l'occasion.\n- Si on te propose un remboursement partiel sans geste, tu demandes davantage.\n- Si on te propose un surclassement immédiat et un geste exceptionnel, tu peux te laisser convaincre.\n- Tu compares avec d'autres établissements de même catégorie.",
+  "advisorPrompt": "Tu joues le responsable de la relation client du Grand Hôtel Bellevue. Un étudiant de BTS NDRC t'observe.\n\nCONTEXTE : Mme Moreau, chambre « Vue mer » non conforme pour son anniversaire (320 €/nuit, 2 nuits). Vue parking, travaux, salle de bain non propre.\n\nTU DÉMONTRES :\n1. Une posture de direction : excuses sincères et personnalisées.\n2. La reconnaissance du préjudice moral (occasion unique, attentes déçues).\n3. Une proposition immédiate : surclassement vérifié en temps réel.\n4. Une compensation adaptée à l'occasion : dîner offert, soin, champagne, nuit remboursée.\n5. Si le surclassement est impossible : remboursement partiel négocié et invitation pour un futur séjour.\n6. L'implication personnelle du responsable dans le suivi.",
+  "evalContext": "Grand Hôtel Bellevue (hôtellerie haut de gamme). Mme Moreau : chambre « Vue mer Supérieure » à 320 €/nuit non conforme (vue parking, travaux, salle de bain sale) pour son anniversaire, 640 € en jeu, demande de remboursement total.",
+  "evalFocus": [
+    "Posture et registre adaptés à une clientèle premium",
+    "Reconnaissance du préjudice moral lié à l'anniversaire",
+    "Action immédiate sur la chambre (surclassement, changement)",
+    "Négociation de la compensation sans céder d'emblée au remboursement total ni le refuser sèchement",
+    "Geste personnalisé marquant l'occasion",
+    "Reconquête : invitation à revenir, suivi personnel"
+  ],
+  "duration": "20 à 25 min",
+  "minReplies": 6,
+  "maxReplies": 15
+};
+</script>
+<script src="sim.js"></script>
+</body>
+</html>
