@@ -72,13 +72,14 @@ GRILLE (4 critères notés de 0 à 5, entiers) :
 
 EXIGENCES DU RETOUR :
 - Bienveillant mais exigeant. Tu vouvoies l'étudiant. Phrases courtes et concrètes.
-- Appuie chaque constat sur ses propres mots (cite brièvement ses répliques).
+- Appuie chaque constat sur ses propres mots : cite-les brièvement entre guillemets français « ».
+- Sois concis : chaque commentaire et chaque suggestion tient en une ou deux phrases.
 - "satisfaisant" et "insatisfaisant" : 2 à 4 constats précis chacun.
 - "pistes" : 3 actions concrètes, chacune avec une phrase type qu'il pourra réutiliser.
 - "repliques" : exactement ${n} éléments, de R1 à R${n}. Statut "bien", "a_revoir" ou "a_eviter". Pour tout statut autre que "bien", donne dans "suggestion" la formulation qu'il aurait pu dire à la place (style oral professionnel). Pour "bien", "suggestion" peut rester vide.
 - Note réaliste : une prestation moyenne se situe autour de 10 à 12 sur 20.
 
-Réponds UNIQUEMENT par un objet JSON valide, sans aucun texte autour :
+FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni balises de code. À l'intérieur des textes, n'utilise JAMAIS de guillemets droits ("), uniquement des guillemets français « » ; pas de retour à la ligne dans les textes.
 {
   "criteres": [
     {"nom": "Écoute et empathie", "note": 0, "commentaire": "..."},
@@ -378,11 +379,19 @@ Réponds UNIQUEMENT par un objet JSON valide, sans aucun texte autour :
     return `Transcription complète de l'échange :\n\n${lines.join("\n\n")}\n\nL'étudiant a produit ${k} répliques : le champ "repliques" doit en contenir exactement ${k}, de R1 à R${k}.`;
   }
 
+  // Lecture du bilan : JSON strict d'abord, puis réparation automatique
+  // (guillemets non échappés, réponse coupée…) grâce à la bibliothèque jsonrepair.
   function parseJSON(raw) {
-    const a = raw.indexOf("{");
-    const b = raw.lastIndexOf("}");
-    try { return JSON.parse(raw.slice(a, b + 1)); }
-    catch { throw new Error("Le bilan reçu est incomplet ou mal formé."); }
+    const start = raw.indexOf("{");
+    if (start < 0) throw new Error("Le formateur IA n'a pas renvoyé de bilan exploitable.");
+    const end = raw.lastIndexOf("}");
+    const body = end > start ? raw.slice(start, end + 1) : raw.slice(start);
+    try { return JSON.parse(body); } catch { /* on tente la réparation */ }
+    try {
+      return JSON.parse(window.JSONRepair.jsonrepair(raw.slice(start).replace(/```\s*$/, "")));
+    } catch {
+      throw new Error("Le bilan reçu est incomplet ou mal formé.");
+    }
   }
 
   async function evaluate() {
@@ -391,11 +400,23 @@ Réponds UNIQUEMENT par un objet JSON valide, sans aucun texte autour :
     document.body.classList.add("is-debrief");
     box.innerHTML = `<div class="db-loading"><div class="spinner" aria-hidden="true"></div><p class="db-loading-title">Votre formateur relit vos répliques</p><p>Comptez une trentaine de secondes.</p></div>`;
     box.scrollTop = 0;
-    try {
+    const attempt = async () => {
       const raw = await callAI(evalSystem(state.studentCount), [{ role: "user", content: transcriptForEval() }], 4000, "evaluation");
-      renderDebrief(parseJSON(raw));
+      return parseJSON(raw);
+    };
+    try {
+      let data;
+      try { data = await attempt(); }
+      catch (first) {
+        // Une seconde tentative automatique règle la plupart des incidents passagers.
+        console.warn("Bilan, 1re tentative :", first);
+        box.querySelector(".db-loading p:last-child").textContent = "Encore quelques secondes, seconde lecture en cours.";
+        data = await attempt();
+      }
+      renderDebrief(data);
     } catch (err) {
-      box.innerHTML = `<div class="db-loading"><p class="db-loading-title">Le bilan n'a pas pu être produit</p><p>${esc(err.message)}</p>
+      console.error("Bilan :", err);
+      box.innerHTML = `<div class="db-loading"><p class="db-loading-title">Le bilan n'a pas pu être produit</p><p>Votre conversation est conservée : vous pouvez relancer l'analyse.</p><p class="db-error-detail">Détail technique : ${esc(err.message)}</p>
         <div class="db-actions db-actions--center"><button class="btn btn--primary" id="dbRetry">Relancer l'analyse</button><button class="btn btn--ghost" id="dbBack">Revenir à la conversation</button></div></div>`;
       $("dbRetry").addEventListener("click", evaluate);
       $("dbBack").addEventListener("click", () => { box.hidden = true; document.body.classList.remove("is-debrief"); });

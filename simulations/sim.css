@@ -199,6 +199,7 @@ body.is-debrief{overflow:hidden}
 
 .db-loading{min-height:75vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;color:var(--ink-2)}
 .db-loading-title{font-family:var(--display);font-size:1.4rem;color:var(--ink);font-weight:700}
+.db-error-detail{font-size:.85rem;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:560px;margin-top:6px;user-select:all}
 .spinner{width:46px;height:46px;border-radius:50%;border:4px solid var(--sky);border-top-color:var(--cobalt);animation:spin .9s linear infinite;margin-bottom:14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
