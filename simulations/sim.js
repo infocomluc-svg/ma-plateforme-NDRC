@@ -73,16 +73,32 @@
   }
   const starIcon = (on) => `<svg class="star${on ? " star--on" : ""}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 6.1 6.6.7-4.9 4.5 1.4 6.5L12 17.1l-5.9 3.3 1.4-6.5L2.6 9.4l6.6-.7z"/></svg>`;
   const starRow = (n, max = MAX_STARS) => Array.from({ length: max }, (_, i) => starIcon(i < n)).join("");
+  // ── Historique des bilans : relisibles à tout moment depuis « Mes bilans »
+  const BILANS_KEY = "ndrc-simulations-bilans";
+  const BILANS_MAX = 40;
+  function loadBilans() { try { return JSON.parse(localStorage.getItem(BILANS_KEY)) || []; } catch { return []; } }
+  function storeBilan(rec) {
+    let all = loadBilans().filter((b) => b.id !== rec.id);
+    all.unshift(rec);
+    all = all.slice(0, BILANS_MAX);
+    // Si le navigateur manque de place, on retire les plus anciens jusqu'à ce que ça rentre.
+    while (all.length) {
+      try { localStorage.setItem(BILANS_KEY, JSON.stringify(all)); return true; }
+      catch { all.pop(); }
+    }
+    return false;
+  }
   const LEVELS = ["À travailler", "À travailler", "Fragile", "En progrès", "Solide", "Maîtrisé"];
   const cap = (t) => t.toLocaleLowerCase("fr").replace(/(^|[\s'-])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase("fr"));
 
   // ── Consignes ajoutées aux prompts
   const CLIENT_RULES = `CONSIGNES TECHNIQUES (jamais mentionnées dans tes réponses) :
 - Termine CHAQUE message par [[humeur:N]], N allant de 1 (furieux) à 5 (satisfait), selon ton état après la dernière réplique du conseiller. Tu commences à 1.
-- Ton humeur ne remonte que si le conseiller le mérite : écoute, reformulation, empathie sincère, solutions concrètes et datées. Elle baisse s'il est évasif, défensif, impoli, s'il te coupe ou répète des formules creuses.
+- Ton humeur remonte surtout quand le conseiller est précis : informations exactes, délais et montants chiffrés, procédure claire, droits correctement cités, termes justes du métier. L'empathie te touche, mais elle ne te suffit pas : des paroles compréhensives sans contenu concret te font douter. Ton humeur baisse s'il est vague, approximatif, se trompe sur tes droits, emploie un vocabulaire familier, répète des formules toutes faites, est défensif ou impoli. Quand une réponse reste floue, demande des précisions : « c'est-à-dire ? », « quel délai exactement ? », « sur quel fondement ? ».
 - Messages de 2 à 5 phrases, en français oral, sans didascalies ni astérisques. Tu ne sors jamais de ton rôle.`;
 
-  const ADVISOR_RULES = `Réponds uniquement par la réplique du conseiller : 3 à 5 phrases, français oral professionnel, sans didascalies ni astérisques. Tu ne joues jamais le client.`;
+  const ADVISOR_RULES = `Réponds uniquement par la réplique du conseiller : 3 à 5 phrases, français oral professionnel, sans didascalies ni astérisques. Tu ne joues jamais le client.
+Modèle à démontrer : précision et technicité d'abord. Emploie le vocabulaire exact du métier et du secteur, donne des informations vérifiables (délais, montants, étapes, documents, références de garantie ou de procédure), prends des engagements datés. L'empathie est brève et sincère, une phrase au plus, jamais répétée mécaniquement.`;
 
   // Le client ne peut conclure l'appel qu'une fois que l'étudiant a fait le minimum de répliques.
   // Avant, il relance toujours : c'est ce qui laisse à l'étudiant de la matière pour s'entraîner.
@@ -106,10 +122,16 @@ POINTS ATTENDUS DANS CE SCÉNARIO :
 ${focus}
 
 GRILLE (4 critères notés de 0 à 5, entiers) :
-1. Écoute et empathie : reformulation, reconnaissance de l'émotion, personnalisation, absence de formules creuses.
-2. Professionnalisme : clarté, ton, politesse, maîtrise de soi, vocabulaire, pas de promesse irréaliste.
-3. Solutions et argumentation : diagnostic, solutions concrètes et datées, droits du client, geste commercial proportionné.
-4. Fidélisation : reprise de confiance, engagement de suivi, conclusion de l'échange.
+1. Précision et exactitude : informations exactes et vérifiables (délais, montants, étapes de la procédure), droits du client et cadre juridique correctement cités, engagements chiffrés et datés, aucune promesse vague ou irréaliste.
+2. Vocabulaire professionnel : termes techniques du métier et du secteur employés à bon escient, registre professionnel, syntaxe correcte, absence de familiarités, de tics de langage et de formules toutes faites répétées.
+3. Solutions et argumentation : questions de diagnostic pertinentes, solutions concrètes et réalistes, argumentation technique ou juridique, geste commercial proportionné au préjudice.
+4. Relation client : écoute, reformulation, empathie, reprise de confiance, engagement de suivi et conclusion de l'échange.
+
+PONDÉRATION DE L'EXIGENCE :
+- La précision, le vocabulaire et la technicité priment. Les qualités relationnelles restent attendues mais ne comptent que pour un critère sur quatre.
+- L'empathie seule ne suffit pas : une réplique chaleureuse mais imprécise, vague ou sans contenu technique est « a_revoir ».
+- Pénalise les formules d'empathie répétées à chaque réplique (« je comprends votre frustration ») quand elles remplacent une information.
+- Valorise les termes exacts (nom de la garantie, délai légal, référence de procédure, étape logistique, document à fournir) et les engagements vérifiables.
 
 EXIGENCES DU RETOUR :
 - Bienveillant mais exigeant. Tu vouvoies l'étudiant. Phrases courtes et concrètes.
@@ -117,16 +139,16 @@ EXIGENCES DU RETOUR :
 - Sois concis : chaque commentaire et chaque suggestion tient en une ou deux phrases.
 - "satisfaisant" et "insatisfaisant" : 2 à 4 constats précis chacun.
 - "pistes" : 3 actions concrètes, chacune avec une phrase type qu'il pourra réutiliser.
-- "repliques" : exactement ${n} éléments, de R1 à R${n}. Statut "bien", "a_revoir" ou "a_eviter". Pour tout statut autre que "bien", donne dans "suggestion" la formulation qu'il aurait pu dire à la place (style oral professionnel). Pour "bien", "suggestion" peut rester vide.
+- "repliques" : exactement ${n} éléments, de R1 à R${n}. Statut "bien", "a_revoir" ou "a_eviter". Pour tout statut autre que "bien", donne dans "suggestion" la formulation qu'il aurait pu dire à la place : style oral professionnel, précise, avec le vocabulaire exact du métier et des éléments concrets (délai, montant, procédure). Pour "bien", "suggestion" peut rester vide.
 - Note réaliste : une prestation moyenne se situe autour de 10 à 12 sur 20.
 
 FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni balises de code. À l'intérieur des textes, n'utilise JAMAIS de guillemets droits ("), uniquement des guillemets français « » ; pas de retour à la ligne dans les textes.
 {
   "criteres": [
-    {"nom": "Écoute et empathie", "note": 0, "commentaire": "..."},
-    {"nom": "Professionnalisme", "note": 0, "commentaire": "..."},
+    {"nom": "Précision et exactitude", "note": 0, "commentaire": "..."},
+    {"nom": "Vocabulaire professionnel", "note": 0, "commentaire": "..."},
     {"nom": "Solutions et argumentation", "note": 0, "commentaire": "..."},
-    {"nom": "Fidélisation", "note": 0, "commentaire": "..."}
+    {"nom": "Relation client", "note": 0, "commentaire": "..."}
   ],
   "appreciation": "une phrase de synthèse",
   "verdict": "fidelise | mitige | perdu",
@@ -172,7 +194,8 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
   function render() {
     document.title = `${S.title} — Simulation BTS NDRC`;
     document.body.style.setProperty("--tone", S.tone || LEVEL_TONES[S.level] || "#1F4FFF");
-    const goals = S.tips.map((t) => `<li>${esc(t)}</li>`).join("");
+    const goals = ["Être précis : délais, montants, procédure, droits exacts", "Employer le vocabulaire professionnel du secteur", ...S.tips]
+      .map((t) => `<li>${esc(t)}</li>`).join("");
     const segs = MOODS.map(() => "<i></i>").join("");
     document.body.innerHTML = `
 <div class="app">
@@ -493,11 +516,20 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
     return `<figure class="mood-chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution de l'humeur du client, de ${MOODS[pts[0].mood - 1].label} à ${MOODS[pts[pts.length - 1].mood - 1].label}">${grid}<polygon points="${area}" class="mc-area"/><polyline points="${line}" class="mc-line"/>${marker}${dots}</svg></figure>`;
   }
 
-  function renderDebrief(d) {
+  function renderDebrief(d, replay = null) {
     const crit = list(d.criteres).slice(0, 4).map((c) => ({ nom: c.nom, note: clamp(c.note, 0, 5), commentaire: c.commentaire }));
     const total = crit.reduce((s, c) => s + c.note, 0);
     const stars = toStars(total);
-    const { mine, improved } = saveBest(whoLabel(state.who), S.num, stars);
+    const { mine, improved } = replay
+      ? { mine: loadStars()[whoLabel(state.who)] || {}, improved: true }
+      : saveBest(whoLabel(state.who), S.num, stars);
+    const when = replay ? new Date(replay.date) : new Date();
+    const stored = replay ? true : storeBilan({
+      id: state.simId, date: when.toISOString(), who: state.who, num: S.num, title: S.title,
+      page: location.pathname.split("/").pop() || `chatbot-s${S.num}.html`, stars, d,
+      transcript: state.transcript.map((e) => ({ role: e.role, text: e.text, mood: e.mood })),
+      moods: state.moods, handoverAt: state.handoverAt, mood: state.mood,
+    });
     const done = Object.keys(mine).length;
     const cumul = Object.values(mine).reduce((a, b) => a + b, 0);
     const verdicts = { fidelise: "Client fidélisé", mitige: "Résultat mitigé", perdu: "Client perdu" };
@@ -526,7 +558,7 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
       <p class="db-appr">${esc(d.appreciation || "")}</p>
       <span class="verdict verdict--${verdict}">${verdicts[verdict]}</span>
     </div>
-    <p class="db-meta">Bilan de ${esc(whoLabel(state.who))}, le ${new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}. ${esc(S.title)}, ${esc(S.company)}. ${students.length} répliques analysées.</p>
+    <p class="db-meta">${replay ? "Relecture du bilan" : "Bilan"} de ${esc(whoLabel(state.who))}, le ${when.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })} à ${when.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}. ${esc(S.title)}, ${esc(S.company)}. ${students.length} répliques analysées.</p>
   </header>
 
   <section class="db-progress">
@@ -559,19 +591,19 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
 
   ${d.conseil ? `<section class="db-advice"><h2>Pour la prochaine fois</h2><p>${esc(d.conseil)}</p></section>` : ""}
 
-  ${resultsOn() ? `<p class="db-sent" id="dbSent" role="status">Transmission du bilan à votre formateur…</p>` : ""}
+  ${resultsOn() && !replay ? `<p class="db-sent" id="dbSent" role="status">Transmission du bilan à votre formateur…</p>` : ""}
+  ${!replay && stored ? `<p class="db-kept">Ce bilan reste disponible : retrouvez-le à tout moment dans « Mes bilans », sur la page des scénarios.</p>` : ""}
 
   <div class="db-actions">
-    <button class="btn btn--primary" id="dbRestart">Recommencer ce scénario</button>
+    <a class="btn btn--primary" id="dbRestart" href="${location.pathname.split("/").pop()}">${replay ? "Rejouer ce scénario" : "Recommencer ce scénario"}</a>
     <button class="btn btn--ghost" id="dbPrint">Enregistrer en PDF</button>
-    <a class="btn btn--ghost" href="index.html">Changer de scénario</a>
+    <a class="btn btn--ghost" href="index.html#mes-bilans">${replay ? "Retour à mes bilans" : "Changer de scénario"}</a>
   </div>
 </div>`;
-    $("dbRestart").addEventListener("click", () => location.reload());
     $("dbPrint").addEventListener("click", () => window.print());
     $("debrief").scrollTop = 0;
 
-    if (resultsOn()) {
+    if (resultsOn() && !replay) {
       sendResults({
         id: state.simId,
         date: new Date().toISOString(),
@@ -658,9 +690,30 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
     runModel();
   }
 
+  function openSaved(id) {
+    const rec = loadBilans().find((b) => b.id === id);
+    if (!rec) return false;
+    state.who = rec.who;
+    state.simId = rec.id;
+    state.transcript = rec.transcript || [];
+    state.moods = rec.moods || [];
+    state.handoverAt = rec.handoverAt;
+    state.phase = "done";
+    updateMood(rec.mood || 1);
+    state.transcript.forEach(addBubble);
+    $("intro").remove();
+    $("phase").textContent = "Relecture d'un bilan";
+    $("debrief").hidden = false;
+    document.body.classList.add("is-debrief");
+    renderDebrief(rec.d, rec);
+    return true;
+  }
+
   function init() {
     render();
     updateMood(1);
+    const savedId = new URLSearchParams(location.search).get("bilan");
+    if (savedId && openSaved(savedId)) return;
     $("who").addEventListener("submit", start);
     const known = loadWho();
     if (known) { $("whoFirst").value = known.prenom; $("whoInitial").value = known.initiale; }

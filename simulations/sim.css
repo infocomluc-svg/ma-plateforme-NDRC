@@ -147,6 +147,8 @@ body.is-debrief{overflow:hidden}
 .db-sent--ko{color:var(--bad)}
 .db-sent--ko::before{background:var(--bad)}
 
+.db-kept{font-size:.9rem;color:var(--ink-2);background:var(--ice);border-radius:var(--r-md);padding:12px 16px}
+
 /* ── Bilan */
 .debrief{position:fixed;inset:0;z-index:30;background:var(--mist);overflow-y:auto;padding:clamp(16px,4vw,48px)}
 .sheet{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
@@ -265,7 +267,7 @@ body.is-debrief{overflow:hidden}
   body.is-debrief{overflow:visible}
   .app,.intro{display:none!important}
   .debrief{position:static;padding:0;background:#fff;overflow:visible}
-  .db-actions,.db-sent{display:none}
+  .db-actions,.db-sent,.db-kept{display:none}
   .db-head,.reply-better,.chip,.crit-bar i,.db-col li::before,.star,.db-progress-total{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .reply,.crit,.tracks li{break-inside:avoid}
   .db-block,.db-col,.db-advice{border-color:#ccd}

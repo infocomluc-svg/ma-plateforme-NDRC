@@ -19,7 +19,7 @@ const CONFIG = {
 const ONGLET = "Résultats";
 const COLONNES = [
   "Reçu le", "Identifiant", "Étudiant", "Scénario", "Note /20", "Mention",
-  "Écoute et empathie /5", "Professionnalisme /5", "Solutions et argumentation /5", "Fidélisation /5",
+  "Précision et exactitude /5", "Vocabulaire professionnel /5", "Solutions et argumentation /5", "Relation client /5",
   "Verdict", "Humeur finale du client", "Appréciation", "Ce qui est satisfaisant", "Ce qui ne l'est pas",
   "Pistes d'amélioration", "Conseil prioritaire", "Réplique par réplique", "Conversation complète", "Envoyé par e-mail le",
   "Étoiles /4",
@@ -67,8 +67,9 @@ function doPost(e) {
       .createTextFinder(d.id).matchEntireCell(true).findNext();
     if (deja) return json_({ ok: true, doublon: true });
 
-    const crit = (nom) => {
-      const c = (d.criteres || []).find((x) => String(x.nom || "").indexOf(nom) === 0);
+    // Les 4 critères sont rangés dans l'ordre de la grille (colonnes G à J).
+    const crit = (i) => {
+      const c = (d.criteres || [])[i];
       return c ? Number(c.note) : "";
     };
     const ligne = [
@@ -78,7 +79,7 @@ function doPost(e) {
       `S${d.scenario.num} : ${d.scenario.titre}`,
       Number(d.note),
       d.mention || "",
-      crit("Écoute"), crit("Professionnalisme"), crit("Solutions"), crit("Fidélisation"),
+      crit(0), crit(1), crit(2), crit(3),
       d.verdict || "",
       d.humeur_finale || "",
       d.appreciation || "",
@@ -211,7 +212,7 @@ function courriel_(lignes, url, synthese) {
     <div style="border:1px solid #D5E2F7;border-radius:14px;padding:18px 20px;margin:0 0 16px">
       <p style="margin:0 0 4px;font-size:17px"><b>${h(g(v, "Étudiant"))}</b>, ${h(g(v, "Scénario"))}</p>
       <p style="margin:0 0 12px">${or(et(v))} <b>${h(g(v, "Mention"))}</b> (${h(g(v, "Note /20"))}/20). ${h(g(v, "Verdict"))}, client ${h(String(g(v, "Humeur finale du client")).toLowerCase())} en fin d'échange.</p>
-      <p style="margin:0 0 12px;color:#46587F">Écoute ${h(g(v, "Écoute et empathie /5"))}/5, professionnalisme ${h(g(v, "Professionnalisme /5"))}/5, solutions ${h(g(v, "Solutions et argumentation /5"))}/5, fidélisation ${h(g(v, "Fidélisation /5"))}/5.</p>
+      <p style="margin:0 0 12px;color:#46587F">${COLONNES.slice(COL["Note /20"] + 1, COL["Note /20"] + 5).map((nom) => `${h(nom.replace(" /5", ""))} ${h(g(v, nom))}/5`).join(", ")}.</p>
       <p style="margin:0 0 12px"><i>${h(g(v, "Appréciation"))}</i></p>
       <p style="margin:0 0 4px;color:#0B8A5F"><b>Ce qui est satisfaisant</b></p><p style="margin:0 0 12px">${h(g(v, "Ce qui est satisfaisant"))}</p>
       <p style="margin:0 0 4px;color:#C8234A"><b>Ce qui ne l'est pas</b></p><p style="margin:0 0 12px">${h(g(v, "Ce qui ne l'est pas"))}</p>
@@ -252,11 +253,12 @@ function feuille_() {
     sh.hideColumns(COL["Identifiant"]);
     sh.getRange(2, COL["Reçu le"], 999, 1).setNumberFormat("dd/MM/yyyy HH:mm");
     sh.getRange(2, COL["Envoyé par e-mail le"], 999, 1).setNumberFormat("dd/MM/yyyy HH:mm");
-  } else if (sh.getLastColumn() < COLONNES.length) {
-    // Tableur créé avec une version précédente : on ajoute les colonnes manquantes à droite.
-    const deb = sh.getLastColumn() + 1;
-    sh.getRange(1, deb, 1, COLONNES.length - deb + 1).setValues([COLONNES.slice(deb - 1)])
-      .setFontWeight("bold").setBackground("#E6F0FF");
+  } else {
+    // Tableur créé avec une version précédente : en-tête mis à jour (colonnes ajoutées, critères renommés).
+    const actuel = sh.getRange(1, 1, 1, COLONNES.length).getValues()[0];
+    if (COLONNES.some((nom, i) => actuel[i] !== nom)) {
+      sh.getRange(1, 1, 1, COLONNES.length).setValues([COLONNES]).setFontWeight("bold").setBackground("#E6F0FF");
+    }
   }
   return sh;
 }

@@ -106,6 +106,20 @@ footer a:hover{text-decoration:underline}
 .pp-track i{display:flex;gap:2px;font-style:normal}
 @media (max-width:640px){.progress-panel{grid-template-columns:1fr}.pp-track{grid-template-columns:repeat(5,1fr);gap:6px}.pp-track div{padding:8px 6px;align-items:center}.pp-track .star{width:12px;height:12px}}
 
+/* Mes bilans */
+.my-bilans{margin:-20px 0 clamp(32px,5vw,48px);background:var(--white);border:1px solid var(--line);border-radius:24px;padding:clamp(18px,3vw,26px)}
+.my-bilans h2{font-family:var(--display);font-size:1.3rem;letter-spacing:-.01em;margin-bottom:4px}
+.my-bilans > p{color:var(--ink-2);font-size:.92rem;margin-bottom:14px}
+.mb-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.mb-list a{display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:center;padding:12px 16px;border-radius:14px;background:var(--mist);text-decoration:none;color:inherit;border:1px solid transparent}
+.mb-list a:hover{border-color:var(--cobalt)}
+.mb-list strong{font-family:var(--display);font-size:1rem;display:block}
+.mb-list small{color:var(--ink-2);font-size:.84rem}
+.mb-list .scn-stars{min-height:0}
+.mb-open{font-weight:700;font-size:.88rem;color:var(--cobalt);white-space:nowrap}
+.mb-more{margin-top:10px;background:none;border:none;color:var(--cobalt);font:inherit;font-weight:700;cursor:pointer;padding:6px 0}
+@media (max-width:560px){.mb-list a{grid-template-columns:1fr auto}.mb-open{display:none}}
+
 @media (max-width:900px){
   .hero-inner{grid-template-columns:1fr}
   .collage{height:440px;max-width:440px}
@@ -155,6 +169,7 @@ footer a:hover{text-decoration:underline}
 
 <main id="scenarios">
   <section class="progress-panel" id="progress" hidden aria-live="polite"></section>
+  <section class="my-bilans" id="mes-bilans" hidden></section>
   <div class="head">
     <h2>Cinq clients vous attendent</h2>
     <div class="legend" aria-label="Plus le bleu est profond, plus le scénario est difficile">
@@ -260,6 +275,26 @@ footer a:hover{text-decoration:underline}
     '<div class="pp-total"><strong>' + total + '</strong><span>étoiles sur 20</span></div>' +
     '<div class="pp-track">' + names.map((nm, i) => '<div>' + nm + '<i>' + row(mine["s" + (i + 1)] || 0) + '</i></div>').join("") + '</div>';
   el.hidden = false;
+
+  // Mes bilans : chaque bilan reste relisible
+  let bilans = [];
+  try { bilans = (JSON.parse(localStorage.getItem("ndrc-simulations-bilans")) || []).filter((b) => b.who && b.who.prenom + " " + b.who.initiale + "." === label); } catch (e) { bilans = []; }
+  if (!bilans.length) return;
+  const box = document.getElementById("mes-bilans");
+  const item = (b) => {
+    const d = new Date(b.date);
+    const quand = d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    return '<li><a href="' + encodeURI(b.page) + '?bilan=' + encodeURIComponent(b.id) + '"><span><strong>' + esc(b.title) + '</strong><small>' + quand + '</small></span>' +
+      '<span class="scn-stars" role="img" aria-label="' + b.stars + ' étoile' + (b.stars > 1 ? "s" : "") + ' sur 4">' + row(b.stars) + '</span><span class="mb-open">Relire</span></a></li>';
+  };
+  const VISIBLES = 5;
+  box.innerHTML = '<h2>Mes bilans</h2><p>Relisez vos analyses, vos points forts et les reformulations proposées, aussi souvent que vous le souhaitez.</p>' +
+    '<ul class="mb-list">' + bilans.slice(0, VISIBLES).map(item).join("") + '</ul>' +
+    (bilans.length > VISIBLES ? '<button class="mb-more" type="button">Afficher les ' + bilans.length + ' bilans</button>' : "");
+  const more = box.querySelector(".mb-more");
+  if (more) more.addEventListener("click", () => { box.querySelector(".mb-list").innerHTML = bilans.map(item).join(""); more.remove(); });
+  box.hidden = false;
+  if (location.hash === "#mes-bilans") box.scrollIntoView();
 })();
 </script>
 </body>
