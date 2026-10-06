@@ -16,7 +16,7 @@
   const MODEL_TURNS = S.modelTurns ?? 3;   // répliques du conseiller modèle
   const MIN_REPLIES = S.minReplies ?? 5;   // répliques avant de pouvoir demander le bilan
   const MAX_REPLIES = S.maxReplies ?? 15;  // répliques maximum de l'étudiant
-  const LEVEL_TONES = { 1: "#2F8CFF", 2: "#1F4FFF", 3: "#13306E" };
+  const LEVEL_TONES = { 1: "#4C7DFF", 2: "#2B5CFF", 3: "#13265A" };
   const MOODS = [
     { face: "😡", label: "Furieux" },
     { face: "😠", label: "Agacé" },

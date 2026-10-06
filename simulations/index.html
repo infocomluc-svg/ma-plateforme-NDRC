@@ -6,13 +6,13 @@
 <title>Simulations relation client — BTS NDRC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500;62..125,700;62..125,800;62..125,900&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --abyss:#0B1F4D; --navy:#13306E; --cobalt:#1F4FFF; --azure:#2F8CFF;
-  --sky:#CFE4FF; --ice:#E6F0FF; --mist:#F3F7FF; --white:#FFFFFF;
-  --ink:#0B1F4D; --ink-2:#46587F; --line:#D5E2F7;
-  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --abyss:#0A1A3F; --navy:#13265A; --cobalt:#2B5CFF; --azure:#4C7DFF;
+  --sky:#C9D4F2; --ice:#E9EEFF; --mist:#F2F4FA; --white:#FFFFFF;
+  --ink:#0A1A3F; --ink-2:#4A5878; --line:#DCE2F0; --signal:#FFD23F; --signal-2:#FFE680;
+  --display:"Archivo",system-ui,sans-serif;
   --body:"Figtree",system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -21,15 +21,25 @@ body{font-family:var(--body);color:var(--ink);background:var(--mist);-webkit-fon
 a{color:inherit}
 
 /* Hero */
-.hero{color:#fff;overflow:hidden;
-  background:radial-gradient(1100px 600px at 90% -20%,#2F6BFF 0%,transparent 55%),radial-gradient(800px 500px at -10% 120%,#1A3FA8 0%,transparent 60%),var(--abyss)}
+.hero{color:#fff;overflow:hidden;position:relative;background:var(--abyss)}
+.hero::before{content:"";position:absolute;top:0;bottom:0;right:-140px;width:min(44vw,600px);background:var(--signal);transform:skewX(-16deg)}
+.hero::after{content:"";position:absolute;top:0;bottom:0;right:calc(min(44vw,600px) - 120px);width:44px;background:var(--cobalt);transform:skewX(-16deg)}
+.hero-inner{position:relative;z-index:1}
+.wm-target{position:absolute;right:-80px;top:-40px;width:480px;opacity:.16;pointer-events:none;z-index:0}
+.wm-target .ring{transform-origin:100px 100px;animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker{background:var(--cobalt);color:#fff;overflow:hidden;padding:11px 0}
+.ticker-track{display:flex;width:max-content;animation:tick 36s linear infinite}
+.ticker span{display:inline-flex;align-items:center;gap:10px;padding:0 26px;font-weight:700;font-size:.92rem;white-space:nowrap}
+.ticker svg{width:13px;height:13px;fill:var(--signal)}
 .hero-inner{max-width:1160px;margin:0 auto;padding:clamp(28px,6vw,72px) 20px clamp(48px,8vw,96px);display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
 .brand{display:inline-flex;align-items:center;gap:10px;font-weight:600;color:var(--sky);font-size:.95rem;margin-bottom:clamp(28px,5vw,56px)}
-.brand-dot{width:30px;height:30px;border-radius:10px;background:var(--cobalt);display:grid;place-items:center;font-size:1rem}
-.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,6.4vw,4.8rem);line-height:.98;letter-spacing:-.03em}
+.brand-dot{width:30px;height:30px;border-radius:8px;background:var(--signal);color:var(--abyss);display:grid;place-items:center;font-size:1rem}
+.hero h1{font-family:var(--display);font-weight:900;font-stretch:72%;text-transform:uppercase;font-size:clamp(2.6rem,7.4vw,5.4rem);line-height:.92;letter-spacing:-.01em}
 .hero p{font-size:clamp(1rem,1.6vw,1.15rem);line-height:1.6;color:#DCEAFF;max-width:46ch;margin:22px 0 30px}
-.cta{display:inline-flex;align-items:center;gap:10px;background:var(--white);color:var(--abyss);text-decoration:none;font-weight:700;padding:15px 26px;border-radius:999px;transition:background .15s}
-.cta:hover{background:var(--sky)}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--signal);color:var(--abyss);text-decoration:none;font-weight:700;padding:15px 26px;border-radius:999px;transition:background .15s}
+.cta:hover{background:var(--signal-2)}
 
 /* Collage de bulles */
 .collage{position:relative;height:500px}
@@ -41,19 +51,19 @@ a{color:inherit}
 .b2{top:108px;right:0;transform:rotate(2deg);animation-delay:.45s}
 .b3{top:196px;left:24px;transform:rotate(-1.5deg);animation-delay:.8s}
 .b4{bottom:62px;right:16px;animation-delay:1.15s}
-.mood-pill{position:absolute;bottom:0;right:16px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);padding:10px 16px;border-radius:999px;font-size:.88rem;font-weight:600;opacity:0;animation:pop .45s ease-out 1.5s forwards}
+.mood-pill{position:absolute;bottom:0;right:16px;display:flex;align-items:center;gap:10px;background:var(--abyss);border:1px solid rgba(255,255,255,.2);padding:10px 16px;border-radius:999px;font-size:.88rem;font-weight:600;opacity:0;animation:pop .45s ease-out 1.5s forwards}
 .mood-pill b{font-size:1.25rem}
 .mood-pill i{display:inline-flex;gap:3px}
 .mood-pill i span{width:16px;height:8px;border-radius:99px;background:rgba(255,255,255,.25)}
-.mood-pill i span.on{background:#8FCBFF}
+.mood-pill i span.on{background:var(--signal)}
 @keyframes pop{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
 
 /* Déroulé */
-.flow{max-width:1160px;margin:-40px auto 0;padding:0 20px;position:relative}
+.flow{max-width:1160px;margin:32px auto 0;padding:0 20px;position:relative}
 .flow ol{list-style:none;counter-reset:f;display:grid;grid-template-columns:repeat(3,1fr);background:var(--white);border-radius:24px;box-shadow:0 1px 2px rgba(11,31,77,.06),0 18px 40px rgba(11,31,77,.1);overflow:hidden}
 .flow li{counter-increment:f;padding:24px 26px;display:grid;grid-template-columns:40px 1fr;gap:14px;border-left:1px solid var(--line)}
 .flow li:first-child{border-left:none}
-.flow li::before{content:counter(f);width:40px;height:40px;border-radius:13px;background:var(--ice);color:var(--navy);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
+.flow li::before{content:counter(f);width:40px;height:40px;border-radius:10px;background:var(--abyss);color:var(--signal);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.05rem}
 .flow strong{font-family:var(--display);font-size:1.1rem;display:block;margin-bottom:4px}
 .flow span{font-size:.92rem;line-height:1.5;color:var(--ink-2)}
 
@@ -81,7 +91,7 @@ main{max-width:1160px;margin:0 auto;padding:clamp(48px,7vw,80px) 20px 40px}
 .chips li{font-size:.78rem;font-weight:600;padding:4px 11px;border-radius:999px;background:var(--mist);color:var(--navy);border:1px solid var(--line)}
 .scn-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;min-width:120px}
 .scn-time{font-size:.86rem;color:var(--ink-2);white-space:nowrap}
-.go{background:var(--tone);color:#fff;font-weight:700;font-size:.92rem;padding:11px 22px;border-radius:999px;white-space:nowrap}
+.go{background:var(--signal);color:var(--abyss);font-weight:700;font-size:.92rem;padding:11px 22px;border-radius:999px;white-space:nowrap}
 
 footer{max-width:1160px;margin:0 auto;padding:28px 20px 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.88rem;color:var(--ink-2)}
 .hero .credit{margin:28px 0 0;font-size:.86rem;line-height:1.55;color:var(--sky);max-width:52ch}
@@ -101,7 +111,7 @@ footer a:hover{text-decoration:underline}
 .progress-panel p{color:#DCEAFF;line-height:1.55;max-width:60ch}
 .progress-panel p b{color:#fff}
 .pp-total{text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:14px 24px}
-.pp-total strong{display:block;font-family:var(--display);font-size:3rem;line-height:1;color:#F7B731;font-weight:800}
+.pp-total strong{display:block;font-family:var(--display);font-stretch:80%;font-size:3rem;line-height:1;color:#F7B731;font-weight:800}
 .pp-total span{font-size:.82rem;color:var(--sky)}
 .pp-track{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .pp-track div{background:rgba(255,255,255,.07);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:.8rem;color:var(--sky)}
@@ -125,6 +135,9 @@ footer a:hover{text-decoration:underline}
 @media (max-width:560px){.mb-list a{grid-template-columns:1fr auto}.mb-open{display:none}}
 
 @media (max-width:900px){
+  .hero::before{width:130px;right:-70px;bottom:auto;height:160px}
+  .hero::after{display:none}
+  .wm-target{width:220px}
   .hero-inner{grid-template-columns:1fr}
   .collage{height:440px;max-width:440px}
   .flow ol{grid-template-columns:1fr}
@@ -138,6 +151,7 @@ footer a:hover{text-decoration:underline}
   .bub{max-width:250px;font-size:.92rem}
 }
 @media (prefers-reduced-motion:reduce){
+  .ticker-track,.wm-target .ring{animation:none}
   .bub,.mood-pill{animation:none;opacity:1}
   .scn,.cta{transition:none}
 }
@@ -146,6 +160,12 @@ footer a:hover{text-decoration:underline}
 <body>
 
 <header class="hero">
+  <svg class="wm-target" viewBox="0 0 200 200" aria-hidden="true">
+    <g class="ring"><circle cx="100" cy="100" r="92" fill="none" stroke="#0A1A3F" stroke-width="5" stroke-dasharray="14 10"></circle></g>
+    <circle cx="100" cy="100" r="68" fill="none" stroke="#0A1A3F" stroke-width="5"></circle>
+    <circle cx="100" cy="100" r="44" fill="none" stroke="#0A1A3F" stroke-width="5"></circle>
+    <circle cx="100" cy="100" r="18" fill="#0A1A3F"></circle>
+  </svg>
   <div class="hero-inner">
     <div>
       <div class="brand"><span class="brand-dot" aria-hidden="true">☎</span>BTS NDRC, simulations relation client</div>
@@ -163,6 +183,7 @@ footer a:hover{text-decoration:underline}
     </div>
   </div>
 </header>
+<div class="ticker" aria-hidden="true"><div class="ticker-track"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Écoute active</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Reformulation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Garantie légale de conformité</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Délai de remboursement</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Geste commercial</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Engagement de suivi</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Vocabulaire professionnel</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Fidélisation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Écoute active</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Reformulation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Garantie légale de conformité</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Délai de remboursement</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Geste commercial</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Engagement de suivi</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Vocabulaire professionnel</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Fidélisation</span></div></div>
 
 <section class="flow" aria-label="Déroulement d'une simulation">
   <ol>
@@ -178,14 +199,14 @@ footer a:hover{text-decoration:underline}
   <div class="head">
     <h2>Cinq clients vous attendent</h2>
     <div class="legend" aria-label="Plus le bleu est profond, plus le scénario est difficile">
-      <span><i style="background:#2F8CFF"></i>Niveau 1</span>
-      <span><i style="background:#1F4FFF"></i>Niveau 2</span>
-      <span><i style="background:#13306E"></i>Niveau 3</span>
+      <span><i style="background:#4C7DFF"></i>Niveau 1</span>
+      <span><i style="background:#2B5CFF"></i>Niveau 2</span>
+      <span><i style="background:#0A1A3F"></i>Niveau 3</span>
     </div>
   </div>
 
   <div class="list">
-    <a class="scn" href="chatbot-s1.html" style="--tone:#2F8CFF">
+    <a class="scn" href="chatbot-s1.html" style="--tone:#4C7DFF">
       <div class="scn-tile" aria-hidden="true">📦</div>
       <div>
         <div class="scn-top"><h3>Colis perdu avant Noël</h3><span class="lvl"><i><span class="on"></span><span></span><span></span></i>Niveau 1</span></div>
@@ -196,7 +217,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s2.html" style="--tone:#1F4FFF">
+    <a class="scn" href="chatbot-s2.html" style="--tone:#2B5CFF">
       <div class="scn-tile" aria-hidden="true">🫧</div>
       <div>
         <div class="scn-top"><h3>Lave-linge en panne à 15 jours</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span></span></i>Niveau 2</span></div>
@@ -207,7 +228,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s3.html" style="--tone:#1F4FFF">
+    <a class="scn" href="chatbot-s3.html" style="--tone:#2B5CFF">
       <div class="scn-tile" aria-hidden="true">📱</div>
       <div>
         <div class="scn-top"><h3>Facture multipliée par dix</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span></span></i>Niveau 2</span></div>
@@ -218,7 +239,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s4.html" style="--tone:#13306E">
+    <a class="scn" href="chatbot-s4.html" style="--tone:#0A1A3F">
       <div class="scn-tile" aria-hidden="true">🏨</div>
       <div>
         <div class="scn-top"><h3>Séjour d'anniversaire gâché</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span class="on"></span></i>Niveau 3</span></div>
@@ -229,7 +250,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s5.html" style="--tone:#13306E">
+    <a class="scn" href="chatbot-s5.html" style="--tone:#0A1A3F">
       <div class="scn-tile" aria-hidden="true">🚗</div>
       <div>
         <div class="scn-top"><h3>Réparation ratée, client immobilisé</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span class="on"></span></i>Niveau 3</span></div>

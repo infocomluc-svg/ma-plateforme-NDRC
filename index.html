@@ -281,16 +281,52 @@ footer strong { color: var(--green); }
   .modules-grid { grid-template-columns: 1fr; }
 }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500;62..125,700;62..125,800;62..125,900&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme-ndrc.css">
 </head>
-<body>
+<body class="page-home">
 
-<header>
-  <div class="header-badge">Référentiel officiel 2018 · Pages 5-10 &amp; 13-14</div>
-  <h1>BTS NDRC<br><span>Plateforme interactive</span></h1>
-  <p>Fiches de cours et cas pratiques autocorrectifs — Négociation &amp; Digitalisation de la Relation Client</p>
+<header class="ndrc-hero">
+  <div class="ndrc-band" aria-hidden="true"></div>
+  <div class="ndrc-band2" aria-hidden="true"></div>
+  <svg class="ndrc-wm-chart" viewBox="0 0 560 440" aria-hidden="true">
+    <path d="M20 400 L120 330 L200 360 L300 240 L380 270 L520 90" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M470 80 L530 80 L530 140" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+    <rect x="40" y="300" width="50" height="120" rx="6" fill="#fff"></rect><rect x="140" y="250" width="50" height="170" rx="6" fill="#fff"></rect><rect x="240" y="200" width="50" height="220" rx="6" fill="#fff"></rect><rect x="340" y="150" width="50" height="270" rx="6" fill="#fff"></rect>
+  </svg>
+  <svg class="ndrc-wm-target" viewBox="0 0 200 200" aria-hidden="true">
+    <g class="ring"><circle cx="100" cy="100" r="92" fill="none" stroke="#0A1A3F" stroke-width="5" stroke-dasharray="14 10"></circle></g>
+    <circle cx="100" cy="100" r="68" fill="none" stroke="#0A1A3F" stroke-width="5"></circle>
+    <circle cx="100" cy="100" r="44" fill="none" stroke="#0A1A3F" stroke-width="5"></circle>
+    <circle cx="100" cy="100" r="18" fill="#0A1A3F"></circle>
+    <path d="M100 100 L176 36" stroke="#0A1A3F" stroke-width="6" stroke-linecap="round"></path><path d="M170 22 L184 40 L164 46" fill="#0A1A3F"></path>
+  </svg>
+  <nav class="ndrc-nav" aria-label="Navigation principale">
+    <a class="ndrc-logo" href="index.html"><i>N</i>BTS NDRC</a>
+    <div class="ndrc-nav-links">
+      <a href="#modules">Modules</a>
+      <a href="simulations/index.html">Simulations</a>
+      <a href="simulations/index.html#mes-bilans">Mes bilans</a>
+    </div>
+  </nav>
+  <div class="ndrc-hero-grid">
+    <div class="ndrc-hero-text">
+      <p class="ndrc-eyebrow">Négociation et digitalisation de la relation client</p>
+      <h1>Négocier.<br>Vendre.<br><span>Convaincre.</span></h1>
+      <p class="ndrc-lead">Fiches de cours, cas pratiques corrigés par l'IA et simulations de clients mécontents. Référentiel officiel 2018, blocs 1, 2 et 3.</p>
+    </div>
+    <div class="ndrc-goal">
+      <p class="g-label">Objectif simulateur</p>
+      <div class="g-row"><p class="g-num">20/20</p><div class="g-bars" aria-hidden="true"><span style="height:22px"></span><span style="height:30px"></span><span style="height:38px"></span><span style="height:46px"></span><span style="height:54px"></span></div></div>
+      <p class="g-text">5 clients furieux à reconquérir, 4 étoiles à gagner sur chacun.</p>
+      <a href="simulations/index.html">Affronter un client IA</a>
+    </div>
+  </div>
 </header>
-
-<div class="credit-bar"><p>Plate-forme créée par <strong>Luc Masson</strong> &amp; <strong>Claude.ai</strong></p><p class="credit-role">Luc Masson, IA référent Académique et Interlocuteur Académique au Numérique Éducatif (DRANE de Lille)</p></div>
+<div class="ndrc-ticker" aria-hidden="true"><div class="ndrc-ticker-track"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Taux de transformation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>NPS</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Panier moyen</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Coût d'acquisition client</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Taux de prise de rendez-vous</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Méthode SONCAS</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Argumentaire CAP</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Traitement des objections</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Closing</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Fidélisation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Omnicanalité</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>RGPD</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Taux de transformation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>NPS</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Panier moyen</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Coût d'acquisition client</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Taux de prise de rendez-vous</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Méthode SONCAS</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Argumentaire CAP</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Traitement des objections</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Closing</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Fidélisation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Omnicanalité</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>RGPD</span></div></div>
+<div class="ndrc-credit"><p>Plate-forme créée par <strong>Luc Masson</strong> &amp; <strong>Claude.ai</strong></p><p>IA référent Académique et Interlocuteur Académique au Numérique Éducatif (DRANE de Lille)</p></div>
 
 <div class="intro-bar">
   <span><span class="dot dot-green"></span> Fiche de cours</span>
@@ -300,7 +336,7 @@ footer strong { color: var(--green); }
 </div>
 
 <main>
-  <h2 class="section-title">Choisissez un module</h2>
+  <h2 class="section-title" id="modules">Choisissez un module</h2>
   <p class="section-sub">Accès libre — consultez la fiche de cours puis entraînez-vous sur le cas pratique.</p>
 
   <div class="modules-grid">
@@ -352,7 +388,7 @@ footer strong { color: var(--green); }
       <div class="card-body">
         <p>Phases de l'entretien de vente, closing, suivi client, événements commerciaux, fidélisation et indicateurs NPS/LTV.</p>
         <div class="card-actions">
-          <a href="fiche-vente.html" target="_blank" class="btn-fiche" style="color:#0891b2;border-color:#0891b2;background:#e0f2fe;">📄 Consulter la fiche de cours</a>
+          <a href="fiche-vente.html" target="_blank" class="btn-fiche">📄 Consulter la fiche de cours</a>
           <button class="btn-cas" onclick="toggleCas('vente', this)">
             🧠 Accéder au cas pratique <span class="arrow">▼</span>
           </button>
@@ -370,7 +406,7 @@ footer strong { color: var(--green); }
       <div class="card-body">
         <p>Segmentation, marketing relationnel et digital, CRM, SIC, inbound marketing, omnicanalité, RGPD et veille commerciale.</p>
         <div class="card-actions">
-          <a href="fiche-marketing.html" target="_blank" class="btn-fiche" style="color:#7c3aed;border-color:#7c3aed;background:#ede9fe;">📄 Consulter la fiche de cours</a>
+          <a href="fiche-marketing.html" target="_blank" class="btn-fiche">📄 Consulter la fiche de cours</a>
           <button class="btn-cas" onclick="toggleCas('marketing', this)">
             🧠 Accéder au cas pratique <span class="arrow">▼</span>
           </button>
@@ -918,10 +954,9 @@ footer strong { color: var(--green); }
 
 </main>
 
-<footer>
-  <p>Module interactif BTS NDRC — Référentiel officiel arrêté du 19 février 2018<br>
-  <strong>Blocs de compétences 1, 2 &amp; 3</strong> · Pages 5-10 et 13-14 · Usage pédagogique</p>
-  <p class="credit-foot">Plate-forme créée par <strong>Luc Masson</strong> &amp; <strong>Claude.ai</strong><br><span class="credit-role">Luc Masson, IA référent Académique et Interlocuteur Académique au Numérique Éducatif (DRANE de Lille)</span></p>
+<footer class="ndrc-foot">
+  <p>Module interactif BTS NDRC. Référentiel officiel, arrêté du 19 février 2018.<br>Blocs de compétences 1, 2 et 3, pages 5-10 et 13-14. Usage pédagogique.</p>
+  <p class="ndrc-foot-credit"><b>Plate-forme créée par Luc Masson &amp; Claude.ai</b><br>IA référent Académique et Interlocuteur Académique au Numérique Éducatif (DRANE de Lille)</p>
 </footer>
 
 <script>
