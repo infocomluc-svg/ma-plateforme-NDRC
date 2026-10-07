@@ -114,6 +114,29 @@ body.page-home{font-family:var(--body);background:#fff;color:var(--ink)}
 .page-home .ia-tag,.page-home .ia-note{color:var(--lien)}
 .page-home .ia-note{font-family:var(--display)}
 
+/* Bandeau limité à 8 cm de haut (environ 300 px) */
+.page-home .ndrc-hero{max-height:300px;padding-top:14px}
+.ndrc-hero-grid{align-items:center;margin-top:8px}
+.ndrc-hero-text{padding-bottom:22px}
+.page-home .ndrc-hero h1{font-size:clamp(1.6rem,2.7vw,2.3rem)}
+.page-home .ndrc-hero .ndrc-lead{margin-top:10px;font-size:.95rem;max-width:560px}
+.ndrc-ctas{margin-top:14px}
+.ndrc-btn{padding:10px 18px;font-size:.9rem}
+.ndrc-visual{max-width:330px;align-self:end}
+.ndrc-kpi--a{top:0}
+@media (max-width:860px){
+  .page-home .ndrc-hero{max-height:none}
+  .ndrc-visual{display:none}
+  .ndrc-hero-grid{margin-top:10px}
+  .ndrc-nav-links{gap:4px 18px}
+  .ndrc-nav-links a{font-size:.85rem;padding:2px 0}
+  .page-home .ndrc-hero h1{font-size:1.55rem}
+  .page-home .ndrc-hero .ndrc-lead{font-size:.86rem;margin-top:6px}
+  .ndrc-ctas{margin-top:10px;gap:8px}
+  .ndrc-btn{padding:9px 12px;font-size:.84rem}
+  .ndrc-hero-text{padding-bottom:16px}
+}
+
 /* ═══ FICHES DE COURS ═══════════════════════════════════════════ */
 body.page-fiche{
   --green:#0B5FD9; --teal:#0B5FD9; --purple:#0B5FD9; --orange:#0B5FD9;

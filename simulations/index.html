@@ -168,10 +168,21 @@ footer a:hover{text-decoration:underline}
 .hero-inner{padding-top:clamp(20px,3vw,36px);padding-bottom:clamp(32px,4vw,52px);align-items:center}
 .brand{margin-bottom:clamp(16px,2.5vw,28px)}
 .hero p{margin:16px 0 22px}
-.collage{height:400px}
-.bub{font-size:.9rem;padding:11px 15px;max-width:270px}
-.b1{top:0}.b2{top:84px}.b3{top:170px}.b4{bottom:52px;top:auto}
-.mood-pill{padding:8px 14px;font-size:.82rem}
+/* Bandeau limité à 8 cm de haut (environ 300 px) */
+.hero h1{font-size:clamp(1.6rem,2.8vw,2.4rem)}
+.hero-inner{padding-top:16px;padding-bottom:22px;gap:24px}
+.brand{margin-bottom:12px}
+.hero p{margin:10px 0 14px;font-size:.95rem;max-width:52ch}
+.cta{padding:10px 20px;font-size:.92rem}
+.collage{height:236px}
+.bub{font-size:.86rem;padding:10px 14px;max-width:260px}
+.b1{top:0;left:0}.b2,.b3{display:none}.b4{top:84px;bottom:auto;right:0}
+.mood-pill{bottom:0;left:20px;right:auto;padding:7px 14px;font-size:.8rem}
+.hero::before{height:55%}
+.credit-strip{background:var(--abyss);color:#fff;padding:12px 20px;font-size:.88rem;line-height:1.5;text-align:center}
+.credit-strip strong{font-weight:800}
+.credit-strip span{color:#B9C7E6}
+@media (max-width:900px){.collage{display:none}.hero h1{font-size:1.55rem}.hero p{font-size:.86rem;margin:6px 0 12px}.hero-inner{padding-top:12px;padding-bottom:16px}.brand{font-size:.85rem;margin-bottom:8px}}
 .hero p{color:var(--ink-2)}
 .brand{color:var(--ink)}
 .brand-dot{background:var(--abyss);color:#fff}
@@ -199,7 +210,6 @@ footer a:hover{text-decoration:underline}
       <h1>Le client est furieux. À vous de le reconquérir.</h1>
       <p>Cinq appels de clients mécontents, joués par une IA qui réagit à chacune de vos phrases. À la fin, un bilan détaillé vous dit ce qui a marché, ce qui a coincé, et comment le dire mieux.</p>
       <a class="cta" href="#scenarios">Choisir un scénario</a>
-      <p class="credit">Plate-forme créée par <strong>Luc Masson</strong> &amp; <strong>Claude.ai</strong><br><span>Luc Masson, IA référent Académique et Interlocuteur Académique au Numérique Éducatif (DRANE de Lille)</span></p>
     </div>
     <div class="collage" aria-hidden="true">
       <div class="bub bub--c b1"><small>M. Durand</small>Noël, c'est dans trois jours. Le suivi n'a pas bougé depuis une semaine !</div>
@@ -210,6 +220,7 @@ footer a:hover{text-decoration:underline}
     </div>
   </div>
 </header>
+<div class="credit-strip"><strong>Plate-forme créée par Luc Masson &amp; Claude.ai</strong><span>, IA référent Académique et Interlocuteur Académique au Numérique Éducatif (DRANE de Lille)</span></div>
 
 <section class="flow" aria-label="Déroulement d'une simulation">
   <ol>
