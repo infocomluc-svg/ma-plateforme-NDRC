@@ -6,7 +6,7 @@
 <title>Simulations relation client — BTS NDRC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500;62..125,700;62..125,800;62..125,900&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --abyss:#0A1A3F; --navy:#13265A; --cobalt:#2B5CFF; --azure:#4C7DFF;
@@ -156,16 +156,36 @@ footer a:hover{text-decoration:underline}
   .scn,.cta{transition:none}
 }
 </style>
+<style>
+/* ═══ Charte « Courbe de croissance » ═══ */
+:root{--abyss:#0B1F4D;--navy:#13285E;--cobalt:#0B5FD9;--azure:#00B4FF;--sky:#B9C7E6;--ice:#EEF5FF;--mist:#F7FAFF;
+  --ink:#0B1F4D;--ink-2:#3D5280;--line:#D6E2F5;--signal:#00B4FF;--signal-2:#4CCBFF;
+  --display:"Sora",system-ui,sans-serif;--body:"Manrope",system-ui,sans-serif}
+.hero{background:var(--ice);color:var(--ink)}
+.hero::before{transform:none;top:auto;right:0;bottom:0;width:min(62vw,820px);height:40%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' preserveAspectRatio='xMaxYMax meet'%3E%3Cpath d='M10 250 C 140 238, 200 190, 270 158 S 420 70, 550 20 L 550 260 L 10 260 Z' fill='%23D6E8FF'/%3E%3Cpath d='M10 250 C 140 238, 200 190, 270 158 S 420 70, 550 20' fill='none' stroke='%230B1F4D' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='60' cy='244' r='8' fill='%2300B4FF' stroke='%230B1F4D' stroke-width='2.5'/%3E%3Ccircle cx='230' cy='176' r='8' fill='%2300B4FF' stroke='%230B1F4D' stroke-width='2.5'/%3E%3Ccircle cx='390' cy='100' r='8' fill='%2300B4FF' stroke='%230B1F4D' stroke-width='2.5'/%3E%3Ccircle cx='536' cy='28' r='10' fill='%23F7B731' stroke='%230B1F4D' stroke-width='2.5'/%3E%3C/svg%3E") right bottom/contain no-repeat}
+.hero::after{content:none}
+.hero h1{font-weight:800;font-stretch:normal;text-transform:none;letter-spacing:-.035em;font-size:clamp(2.4rem,5.6vw,4.4rem);line-height:1.03;color:var(--ink)}
+.hero p{color:var(--ink-2)}
+.brand{color:var(--ink)}
+.brand-dot{background:var(--abyss);color:#fff}
+.cta{background:var(--abyss);color:#fff}
+.cta:hover{background:#24396E}
+.hero .credit{color:var(--ink-2)}
+.hero .credit strong{color:var(--ink)}
+.bub{box-shadow:0 14px 36px rgba(11,31,77,.16)}
+.bub--a{background:var(--cobalt)}
+.mood-pill{background:var(--abyss);color:#fff}
+.mood-pill i span.on{background:#F7B731}
+.flow li::before{background:var(--abyss);color:#fff;font-family:var(--display)}
+.go{background:var(--abyss);color:#fff}
+.scn:hover{border-color:var(--cyan)}
+.pp-total strong{font-stretch:normal}
+@media (max-width:900px){.hero::before{width:100vw;height:30%;opacity:.5}}
+</style>
 </head>
 <body>
 
 <header class="hero">
-  <svg class="wm-target" viewBox="0 0 200 200" aria-hidden="true">
-    <g class="ring"><circle cx="100" cy="100" r="92" fill="none" stroke="#0A1A3F" stroke-width="5" stroke-dasharray="14 10"></circle></g>
-    <circle cx="100" cy="100" r="68" fill="none" stroke="#0A1A3F" stroke-width="5"></circle>
-    <circle cx="100" cy="100" r="44" fill="none" stroke="#0A1A3F" stroke-width="5"></circle>
-    <circle cx="100" cy="100" r="18" fill="#0A1A3F"></circle>
-  </svg>
   <div class="hero-inner">
     <div>
       <div class="brand"><span class="brand-dot" aria-hidden="true">☎</span>BTS NDRC, simulations relation client</div>
@@ -183,7 +203,6 @@ footer a:hover{text-decoration:underline}
     </div>
   </div>
 </header>
-<div class="ticker" aria-hidden="true"><div class="ticker-track"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Écoute active</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Reformulation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Garantie légale de conformité</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Délai de remboursement</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Geste commercial</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Engagement de suivi</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Vocabulaire professionnel</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Fidélisation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Écoute active</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Reformulation</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Garantie légale de conformité</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Délai de remboursement</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Geste commercial</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Engagement de suivi</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Vocabulaire professionnel</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.6 4.9 9.7 10.5 10.5-5.6.8-9.7 4.9-10.5 10.5C11.2 16.9 7.1 12.8 1.5 12 7.1 11.2 11.2 7.1 12 1.5z"></path></svg>Fidélisation</span></div></div>
 
 <section class="flow" aria-label="Déroulement d'une simulation">
   <ol>
@@ -199,14 +218,14 @@ footer a:hover{text-decoration:underline}
   <div class="head">
     <h2>Cinq clients vous attendent</h2>
     <div class="legend" aria-label="Plus le bleu est profond, plus le scénario est difficile">
-      <span><i style="background:#4C7DFF"></i>Niveau 1</span>
-      <span><i style="background:#2B5CFF"></i>Niveau 2</span>
-      <span><i style="background:#0A1A3F"></i>Niveau 3</span>
+      <span><i style="background:#1C6FE8"></i>Niveau 1</span>
+      <span><i style="background:#0B5FD9"></i>Niveau 2</span>
+      <span><i style="background:#0B1F4D"></i>Niveau 3</span>
     </div>
   </div>
 
   <div class="list">
-    <a class="scn" href="chatbot-s1.html" style="--tone:#4C7DFF">
+    <a class="scn" href="chatbot-s1.html" style="--tone:#1C6FE8">
       <div class="scn-tile" aria-hidden="true">📦</div>
       <div>
         <div class="scn-top"><h3>Colis perdu avant Noël</h3><span class="lvl"><i><span class="on"></span><span></span><span></span></i>Niveau 1</span></div>
@@ -217,7 +236,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s2.html" style="--tone:#2B5CFF">
+    <a class="scn" href="chatbot-s2.html" style="--tone:#0B5FD9">
       <div class="scn-tile" aria-hidden="true">🫧</div>
       <div>
         <div class="scn-top"><h3>Lave-linge en panne à 15 jours</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span></span></i>Niveau 2</span></div>
@@ -228,7 +247,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s3.html" style="--tone:#2B5CFF">
+    <a class="scn" href="chatbot-s3.html" style="--tone:#0B5FD9">
       <div class="scn-tile" aria-hidden="true">📱</div>
       <div>
         <div class="scn-top"><h3>Facture multipliée par dix</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span></span></i>Niveau 2</span></div>
@@ -239,7 +258,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">15 à 20 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s4.html" style="--tone:#0A1A3F">
+    <a class="scn" href="chatbot-s4.html" style="--tone:#0B1F4D">
       <div class="scn-tile" aria-hidden="true">🏨</div>
       <div>
         <div class="scn-top"><h3>Séjour d'anniversaire gâché</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span class="on"></span></i>Niveau 3</span></div>
@@ -250,7 +269,7 @@ footer a:hover{text-decoration:underline}
       <div class="scn-side"><span class="scn-stars" aria-hidden="true"></span><span class="scn-time">20 à 25 min</span><span class="go">Lancer</span></div>
     </a>
 
-    <a class="scn" href="chatbot-s5.html" style="--tone:#0A1A3F">
+    <a class="scn" href="chatbot-s5.html" style="--tone:#0B1F4D">
       <div class="scn-tile" aria-hidden="true">🚗</div>
       <div>
         <div class="scn-top"><h3>Réparation ratée, client immobilisé</h3><span class="lvl"><i><span class="on"></span><span class="on"></span><span class="on"></span></i>Niveau 3</span></div>
