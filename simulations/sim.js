@@ -206,6 +206,7 @@ FORMAT : réponds UNIQUEMENT par un objet JSON valide, sans texte autour ni bali
       <div><strong>${esc(S.title)}</strong><span>${esc(S.company)}</span></div>
     </div>
     <div class="progress"><span id="progressText">Observation</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+    <a class="home-link" href="../index.html" title="Retour à la plate-forme de cours"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 9.5V20h13V9.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Plate-forme de cours</span></a>
     <button class="brief-toggle" id="briefToggle" aria-expanded="false" aria-controls="brief">Fiche client</button>
   </header>
   <div class="layout">

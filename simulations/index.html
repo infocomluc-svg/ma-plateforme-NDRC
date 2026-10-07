@@ -168,6 +168,15 @@ footer a:hover{text-decoration:underline}
 .hero-inner{padding-top:clamp(20px,3vw,36px);padding-bottom:clamp(32px,4vw,52px);align-items:center}
 .brand{margin-bottom:clamp(16px,2.5vw,28px)}
 .hero p{margin:16px 0 22px}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:8px 20px;flex-wrap:wrap;margin-bottom:6px}
+.hero-top .brand{margin-bottom:0}
+.hero-inner{position:relative}
+.home-btn{position:absolute!important;top:14px;right:20px}
+.collage{margin-top:30px}
+.hero-inner{padding-bottom:14px!important}
+@media (max-width:900px){.home-btn{position:relative!important;top:auto;right:auto}.collage{margin-top:0}}
+.home-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--abyss);border:1.5px solid var(--line);font-weight:700;font-size:.84rem;text-decoration:none;padding:6px 14px;border-radius:999px;position:relative;z-index:2}
+.home-btn:hover{border-color:var(--abyss)}
 /* Bandeau limité à 8 cm de haut (environ 300 px) */
 .hero h1{font-size:clamp(1.6rem,2.8vw,2.4rem)}
 .hero-inner{padding-top:16px;padding-bottom:22px;gap:24px}
@@ -206,9 +215,12 @@ footer a:hover{text-decoration:underline}
 <header class="hero">
   <div class="hero-inner">
     <div>
-      <div class="brand"><span class="brand-dot" aria-hidden="true">☎</span>BTS NDRC, simulations relation client</div>
+      <div class="hero-top">
+        <div class="brand"><span class="brand-dot" aria-hidden="true">☎</span>BTS NDRC, simulations relation client</div>
+        <a class="home-btn" href="../index.html"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 9.5V20h13V9.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Retour à la plate-forme de cours</a>
+      </div>
       <h1>Le client est furieux. À vous de le reconquérir.</h1>
-      <p>Cinq appels de clients mécontents, joués par une IA qui réagit à chacune de vos phrases. À la fin, un bilan détaillé vous dit ce qui a marché, ce qui a coincé, et comment le dire mieux.</p>
+      <p>Cinq clients mécontents joués par une IA qui réagit à chacune de vos phrases, puis un bilan détaillé : ce qui a marché, ce qui a coincé, comment le dire mieux.</p>
       <a class="cta" href="#scenarios">Choisir un scénario</a>
     </div>
     <div class="collage" aria-hidden="true">
