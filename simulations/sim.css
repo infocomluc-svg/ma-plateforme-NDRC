@@ -276,8 +276,8 @@ body.is-debrief{overflow:hidden}
 
 
 /* Bouton de retour vers la plate-forme de cours */
-.home-link{display:inline-flex;align-items:center;gap:8px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);text-decoration:none;font-weight:700;font-size:.86rem;padding:8px 14px;border-radius:999px;white-space:nowrap;flex-shrink:0}
-.home-link:hover{background:rgba(255,255,255,.2)}
+.home-link{display:inline-flex;align-items:center;gap:8px;color:#fff;background:#0B5FD9;border:1px solid #3C82F0;text-decoration:none;font-weight:700;font-size:.86rem;padding:8px 14px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+.home-link:hover{background:#1C6FE8}
 @media (max-width:880px){.home-link span{display:none}.home-link{padding:9px}}
 
 /* ═══ Charte « Courbe de croissance » ═══ */
