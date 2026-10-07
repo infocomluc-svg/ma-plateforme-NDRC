@@ -35,7 +35,7 @@
 
 /* ═══ ACCUEIL ═══════════════════════════════════════════════════ */
 body.page-home{font-family:var(--body);background:#fff;color:var(--ink)}
-.page-home .ndrc-hero{background:var(--ciel);color:var(--ink);position:relative;overflow:hidden;padding:26px clamp(16px,5vw,72px) 0;text-align:left}
+.page-home .ndrc-hero{background:var(--ciel);color:var(--ink);position:relative;overflow:hidden;padding:18px clamp(16px,5vw,72px) 0;text-align:left}
 .page-home .ndrc-hero::before,.page-home .ndrc-hero::after{content:none}
 .ndrc-nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
 .ndrc-logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--marine);text-decoration:none}
@@ -43,23 +43,23 @@ body.page-home{font-family:var(--body);background:#fff;color:var(--ink)}
 .ndrc-nav-links{display:flex;gap:6px 26px;flex-wrap:wrap}
 .ndrc-nav-links a{color:var(--marine);font-weight:600;font-size:.95rem;text-decoration:none;padding:6px 0}
 .ndrc-nav-links a:hover{color:var(--lien)}
-.ndrc-hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px;align-items:end;margin-top:clamp(28px,5vw,52px)}
-.ndrc-hero-text{padding-bottom:clamp(40px,6vw,72px);position:relative;z-index:2}
-.page-home .ndrc-hero h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,5.4vw,4.5rem);line-height:1.03;letter-spacing:-.035em;color:var(--marine);text-transform:none}
-.page-home .ndrc-hero .ndrc-lead{margin:22px 0 0;font-size:1.1rem;line-height:1.6;color:var(--ink-2);max-width:520px;opacity:1}
-.ndrc-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.ndrc-btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:1rem;padding:15px 24px;border-radius:12px;text-decoration:none}
+.ndrc-hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:end;margin-top:clamp(16px,2.5vw,28px);max-width:1180px;margin-inline:auto}
+.ndrc-hero-text{padding-bottom:clamp(24px,3vw,40px);position:relative;z-index:2}
+.page-home .ndrc-hero h1{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,3.4vw,2.9rem);line-height:1.08;letter-spacing:-.03em;color:var(--marine);text-transform:none}
+.page-home .ndrc-hero .ndrc-lead{margin:14px 0 0;font-size:1rem;line-height:1.6;color:var(--ink-2);max-width:520px;opacity:1}
+.ndrc-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.ndrc-btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:.95rem;padding:12px 20px;border-radius:12px;text-decoration:none}
 .ndrc-btn--marine{background:var(--marine);color:#fff}
 .ndrc-btn--marine:hover{background:var(--marine-3)}
 .ndrc-btn--cyan{background:var(--cyan);color:var(--marine)}
 .ndrc-btn--cyan:hover{background:#4CCBFF}
-.ndrc-visual{position:relative;align-self:end;min-height:380px}
+.ndrc-visual{position:relative;align-self:end;max-width:440px;justify-self:end;width:100%}
 .ndrc-curve{display:block;width:100%;height:auto}
 .ndrc-curve .curve{stroke-dasharray:900;animation:ndrc-draw 6s ease-in-out infinite}
 .ndrc-curve .step{transform-box:fill-box;transform-origin:center;animation:ndrc-pop 2s ease-in-out infinite}
 .ndrc-curve .spark{transform-box:fill-box;transform-origin:center;animation:ndrc-twinkle 2.6s ease-in-out infinite}
-.ndrc-kpi{position:absolute;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 10px 30px rgba(11,31,77,.12);font-size:.82rem;line-height:1.35;color:var(--ink-2);animation:ndrc-float 5s ease-in-out infinite}
-.ndrc-kpi b{display:block;font-family:var(--display);font-size:1.4rem;color:var(--marine)}
+.ndrc-kpi{position:absolute;background:#fff;border-radius:12px;padding:8px 12px;box-shadow:0 10px 30px rgba(11,31,77,.12);font-size:.74rem;line-height:1.3;color:var(--ink-2);animation:ndrc-float 5s ease-in-out infinite}
+.ndrc-kpi b{display:block;font-family:var(--display);font-size:1.05rem;color:var(--marine)}
 .ndrc-kpi--a{left:2%;top:4%}
 .ndrc-kpi--b{right:0;bottom:30%;background:var(--marine);color:#B9C7E6;animation-delay:2.5s}
 .ndrc-kpi--b b{color:var(--or)}
@@ -147,7 +147,7 @@ body.page-fiche{
 @media (max-width:860px){
   .ndrc-hero-grid{grid-template-columns:1fr}
   .ndrc-hero-text{padding-bottom:8px}
-  .ndrc-visual{min-height:0}
+  .ndrc-visual{max-width:360px;justify-self:center}
   .ndrc-kpi{font-size:.75rem;padding:9px 12px}
   .ndrc-kpi b{font-size:1.1rem}
   .page-fiche header::before{width:70vw;opacity:.45}
